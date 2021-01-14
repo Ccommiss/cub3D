@@ -38,25 +38,9 @@ int		red_cross(void)
 
 int mouse_move(int x, int y, t_data *data)
 {
-	int width;
-	int height;
-	static int i;
-	i = 0;
-
-	printf( "X %d AND Y %d AND I = %d !\n", x, y, i);
-	if (i == 0)
-	{
-		i++;
-		data->img = mlx_xpm_file_to_image(data->mlx, "mario.xpm", &width, &height);
-		mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
-
-	}
-	else
-	{
-		my_mlx_pixel_put(data, x, y, 0x00FF0000);
-		mlx_put_image_to_window(data->mlx, data->win, data->img2, 0, 0);
-	}
-
+	printf( "X %d AND Y %d !\n", x, y);
+    mlx_clear_window(data->mlx, data->win);
+    mlx_put_image_to_window(data->mlx, data->win, data->img, x, y);	
 	return (1);
 }
 
@@ -70,26 +54,12 @@ int		mouse_hook(int button, int x, int y, t_data *data)
 	printf( "BUTTON %d IS PRESSED !\n", button);
 	printf( "X %d AND Y %d IS PRESSED !\n", x, y);
 	printf( "I = %d !\n", i);
-//	mouse_move(x, y, &data);
-
-	if (i == 0){
+//	mouse_move(x, y, &data)
 		//mlx_destroy_image(data->mlx, data->img);
 		// mlx_clear_window(data->mlx, data->win);
-		my_mlx_pixel_put(data, x, y, 0x00FF0000);
-		data->img = mlx_xpm_file_to_image(data->mlx, "mario.xpm", &width, &height);
-		mlx_put_image_to_window(data->mlx, data->win, data->img, 50, 50);
-		i++;
-	}
-	else
-	{
-		//mlx_destroy_image(data->mlx, data->img);
-	//	mlx_clear_window(data->mlx, data->win);
-		my_mlx_pixel_put(data, x, y, 0x00FF0000);
 		data->img = mlx_xpm_file_to_image(data->mlx, "beyonce.xpm", &width, &height);
-		mlx_put_image_to_window(data->mlx, data->win, data->img, 50, 50);
-		i--;
-	}
-	//mlx_png_file_to_image(data->mlx, file, &width, &height);
+
+        //data->texture1 = mlx_xpm_file_to_image(data->mlx, "texture1.xpm", &width, &height);
 
 	}
 	return (0);
@@ -104,14 +74,13 @@ int main(void)
 	//int key_code;
 
     data.mlx = mlx_init();
-    data.win = mlx_new_window(data.mlx, 600, 500, "Hello world!");
+    data.win = mlx_new_window(data.mlx, 600, 500, "who run the world ?");
 	data.img = mlx_new_image(data.mlx, 600, 500);
 	data.imgaddr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 
-    mlx_key_hook(data.win, key_hook, &data);
+  //  mlx_key_hook(data.win, key_hook, &data);
 	mlx_hook(data.win, 6, 1L<<13, mouse_move, &data);
-//	mlx_mouse_hook(data.win, mouse_hook, &data);
-	mlx_hook(data.win, 6, 1L<<13, mouse_move, &data);
+	mlx_mouse_hook(data.win, mouse_hook, &data);
 //	mlx_hook(data.win, 33, (1L << 17), close_window, &data);
 //	mlx_hook(data.win, 33, (1L << 17), close_window, data.mlx);
 	mlx_hook(data.win, 17, (1L << 17), red_cross, &data); //fonctionne

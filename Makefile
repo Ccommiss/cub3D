@@ -2,7 +2,7 @@
 NAME = test
 
 
-SRCS = test_minilibx.c
+SRCS = cub.c
 
 OBJS := ${SRCS:c=o}
 

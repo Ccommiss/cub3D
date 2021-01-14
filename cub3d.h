@@ -17,4 +17,9 @@ typedef struct s_data
     int     line_length;
     int     endian;
 
+
+    int     pos_x;
+    int     pos_y;
+    int     **tab;
+
 }   t_data;
