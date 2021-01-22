@@ -1,5 +1,23 @@
 #include "cub3d.h"
 
+
+void fill_black(t_data *data)
+{
+    int i = 0;
+    int j = 0;
+
+  while (i < data->height)
+       {
+           while (j < data->width)
+           {
+                my_mlx_pixel_put(data, j, i, 0x000000);
+                j++;
+           }
+           j = 0;
+           i++;
+       }
+}
+
 int     set_player(t_data *data)
 {
     int w = 0;

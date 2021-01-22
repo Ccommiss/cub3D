@@ -2,9 +2,12 @@
 
  void display(t_data *data)
  {
-	 mlx_clear_window(data->mlx, data->win);
-	 set_player(data);
+	 //mlx_clear_window(data->mlx, data->win);
+	 fill_black(data);
+	 
 	 set_map(data);
+	 set_player(data);
+	 mlx_new_image(data->mlx,data->width, data->height);
 	 mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
  }
 
@@ -36,9 +39,26 @@ int key_hook(int keycode, t_data *data)
 		if (data->map[(int)(data->pos_x)][(int)(data->pos_y - data->dirY * 0.2)] == '0')
 			data->pos_y -= data->dirY * 0.2;
 	}
-	// if (keycode == KEY_LEFT) ROTATION A FAIRE
+	if (keycode == KEY_LEFT) //ROTATION A FAIRE
+	{
+      //both camera direction and camera plane must be rotated
+      double oldDirX = data->dirX;
+      data->dirX = data->dirX * cos(0.2) - data->dirY * sin(0.2);
+      data->dirY = oldDirX * sin(0.2) + data->dirY * cos(0.2);
+      double oldPlaneX = data->planeX;
+      data->planeX = data->planeX * cos(0.2) - data->planeY * sin(0.2);
+      data->planeY = oldPlaneX * sin(0.2) + data->planeY * cos(0.2);
+    }
 
-	// if (keycode == KEY_RIGHT)
+	if (keycode == KEY_RIGHT)
+	{
+	    double oldDirX = data->dirX;
+      data->dirX = data->dirX * cos(-0.2) - data->dirY * sin(-0.2);
+      data->dirY = oldDirX * sin(-0.2) + data->dirY * cos(-0.2);
+      double oldPlaneX = data->planeX;
+      data->planeX = data->planeX * cos(-0.2) - data->planeY * sin(-0.2);
+      data->planeY = oldPlaneX * sin(-0.2) + data->planeY * cos(-0.2);
+	}
 
 	display(data);
 	return 1;
@@ -86,7 +106,7 @@ void perform_dda(t_data *data)
 		//printf("\n");
 		if (data->map[data->mapY][data->mapX] > '0')
 		{
-		//	printf("HIT X %d Y %d = ", data->mapX, data->mapY);
+			printf("HIT Y %d X %d = ", data->mapX, data->mapY);
 			hit = 1;
 		}
 	}
@@ -155,7 +175,6 @@ void dda(t_data *data)
 		data->rayDirX = data->dirX + data->planeX * data->cameraX;
 		data->rayDirY = data->dirY + data->planeY * data->cameraX;
 		//printf("RAYDIR X - Y = %f - %f \n", data->rayDirX, data->rayDirY);
-
 		data->mapX = (int)data->pos_x;
 		//printf ("POS %f MAP %d\n", data->pos_x, data->mapX);
 		data->mapY = (int)data->pos_y;
@@ -170,7 +189,7 @@ void dda(t_data *data)
 		if (data->side == 0)
 			data->perpWallDist = (data->mapX - data->pos_x + (1 - data->stepX) / 2) / data->rayDirX;
       	else
-		  data->perpWallDist = (data->mapY - data->pos_y + (1 - data->stepY) / 2) / data->rayDirY;
+		  	data->perpWallDist = (data->mapY - data->pos_y + (1 - data->stepY) / 2) / data->rayDirY;
 		draw(data);
 
 		//perform DDA
