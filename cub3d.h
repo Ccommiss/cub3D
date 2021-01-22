@@ -5,6 +5,7 @@
 #include <mlx.h>
 #include <fcntl.h>
 #include "keys.h"
+#include <math.h>
 #include "getnextline/get_next_line.h"
 
 typedef struct s_data
@@ -19,13 +20,49 @@ typedef struct s_data
 
 //Player
 
-    int     pos_x;
-    int     pos_y;
+    double     pos_x;
+    double     pos_y;
+	double		dirX;
+	double		dirY;
+
+	float	angle; //teta
+
+
+
+
+
+//vue
+	double cameraX;
+	double cameraY;
+	double planeX;
+	double planeY;
+
+// Rayon
+	int mapX;
+	int mapY;
+	double rayDirX;
+	double rayDirY;
+
+	double dx; //offset to tile
+	double dy;
+	double	delta_x; // space between next x and next next x
+	double	delta_y;
+
+	int perpWallDist;
+
+
+	int stepX;
+	int stepY;
+
+	int side;	 //was a NS or a EW wall hit?
+
+
 
 // map
     char     **map;
 	int		map_w;
 	int 	map_h;
+	int		map_s;
 
 //window
 	int width;

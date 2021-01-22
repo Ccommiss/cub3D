@@ -8,7 +8,7 @@ int			ft_parse(int fd, t_data *data)
 	int x = 0;
 	int y = 0;
 	printf ("LA\n");
-	data->map = (char **)malloc(sizeof(char *) * (100));
+	data->map = (char **)malloc(sizeof(char *) * (300));
 	while (get_next_line(fd, &line))
 	{
 		printf ("la\n");
