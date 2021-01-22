@@ -72,3 +72,6 @@ typedef struct s_data
 
 int			ft_parse(int fd, t_data *data);
 void    draw_tab(t_data *data);
+void     set_map(t_data *data);
+int     set_player(t_data *data);
+void            my_mlx_pixel_put(t_data *data, int x, int y, int color);

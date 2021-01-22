@@ -2,7 +2,7 @@
 NAME = test
 
 
-SRCS = cub.c parser.c ./getnextline/get_next_line.c ./getnextline/get_next_line_utils.c
+SRCS = cub.c parser.c visu2d.c ./getnextline/get_next_line.c ./getnextline/get_next_line_utils.c
 
 OBJS := ${SRCS:c=o}
 

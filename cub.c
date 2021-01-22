@@ -1,9 +1,29 @@
 #include "cub3d.h"
 
+ void display(t_data *data)
+ {
+	 mlx_clear_window(data->mlx, data->win);
+	 set_player(data);
+	 set_map(data);
+	 mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
+ }
+
+ void            my_mlx_pixel_put(t_data *data, int x, int y, int color)
+{
+	char *dst;
+
+   dst = data->imgaddr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+  	if (x >= 0 && x < data->width && y >= 0 && y < data->height)
+   		*(unsigned int*)dst = color;
+}
+
+
+
 int key_hook(int keycode, t_data *data)
 {
 	if (keycode == KEY_UP)
-	{
+	{	
+		printf("KEUP PRESSED\n");
 		if (data->map[(int)(data->pos_x + data->dirX * 0.2)][(int)(data->pos_y)] == '0')
 			data->pos_x += data->dirX * 0.2;
 		if (data->map[(int)(data->pos_x)][(int)(data->pos_y - data->dirY * 0.2)] == '0')
@@ -12,14 +32,15 @@ int key_hook(int keycode, t_data *data)
 	if (keycode == KEY_DOWN)
 	{
 		if (data->map[(int)(data->pos_x - data->dirX * 0.2)][(int)(data->pos_y)] == '0')
-			data->pos_x += data->dirX * 0.2;
+			data->pos_x -= data->dirX * 0.2;
 		if (data->map[(int)(data->pos_x)][(int)(data->pos_y - data->dirY * 0.2)] == '0')
-			data->pos_y += data->dirY * 0.2;
+			data->pos_y -= data->dirY * 0.2;
 	}
 	// if (keycode == KEY_LEFT) ROTATION A FAIRE
 
 	// if (keycode == KEY_RIGHT)
 
+	display(data);
 	return 1;
 }
 
@@ -65,7 +86,7 @@ void perform_dda(t_data *data)
 		//printf("\n");
 		if (data->map[data->mapY][data->mapX] > '0')
 		{
-			printf("HIT X %d Y %d = ", data->mapX, data->mapY);
+		//	printf("HIT X %d Y %d = ", data->mapX, data->mapY);
 			hit = 1;
 		}
 	}
@@ -74,7 +95,7 @@ void perform_dda(t_data *data)
 
 void calculate_step(t_data *data)
 {
-	printf ("CALCULATING STEPS : \n");
+	//printf ("CALCULATING STEPS : \n");
 	if (data->rayDirX < 0)
 	{
 		data->stepX = -1;
@@ -136,7 +157,7 @@ void dda(t_data *data)
 		//printf("RAYDIR X - Y = %f - %f \n", data->rayDirX, data->rayDirY);
 
 		data->mapX = (int)data->pos_x;
-		printf ("POS %f MAP %d\n", data->pos_x, data->mapX);
+		//printf ("POS %f MAP %d\n", data->pos_x, data->mapX);
 		data->mapY = (int)data->pos_y;
 		//length of ray from one x or y-side to next x or y-side
 		data->delta_x = fabs(1 / data->rayDirX);
@@ -159,7 +180,6 @@ void dda(t_data *data)
 		// 	perpWallDist = (mapX - data->pos_x + (1 - stepX) / 2) / data->rayDirX;
 		// else
 		// 	perpWallDist = (mapY - data->pos_y + (1 - stepY) / 2) / data->rayDirY;
-		printf("x = %d\n", x );
 	}
 }
 
@@ -175,6 +195,8 @@ int main()
 	if (!fd)
 		printf("Bad argument.\n");
 	ft_parse(fd, &data);
+	set_player(&data);
+	set_map(&data);
 	printf("%f --- %f \n", data.pos_x, data.pos_y);
 	dda(&data);
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
