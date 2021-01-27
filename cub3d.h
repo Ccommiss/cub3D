@@ -8,6 +8,13 @@
 #include <math.h>
 #include "getnextline/get_next_line.h"
 
+
+#define RED 0xFF0000
+#define WHITE 0xFFFAFA
+#define YELLOW 0xFFDEAD
+#define BLUE 0x00CCCC
+
+
 typedef struct s_data
 {
     void    *mlx;
@@ -48,7 +55,7 @@ typedef struct s_data
 	double	delta_x; // space between next x and next next x
 	double	delta_y;
 
-	int perpWallDist;
+	double perpWallDist;
 
 
 	int stepX;
@@ -69,6 +76,15 @@ typedef struct s_data
     int height;
 
 	int color;
+
+
+
+	int minimap_size;
+
+
+
+	int speed;
+
 }   t_data;
 
 int			ft_parse(int fd, t_data *data);
@@ -78,3 +94,4 @@ int     set_player(t_data *data);
 void            my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void fill_black(t_data *data);
 void 	bresenham(int xdep, int ydep, int xfin, int yfin, t_data *data);
+void dda(t_data *data);

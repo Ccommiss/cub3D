@@ -7,13 +7,14 @@
  {
 	 //mlx_clear_window(data->mlx, data->win);
 	fill_black(data);
+	dda(data);
 
-	 set_map(data);
-	 set_player(data);
-	 data->color = 0xADD8E6;
-	bresenham(data->pos_x * 64, data->pos_y * 64, (data->pos_x + data->dirX) * 64, (data->pos_y + data->dirY) * 64, data);
+	set_map(data);
+	set_player(data);
+	// data->color = 0xADD8E6;
+	bresenham(data->pos_x * data->minimap_size , data->pos_y * data->minimap_size , (data->pos_x + data->dirX) * data->minimap_size , (data->pos_y + data->dirY) * data->minimap_size , data);
 
-	data->color = 0xFFFFFF;
+	//data->color = 0xFFFFFF;
 //	bresenham(data->pos_x * 64, data->pos_y * 64, (data->pos_x + data->dirX + (data->cameraX - 1)) * 64, (data->pos_y + data->dirY + (data->cameraY + 1)) * 64, data);
 //	bresenham(data->pos_x * 64, data->pos_y * 64, (data->pos_x + data->dirX + data->cameraX) * 64, (data->pos_y + data->dirY + data->cameraY) * 64, data);
 
@@ -53,7 +54,6 @@ if(dx>=dy && dx!=0 && dy!=0)
 {
    if(xdep>xfin)
    {
-	   printf ("ALOHA\n");
       temp=xdep;
       xdep=xfin;
       xfin=temp;
@@ -66,7 +66,6 @@ if(dx>=dy && dx!=0 && dy!=0)
 
    for(unsigned int x=0;x<dx+1;x++)
    {
-	   	   printf ("ALOHA PIXPUT\n");
       my_mlx_pixel_put(data,x+xdep,ydep+(x*a)+cste, data->color);
    }
 }
@@ -133,7 +132,7 @@ int key_hook(int keycode, t_data *data)
 		if (data->map[(int)(data->pos_y - data->dirY * 0.02)][(int)(data->pos_x)] == '0')
 			data->pos_y -= data->dirY * 0.02;
 	}
-	if (keycode == KEY_RIGHT) //ROTATION A FAIRE
+	if (keycode == KEY_LEFT) //ROTATION A FAIRE
 	{
       //both camera direction and camera plane must be rotated
       double oldDirX = data->dirX;
@@ -145,7 +144,7 @@ int key_hook(int keycode, t_data *data)
 	  data->planeY = oldPlaneX * sin(0.2) + data->planeY * cos(0.2);
     }
 
-	if (keycode == KEY_LEFT)
+	if (keycode == KEY_RIGHT)
 	{
 	  double oldDirX = data->dirX;
       data->dirX = data->dirX * cos(-0.02) - data->dirY * sin(-0.02);
@@ -175,6 +174,8 @@ void init_struct(t_data *data)
 	data->planeX = 0;
 	data->planeY = 0.66;
 
+	data->minimap_size = 10;
+
 }
 
 void perform_dda(t_data *data)
@@ -200,7 +201,6 @@ void perform_dda(t_data *data)
 		//printf("\n");
 		if (data->map[data->mapY][data->mapX] > '0')
 		{
-			printf("HIT Y %d X %d = \n", data->mapX, data->mapY);
 			hit = 1;
 		}
 	}
@@ -234,45 +234,41 @@ void calculate_step(t_data *data)
 
 
 
-void draw (t_data *data)
+void draw (t_data *data, int x)
 {
-	  int lineHeight = (int)(data->height / data->perpWallDist);
+	int lineHeight = 8;
+	//printf("[DRAW] DATA PERPWALL DIST = %f \n", data->perpWallDist);
+	if (data->perpWallDist != 0)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+		lineHeight = (int)(data->height / data->perpWallDist);
+	else 
+		lineHeight = (int)data->height;
 
       //calculate lowest and highest pixel to fill in current stripe
       int drawStart = -lineHeight / 2 + data->height/ 2;
       if(drawStart < 0)
 	  	drawStart = 0;
+
       int drawEnd = lineHeight / 2 + data->height/ 2;
       if(drawEnd >= data->height)
 	  	drawEnd = data->height - 1;
-	bresenham(x, 0, drawStart, drawEnd);
+		
+	if (data->side == 1)
+		data->color = RED;
+	else 
+		data->color = YELLOW;
+	bresenham(x, drawStart, x, drawEnd, data);
 }
 
 void dda(t_data *data)
 {
 	int x = 0;
-	// printf("DDA :\n\n");
-
-	// int i;
-	// int j;
-	// for (i = 0; i < data->map_h; i++)
-	// {
-	// 	for (j = 0; j < data->map_w; j++)
-	// 	{
-	// 		printf("yo map[%d][%d] ", i, j);
-	// 		printf("%c ", data->map[i][j]);
-	// 	}
-	// 	printf("\n");
-	// }
-
-	// printf("%d \n", data->width);
 
 	while (x++ < data->width)
 	{
 		data->cameraX = 2 * x / (double)data->width - 1; //x-coordinate in camera space
 		data->rayDirX = data->dirX + data->planeX * data->cameraX;
 		data->rayDirY = data->dirY + data->planeY * data->cameraX;
-		printf("RAYDIR X - Y = %f - %f \n", data->rayDirX, data->rayDirY);
+		//printf("RAYDIR X - Y = %f - %f \n", data->rayDirX, data->rayDirY);
 
 		data->mapX = (int)data->pos_x;
 		//printf ("POS %f MAP %d\n", data->pos_x, data->mapX);
@@ -281,20 +277,13 @@ void dda(t_data *data)
 		data->delta_x = fabs(1 / data->rayDirX);
 		data->delta_y = fabs(1 / data->rayDirY);
 
-
-
-		//calculate step and initial sideDist
 		calculate_step(data);
 		perform_dda(data);
-
-		//bresenham(data->pos_x * 64, data->pos_y * 64, (data->pos_x + data->rayDirX) * 64, (data->pos_y + data->rayDirY) * 64, data);
-
-
 		if (data->side == 0)
 			data->perpWallDist = (data->mapX - data->pos_x + (1 - data->stepX) / 2) / data->rayDirX;
       	else
 		  	data->perpWallDist = (data->mapY - data->pos_y + (1 - data->stepY) / 2) / data->rayDirY;
-		draw(data);
+		draw(data, x);
 	}
 }
 
@@ -312,7 +301,6 @@ int main()
 	ft_parse(fd, &data);
 	set_player(&data);
 	set_map(&data);
-	printf("%f --- %f \n", data.pos_x, data.pos_y);
 	dda(&data);
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 	mlx_hook(data.win, 2, 1L<<0, key_hook, &data);
@@ -337,3 +325,4 @@ int main()
 
 
 
+  

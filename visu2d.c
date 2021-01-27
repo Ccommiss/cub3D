@@ -23,10 +23,11 @@ int     set_player(t_data *data)
     int w = 0;
     int h = 0;
 
-    while (h++ < 10)
+	
+    while (h++ < 3)
     {
-        while (w++ < 10)
-            my_mlx_pixel_put(data, (data->pos_x * 64 + w), (data->pos_y * 64 + h),  0XFF0000);
+        while (w++ < 3)
+            my_mlx_pixel_put(data, (data->pos_x * data->minimap_size + w), (data->pos_y * data->minimap_size + h),  BLUE);
 		w = 0;
 		//printf ("h %d", h);
     }
@@ -52,11 +53,11 @@ void     set_map(t_data *data)
 		{
 			if (data->map[h][w] != '0')
 			{
-				pixh = 64*h;
-				while (pixh++ < 64 * (h + 1))
+				pixh = data->minimap_size  *h;
+				while (pixh++ < data->minimap_size  * (h + 1))
 				{
-					pixw = 64 * (w);
-					while (pixw++ < 64 * (w + 1))
+					pixw = data->minimap_size  * (w);
+					while (pixw++ < data->minimap_size  * (w + 1))
 						my_mlx_pixel_put(data, pixw, pixh, 0xffd700);
 				}
 			}
