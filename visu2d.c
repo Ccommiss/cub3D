@@ -26,11 +26,12 @@ int     set_player(t_data *data)
     while (h++ < 10)
     {
         while (w++ < 10)
-            my_mlx_pixel_put(data, (data->pos_x * 64 + w), (data->pos_y * 64 + h),  0x4b0082);
+            my_mlx_pixel_put(data, (data->pos_x * 64 + w), (data->pos_y * 64 + h),  0XFF0000);
 		w = 0;
-		printf ("h %d", h);
+		//printf ("h %d", h);
     }
     printf ("POS X %f", data->pos_x);
+	printf ("POS Y %f", data->pos_y);
     return 0;
 }
 

@@ -1,12 +1,30 @@
 #include "cub3d.h"
 
+
+
+
  void display(t_data *data)
  {
 	 //mlx_clear_window(data->mlx, data->win);
-	 fill_black(data);
-	 
+	fill_black(data);
+
 	 set_map(data);
 	 set_player(data);
+	 data->color = 0xADD8E6;
+	bresenham(data->pos_x * 64, data->pos_y * 64, (data->pos_x + data->dirX) * 64, (data->pos_y + data->dirY) * 64, data);
+
+	data->color = 0xFFFFFF;
+//	bresenham(data->pos_x * 64, data->pos_y * 64, (data->pos_x + data->dirX + (data->cameraX - 1)) * 64, (data->pos_y + data->dirY + (data->cameraY + 1)) * 64, data);
+//	bresenham(data->pos_x * 64, data->pos_y * 64, (data->pos_x + data->dirX + data->cameraX) * 64, (data->pos_y + data->dirY + data->cameraY) * 64, data);
+
+//	bresenham(data->pos_x * 64, data->pos_y * 64, (data->rayDirX) * 64, (data->rayDirY) * 64, data);
+//	bresenham(data->pos_x * 64, data->pos_y * 64, (data->pos_x + data->dirX + data->planeX * 0) * 64, (data->pos_y + data->dirY + data->planeY* 600) * 64, data);
+//	bresenham(data->pos_x * 64, data->pos_y * 64, (data->pos_x + data->dirX + data->planeX * 600) * 64, (data->pos_y + data->dirY + data->planeY * 600) * 64, data);
+
+
+
+
+
 	 mlx_new_image(data->mlx,data->width, data->height);
 	 mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
  }
@@ -20,44 +38,121 @@
    		*(unsigned int*)dst = color;
 }
 
+void 	bresenham(int xdep, int ydep, int xfin, int yfin, t_data *data)
+{
+   float a=0;
+   int temp=0;
+   int cste=0;
 
+   unsigned int dy;
+   unsigned int dx;
+
+   dx=abs(xfin-xdep);
+   dy=abs(yfin-ydep);
+if(dx>=dy && dx!=0 && dy!=0)
+{
+   if(xdep>xfin)
+   {
+	   printf ("ALOHA\n");
+      temp=xdep;
+      xdep=xfin;
+      xfin=temp;
+
+      temp=ydep;
+      ydep=yfin;
+      yfin=temp;
+   }
+   a=((float)(yfin-ydep)/(xfin-xdep));
+
+   for(unsigned int x=0;x<dx+1;x++)
+   {
+	   	   printf ("ALOHA PIXPUT\n");
+      my_mlx_pixel_put(data,x+xdep,ydep+(x*a)+cste, data->color);
+   }
+}
+
+if(dx<dy && dx!=0 && dy!=0)
+{
+		   printf ("ALOHA 2\n");
+   if(ydep>yfin)
+   {
+   temp=ydep;
+   ydep=yfin;
+   yfin=temp;
+
+   temp=xdep;
+   xdep=xfin;
+   xfin=temp;
+   }
+   a=((float)(xfin-xdep)/(yfin-ydep));
+
+   for(unsigned int y=0;y<dy+1;y++)
+   {
+	my_mlx_pixel_put(data,xdep+(y*a)+cste,y+ydep, data->color);
+   }
+}
+
+if(dx==0)
+{
+   if(ydep>yfin)
+   {
+      temp=ydep;
+      ydep=yfin;
+      yfin=temp;
+   }
+   for(int y=ydep;y<yfin+1;y++)
+   	my_mlx_pixel_put(data,xdep,y, data->color);
+}
+if(dy==0)
+{
+      if(xdep>xfin)
+   {
+      temp=xdep;
+      xdep=xfin;
+      xfin=temp;
+   }
+   for(int x=xdep;x<xfin+1;x++)
+   my_mlx_pixel_put(data,x,ydep,data->color);
+}
+}
 
 int key_hook(int keycode, t_data *data)
 {
 	if (keycode == KEY_UP)
-	{	
+	{
 		printf("KEUP PRESSED\n");
-		if (data->map[(int)(data->pos_x + data->dirX * 0.2)][(int)(data->pos_y)] == '0')
-			data->pos_x += data->dirX * 0.2;
-		if (data->map[(int)(data->pos_x)][(int)(data->pos_y - data->dirY * 0.2)] == '0')
-			data->pos_y += data->dirY * 0.2;
+		if (data->map[(int)(data->pos_y)][(int)(data->pos_x + data->dirX * 0.005)] == '0')
+			data->pos_x += data->dirX * 0.005;
+		if (data->map[(int)(data->pos_y - data->dirY * 0.005)][(int)(data->pos_x)] == '0')
+			data->pos_y += data->dirY * 0.005;
 	}
 	if (keycode == KEY_DOWN)
 	{
-		if (data->map[(int)(data->pos_x - data->dirX * 0.2)][(int)(data->pos_y)] == '0')
-			data->pos_x -= data->dirX * 0.2;
-		if (data->map[(int)(data->pos_x)][(int)(data->pos_y - data->dirY * 0.2)] == '0')
-			data->pos_y -= data->dirY * 0.2;
+		if (data->map[(int)(data->pos_y)][(int)(data->pos_x - data->dirX * 0.02)] == '0')
+			data->pos_x -= data->dirX * 0.02;
+		if (data->map[(int)(data->pos_y - data->dirY * 0.02)][(int)(data->pos_x)] == '0')
+			data->pos_y -= data->dirY * 0.02;
 	}
-	if (keycode == KEY_LEFT) //ROTATION A FAIRE
+	if (keycode == KEY_RIGHT) //ROTATION A FAIRE
 	{
       //both camera direction and camera plane must be rotated
       double oldDirX = data->dirX;
       data->dirX = data->dirX * cos(0.2) - data->dirY * sin(0.2);
-      data->dirY = oldDirX * sin(0.2) + data->dirY * cos(0.2);
-      double oldPlaneX = data->planeX;
-      data->planeX = data->planeX * cos(0.2) - data->planeY * sin(0.2);
-      data->planeY = oldPlaneX * sin(0.2) + data->planeY * cos(0.2);
+	  data->dirY = oldDirX * sin(0.2) + data->dirY * cos(0.2);
+
+	  double oldPlaneX = data->planeX;
+	  data->planeX = data->planeX * cos(0.2) - data->planeY * sin(0.2);
+	  data->planeY = oldPlaneX * sin(0.2) + data->planeY * cos(0.2);
     }
 
-	if (keycode == KEY_RIGHT)
+	if (keycode == KEY_LEFT)
 	{
-	    double oldDirX = data->dirX;
-      data->dirX = data->dirX * cos(-0.2) - data->dirY * sin(-0.2);
-      data->dirY = oldDirX * sin(-0.2) + data->dirY * cos(-0.2);
+	  double oldDirX = data->dirX;
+      data->dirX = data->dirX * cos(-0.02) - data->dirY * sin(-0.02);
+      data->dirY = oldDirX * sin(-0.02) + data->dirY * cos(-0.02);
       double oldPlaneX = data->planeX;
-      data->planeX = data->planeX * cos(-0.2) - data->planeY * sin(-0.2);
-      data->planeY = oldPlaneX * sin(-0.2) + data->planeY * cos(-0.2);
+      data->planeX = data->planeX * cos(-0.02) - data->planeY * sin(-0.02);
+      data->planeY = oldPlaneX * sin(-0.02) + data->planeY * cos(-0.02);
 	}
 
 	display(data);
@@ -79,8 +174,7 @@ void init_struct(t_data *data)
 	data->dirY = 0;
 	data->planeX = 0;
 	data->planeY = 0.66;
-	data->pos_x = 22;
-	data->pos_y = 12;
+
 }
 
 void perform_dda(t_data *data)
@@ -106,7 +200,7 @@ void perform_dda(t_data *data)
 		//printf("\n");
 		if (data->map[data->mapY][data->mapX] > '0')
 		{
-			printf("HIT Y %d X %d = ", data->mapX, data->mapY);
+			printf("HIT Y %d X %d = \n", data->mapX, data->mapY);
 			hit = 1;
 		}
 	}
@@ -119,22 +213,22 @@ void calculate_step(t_data *data)
 	if (data->rayDirX < 0)
 	{
 		data->stepX = -1;
-		data->dx = (data->pos_x - data->mapX) * data->dx;
+		data->dx = (data->pos_x - data->mapX) * data->delta_x;
 	}
 	else
 	{
 		data->stepX = 1;
-		data->dx = (data->mapX + 1.0 - data->pos_x) * data->dx;
+		data->dx = (data->mapX + 1.0 - data->pos_x) * data->delta_x;
 	}
 	if (data->rayDirY < 0)
 	{
 		data->stepY = -1;
-		data->dy = (data->pos_y - data->mapY) * data->dy;
+		data->dy = (data->pos_y - data->mapY) * data->delta_y;
 	}
 	else
 	{
 		data->stepY = 1;
-		data->dy = (data->mapY + 1.0 - data->pos_y) * data->dy;
+		data->dy = (data->mapY + 1.0 - data->pos_y) * data->delta_y;
 	}
 }
 
@@ -146,35 +240,40 @@ void draw (t_data *data)
 
       //calculate lowest and highest pixel to fill in current stripe
       int drawStart = -lineHeight / 2 + data->height/ 2;
-      if(drawStart < 0)drawStart = 0;
+      if(drawStart < 0)
+	  	drawStart = 0;
       int drawEnd = lineHeight / 2 + data->height/ 2;
-      if(drawEnd >= data->height)drawEnd = data->height - 1;
+      if(drawEnd >= data->height)
+	  	drawEnd = data->height - 1;
+	bresenham(x, 0, drawStart, drawEnd);
 }
 
 void dda(t_data *data)
 {
 	int x = 0;
-	printf("DDA :\n\n");
+	// printf("DDA :\n\n");
 
-	int i;
-	int j;
-	for (i = 0; i < data->map_h; i++)
-	{
-		for (j = 0; j < data->map_w; j++)
-		{
-			printf("yo map[%d][%d] ", i, j);
-			printf("%c ", data->map[i][j]);
-		}
-		printf("\n");
-	}
+	// int i;
+	// int j;
+	// for (i = 0; i < data->map_h; i++)
+	// {
+	// 	for (j = 0; j < data->map_w; j++)
+	// 	{
+	// 		printf("yo map[%d][%d] ", i, j);
+	// 		printf("%c ", data->map[i][j]);
+	// 	}
+	// 	printf("\n");
+	// }
 
-	printf("%d \n", data->width);
+	// printf("%d \n", data->width);
+
 	while (x++ < data->width)
 	{
 		data->cameraX = 2 * x / (double)data->width - 1; //x-coordinate in camera space
 		data->rayDirX = data->dirX + data->planeX * data->cameraX;
 		data->rayDirY = data->dirY + data->planeY * data->cameraX;
-		//printf("RAYDIR X - Y = %f - %f \n", data->rayDirX, data->rayDirY);
+		printf("RAYDIR X - Y = %f - %f \n", data->rayDirX, data->rayDirY);
+
 		data->mapX = (int)data->pos_x;
 		//printf ("POS %f MAP %d\n", data->pos_x, data->mapX);
 		data->mapY = (int)data->pos_y;
@@ -183,22 +282,19 @@ void dda(t_data *data)
 		data->delta_y = fabs(1 / data->rayDirY);
 
 
+
 		//calculate step and initial sideDist
 		calculate_step(data);
 		perform_dda(data);
+
+		//bresenham(data->pos_x * 64, data->pos_y * 64, (data->pos_x + data->rayDirX) * 64, (data->pos_y + data->rayDirY) * 64, data);
+
+
 		if (data->side == 0)
 			data->perpWallDist = (data->mapX - data->pos_x + (1 - data->stepX) / 2) / data->rayDirX;
       	else
 		  	data->perpWallDist = (data->mapY - data->pos_y + (1 - data->stepY) / 2) / data->rayDirY;
 		draw(data);
-
-		//perform DDA
-
-		//Calculate distance projected on camera direction (Euclidean distance will give fisheye effect!)
-		// if (data->side == 0)
-		// 	perpWallDist = (mapX - data->pos_x + (1 - stepX) / 2) / data->rayDirX;
-		// else
-		// 	perpWallDist = (mapY - data->pos_y + (1 - stepY) / 2) / data->rayDirY;
 	}
 }
 
@@ -224,3 +320,20 @@ int main()
 
 	mlx_loop(data.mlx);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
