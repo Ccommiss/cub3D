@@ -2,22 +2,24 @@
 NAME = test
 
 
-SRCS = cub.c parser.c visu2d.c ./getnextline/get_next_line.c ./getnextline/get_next_line_utils.c
+SRCS = cub.c \
+	parser.c \
+	visu2d.c \
+	./getnextline/get_next_line.c \
+	./getnextline/get_next_line_utils.c \
+
 
 OBJS := ${SRCS:c=o}
 
-CC = clang -g
+CC = clang -g $(FLAGS)
 
-FLAGS =  -Wall -Werror -Wextra -fsanitize=address
-
-%.o: %.c
-	$(CC) -Wall -Wextra -Werror -Imlx -c $< -o $@
-
+FLAGS =  -Wall -Werror -Wextra -fsanitize=address 
+LIBS = ./libft/
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(FLAGS) $(OBJS) -Lmlx -lmlx -framework OpenGL -framework AppKit -o $(NAME)
+	$(CC) $(OBJS) -Lmlx -lmlx -framework OpenGL -framework AppKit -L$(LIBS) -lft  -o $(NAME)
 
 clean:
 	rm *.o

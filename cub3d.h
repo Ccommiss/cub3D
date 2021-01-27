@@ -2,11 +2,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <mlx.h>
+//#include <mlx.h>
 #include <fcntl.h>
 #include "keys.h"
 #include <math.h>
 #include "getnextline/get_next_line.h"
+#include "libft/libft.h"
+#include "mlx/mlx.h"
 
 
 #define RED 0xFF0000

@@ -12,6 +12,12 @@
 	set_map(data);
 	set_player(data);
 	// data->color = 0xADD8E6;
+	char *positionX = ft_itoa(data->pos_x);
+	
+	char *positionY = ft_itoa(data->pos_y);
+	printf ("%s - %s\n", positionX, positionY);
+	
+
 	bresenham(data->pos_x * data->minimap_size , data->pos_y * data->minimap_size , (data->pos_x + data->dirX) * data->minimap_size , (data->pos_y + data->dirY) * data->minimap_size , data);
 
 	//data->color = 0xFFFFFF;
@@ -28,6 +34,9 @@
 
 	 mlx_new_image(data->mlx,data->width, data->height);
 	 mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
+	 	mlx_string_put(data->mlx, data->win, 30, data->height - 50, BLUE, positionX);
+	mlx_string_put(data->mlx, data->win, 30, data->height - 25, BLUE, positionY);
+	mlx_string_put(data->mlx, data->win, 0, 0, WHITE, "COUCOU");
  }
 
  void            my_mlx_pixel_put(t_data *data, int x, int y, int color)
@@ -119,7 +128,6 @@ int key_hook(int keycode, t_data *data)
 {
 	if (keycode == KEY_UP)
 	{
-		printf("KEUP PRESSED\n");
 		if (data->map[(int)(data->pos_y)][(int)(data->pos_x + data->dirX * 0.005)] == '0')
 			data->pos_x += data->dirX * 0.005;
 		if (data->map[(int)(data->pos_y - data->dirY * 0.005)][(int)(data->pos_x)] == '0')
@@ -198,7 +206,6 @@ void perform_dda(t_data *data)
 			data->side = 1;
 		}
 		//Check if ray has hit a wall
-		//printf("\n");
 		if (data->map[data->mapY][data->mapX] > '0')
 		{
 			hit = 1;
@@ -209,7 +216,6 @@ void perform_dda(t_data *data)
 
 void calculate_step(t_data *data)
 {
-	//printf ("CALCULATING STEPS : \n");
 	if (data->rayDirX < 0)
 	{
 		data->stepX = -1;
@@ -256,7 +262,7 @@ void draw (t_data *data, int x)
 		data->color = RED;
 	else 
 		data->color = YELLOW;
-	bresenham(x, drawStart, x, drawEnd, data);
+	bresenham(x, drawEnd, x, drawStart, data);
 }
 
 void dda(t_data *data)
