@@ -7,18 +7,27 @@
  {
 	 //mlx_clear_window(data->mlx, data->win);
 	fill_black(data);
+	fill_ceiling(data);
+	fill_floor(data);
 	dda(data);
 
-	set_map(data);
-	set_player(data);
+	if (data->displaymap == 1)
+	{
+		set_map(data);
+		set_player(data);
+		bresenham(data->pos_x * data->minimap_size + data->width/2, data->pos_y * data->minimap_size + data->height - 200 , (data->pos_x + data->dirX) * data->minimap_size + data->width/2 , (data->pos_y + data->dirY ) * data->minimap_size + data->height - 200 , data);
+
+	}
 	// data->color = 0xADD8E6;
-	char *positionX = ft_itoa(data->pos_x);
+	char *positionX = ft_ftoa(data->pos_x, 4);
+	char *stringX = ft_strjoin("X = ", positionX);
 	
-	char *positionY = ft_itoa(data->pos_y);
+	char *positionY = ft_ftoa(data->pos_y, 4);
+	char *stringY = ft_strjoin("Y = ", positionY);
+	
 	printf ("%s - %s\n", positionX, positionY);
 	
 
-	bresenham(data->pos_x * data->minimap_size , data->pos_y * data->minimap_size , (data->pos_x + data->dirX) * data->minimap_size , (data->pos_y + data->dirY) * data->minimap_size , data);
 
 	//data->color = 0xFFFFFF;
 //	bresenham(data->pos_x * 64, data->pos_y * 64, (data->pos_x + data->dirX + (data->cameraX - 1)) * 64, (data->pos_y + data->dirY + (data->cameraY + 1)) * 64, data);
@@ -32,10 +41,10 @@
 
 
 
-	 mlx_new_image(data->mlx,data->width, data->height);
-	 mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
-	 	mlx_string_put(data->mlx, data->win, 30, data->height - 50, BLUE, positionX);
-	mlx_string_put(data->mlx, data->win, 30, data->height - 25, BLUE, positionY);
+	mlx_new_image(data->mlx,data->width, data->height);
+	mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
+	mlx_string_put(data->mlx, data->win, 30, data->height - 50, BLUE, stringX);
+	mlx_string_put(data->mlx, data->win, 30, data->height - 25, BLUE, stringY);
 	mlx_string_put(data->mlx, data->win, 0, 0, WHITE, "COUCOU");
  }
 
@@ -128,17 +137,17 @@ int key_hook(int keycode, t_data *data)
 {
 	if (keycode == KEY_UP)
 	{
-		if (data->map[(int)(data->pos_y)][(int)(data->pos_x + data->dirX * 0.005)] == '0')
-			data->pos_x += data->dirX * 0.005;
-		if (data->map[(int)(data->pos_y - data->dirY * 0.005)][(int)(data->pos_x)] == '0')
-			data->pos_y += data->dirY * 0.005;
+		if (data->map[(int)(data->pos_y)][(int)(data->pos_x + data->dirX * 0.10)] == '0')
+			data->pos_x += data->dirX * 0.10;
+		if (data->map[(int)(data->pos_y - data->dirY * 0.10)][(int)(data->pos_x)] == '0')
+			data->pos_y += data->dirY * 0.10;
 	}
 	if (keycode == KEY_DOWN)
 	{
-		if (data->map[(int)(data->pos_y)][(int)(data->pos_x - data->dirX * 0.02)] == '0')
-			data->pos_x -= data->dirX * 0.02;
-		if (data->map[(int)(data->pos_y - data->dirY * 0.02)][(int)(data->pos_x)] == '0')
-			data->pos_y -= data->dirY * 0.02;
+		if (data->map[(int)(data->pos_y)][(int)(data->pos_x - data->dirX * 0.10)] == '0')
+			data->pos_x -= data->dirX * 0.10;
+		if (data->map[(int)(data->pos_y - data->dirY * 0.10)][(int)(data->pos_x)] == '0')
+			data->pos_y -= data->dirY * 0.10;
 	}
 	if (keycode == KEY_LEFT) //ROTATION A FAIRE
 	{
@@ -151,7 +160,6 @@ int key_hook(int keycode, t_data *data)
 	  data->planeX = data->planeX * cos(0.2) - data->planeY * sin(0.2);
 	  data->planeY = oldPlaneX * sin(0.2) + data->planeY * cos(0.2);
     }
-
 	if (keycode == KEY_RIGHT)
 	{
 	  double oldDirX = data->dirX;
@@ -161,6 +169,15 @@ int key_hook(int keycode, t_data *data)
       data->planeX = data->planeX * cos(-0.02) - data->planeY * sin(-0.02);
       data->planeY = oldPlaneX * sin(-0.02) + data->planeY * cos(-0.02);
 	}
+	if (keycode == KEY_SPACE)
+	{
+		if (data->displaymap == 0)
+			data->displaymap = 1;
+		else
+			data->displaymap = 0;
+	}
+		
+
 
 	display(data);
 	return 1;
@@ -169,8 +186,8 @@ int key_hook(int keycode, t_data *data)
 void init_struct(t_data *data)
 {
 	data->mlx = mlx_init();
-	data->width = 600;
-	data->height = 500;
+	data->width = 1080;
+	data->height = 600;
 	data->win = mlx_new_window(data->mlx, data->width, data->height, "who run the world ?");
 	data->img = mlx_new_image(data->mlx, data->width, data->height);
 	data->imgaddr = mlx_get_data_addr(data->img, &data->bits_per_pixel, &data->line_length, &data->endian);
@@ -182,7 +199,8 @@ void init_struct(t_data *data)
 	data->planeX = 0;
 	data->planeY = 0.66;
 
-	data->minimap_size = 10;
+	data->minimap_size = 30;
+	data->displaymap = 1;
 
 }
 
@@ -242,8 +260,7 @@ void calculate_step(t_data *data)
 
 void draw (t_data *data, int x)
 {
-	int lineHeight = 8;
-	//printf("[DRAW] DATA PERPWALL DIST = %f \n", data->perpWallDist);
+	int lineHeight;
 	if (data->perpWallDist != 0)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
 		lineHeight = (int)(data->height / data->perpWallDist);
 	else 
@@ -305,9 +322,27 @@ int main()
 	if (!fd)
 		printf("Bad argument.\n");
 	ft_parse(fd, &data);
-	set_player(&data);
-	set_map(&data);
-	dda(&data);
+
+	int i;		
+ 	int j;
+	printf ("DATA.maph = %d \n", data.map_h);
+	printf ("DATA.mapZ = %d \n", data.map_w);
+
+ 	for (i = 0; i < data.map_h; i++)		
+ 	{		
+ 		for (j = 0; j < data.map_w; j++)		
+ 		{		
+ 			printf("[%d][%d]", i, j);		
+ 			printf("%c ", data.map[i][j]);		
+ 		}		
+ 		printf("\n");		
+ 	}		
+
+	display(&data);
+	//dda(&data);
+//	set_player(&data);
+	//set_map(&data);
+	
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 	mlx_hook(data.win, 2, 1L<<0, key_hook, &data);
 	//	mlx_hook(data.win, 17, (1L << 17), red_cross, &data);

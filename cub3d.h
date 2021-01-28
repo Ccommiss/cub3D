@@ -15,6 +15,7 @@
 #define WHITE 0xFFFAFA
 #define YELLOW 0xFFDEAD
 #define BLUE 0x00CCCC
+#define GREEN 0Xbef574
 
 
 typedef struct s_data
@@ -27,18 +28,14 @@ typedef struct s_data
     int     line_length;
     int     endian;
 
+	int angle;
+
 //Player
 
     double     pos_x;
     double     pos_y;
 	double		dirX;
 	double		dirY;
-
-	float	angle; //teta
-
-
-
-
 
 //vue
 	double cameraX;
@@ -86,6 +83,7 @@ typedef struct s_data
 
 
 	int speed;
+	int displaymap;
 
 }   t_data;
 
@@ -95,5 +93,7 @@ void     set_map(t_data *data);
 int     set_player(t_data *data);
 void            my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void fill_black(t_data *data);
+void fill_ceiling(t_data *data);
+void fill_floor(t_data *data);
 void 	bresenham(int xdep, int ydep, int xfin, int yfin, t_data *data);
 void dda(t_data *data);

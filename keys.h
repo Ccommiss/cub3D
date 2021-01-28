@@ -45,6 +45,7 @@
 # define KEY_N 45
 # define KEY_M 46
 # define KEY_TAB 48
+# define KEY_SPACE 49 //mine
 # define KEY_PLUS 69
 # define KEY_MINUS 78
 # define KEY_LEFT 123
