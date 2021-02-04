@@ -284,6 +284,7 @@ void dda(t_data *data)
 {
 	int x = 0;
 
+	
 	while (x++ < data->width)
 	{
 		data->cameraX = 2 * x / (double)data->width - 1; //x-coordinate in camera space

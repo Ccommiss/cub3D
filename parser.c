@@ -200,37 +200,79 @@ int close_check(t_data *data)
 
 void LabelComponent(t_data *data, int* output, int labelNo, unsigned short x, unsigned short y)
 {
+	static int first = 0;
   int index = x + data->map_w * y;
-  if (map[y][x]== '0') return;   /* This pixel is not part of a component */
-  if (output[index] != 0) return;   /* This pixel has already been labelled  */
-  output[index] = labelNo;
+  printf ("LABEL CO : index is %d \n", index);
+  if (data->map[y][x] == '0') 
+  	return;   /* This pixel is not part of a component */
+    /* This pixel has already been labelled  */
+	if (output[index] == 9)
+		printf ("MAP IS CLOSED\n");
+	if (output[index] != 0) 
+  		return; 
+	if (first != 0)
+  		output[index] = labelNo;
+	else if (first == 0)
+	{
+		output[index] = 9;
+		first = 1;
+	}
+
 
   /* Now label the 4 neighbours: */
-  if (x > 0)        LabelComponent(data, output, labelNo, x-1, y);   /* left  pixel */
-  if (x < data->map_w-1)  LabelComponent(data, output, labelNo, x+1, y);   /* right pixel */
-  if (y > 0)        LabelComponent(data, output, labelNo, x, y-1);   /* upper pixel */
-  if (y < data->map_h-1) LabelComponent(data, output, labelNo, x, y+1);   /* lower pixel */
+  if (x > 0)        
+  	LabelComponent(data, output, labelNo, x-1, y);   /* left  pixel */
+  if (x < data->map_w-1)  
+  	LabelComponent(data, output, labelNo, x+1, y);   /* right pixel */
+  if (y > 0)        
+  	LabelComponent(data, output, labelNo, x, y-1);   /* upper pixel */
+  if (y < data->map_h-1) 
+  	LabelComponent(data, output, labelNo, x, y+1);   /* lower pixel */
 }
 
 void LabelImage(t_data *data, int* output)
 {
+	
   int labelNo = 0;
-  int x = 0;
+  int x = -1;
   int y = 0;
+  output = malloc(sizeof(int) * data->map_w * data->map_h);
   ft_memset(output, 0, sizeof(int) * data->map_h * data->map_w);
   int index = x + data->map_w * y;
   while (y < data->map_h)
-  {
+  {  
     while(x < data->map_w)
-    {
+    { 
+		x++;
       index++;
-      if (data->map[y][x] == '0') continue;   /* This pixel is not part of a component */
-      if (output[index] != 0) continue;   /* This pixel has already been labelled  */
-      /* New component found */
+	  printf ("index = %d\n", index);
+	  printf ("x = %d\n", x);
+      if (data->map[y][x] == '0') 
+	  	continue;   /* This pixel is not part of a component */
+      if (output[index] != 0) 
+	  	continue;   /* This pixel has already been labelled  */
+     
+	  /* New component found */
       labelNo++;
       LabelComponent(data, output, labelNo, x, y);
-	  x++;
+	 // x++;
+	 
     }
+	printf ("y = %d\n", y);
+	y++;
+  }
+  int o = 0;
+  int k = 0;
+  printf("%d \n", (x - 1) + data->map_w * (y-1));
+  while (o < (x - 1) + data->map_w * (y - 1))
+  {
+	while (k++ < data->map_w)
+	{
+		printf ("%d ", output[o]);
+		o++;
+	}
+	printf ("\n");
+	k = 0;
   }
 }
 
@@ -256,8 +298,10 @@ int ft_parse(int fd, t_data *data)
 	// la map est en dernier dans la fichier
 
 	checkmap(data);
-	if (close_check(data) < 0)
-		return (-1);
+	// if (close_check(data) < 0)
+	// 	return (-1);
+	int *output = NULL;
+	LabelImage(data, output);
 
 	return 1;
 }
