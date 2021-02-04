@@ -18,6 +18,22 @@
 #define GREEN 0Xbef574
 
 
+typedef struct s_display
+{
+	char	*sprite_text;
+
+	char	*north_text;
+	char	*south_text;
+	char	*east_text;
+	char	*west_text;
+
+	int		ceiling_rgb;
+	int		floor_rgb;
+
+}	t_display;
+
+
+
 typedef struct s_data
 {
     void    *mlx;
@@ -27,8 +43,6 @@ typedef struct s_data
 	int     bits_per_pixel;
     int     line_length;
     int     endian;
-
-	int angle;
 
 //Player
 
@@ -62,8 +76,6 @@ typedef struct s_data
 
 	int side;	 //was a NS or a EW wall hit?
 
-
-
 // map
     char     **map;
 	int		map_w;
@@ -73,17 +85,13 @@ typedef struct s_data
 //window
 	int width;
     int height;
-
 	int color;
-
-
-
 	int minimap_size;
-
-
-
 	int speed;
 	int displaymap;
+
+// colors
+	t_display *info;
 
 }   t_data;
 
@@ -97,3 +105,7 @@ void fill_ceiling(t_data *data);
 void fill_floor(t_data *data);
 void 	bresenham(int xdep, int ydep, int xfin, int yfin, t_data *data);
 void dda(t_data *data);
+
+void checkmap(t_data *data);
+int checkzero_letter(char c);
+int		red_cross(void);

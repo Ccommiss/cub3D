@@ -16,17 +16,13 @@
 		set_map(data);
 		set_player(data);
 		bresenham(data->pos_x * data->minimap_size + data->width/2, data->pos_y * data->minimap_size + data->height - 200 , (data->pos_x + data->dirX) * data->minimap_size + data->width/2 , (data->pos_y + data->dirY ) * data->minimap_size + data->height - 200 , data);
-
 	}
 	// data->color = 0xADD8E6;
 	char *positionX = ft_ftoa(data->pos_x, 4);
 	char *stringX = ft_strjoin("X = ", positionX);
-	
+
 	char *positionY = ft_ftoa(data->pos_y, 4);
 	char *stringY = ft_strjoin("Y = ", positionY);
-	
-	printf ("%s - %s\n", positionX, positionY);
-	
 
 
 	//data->color = 0xFFFFFF;
@@ -53,6 +49,7 @@
 	char *dst;
 
    dst = data->imgaddr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+ //  printf ("WIDTH = %d -- HEIGHT = %d  \n", data->width, data->height);
   	if (x >= 0 && x < data->width && y >= 0 && y < data->height)
    		*(unsigned int*)dst = color;
 }
@@ -90,7 +87,6 @@ if(dx>=dy && dx!=0 && dy!=0)
 
 if(dx<dy && dx!=0 && dy!=0)
 {
-		   printf ("ALOHA 2\n");
    if(ydep>yfin)
    {
    temp=ydep;
@@ -133,20 +129,28 @@ if(dy==0)
 }
 }
 
+int checkzero_letter(char c)
+{
+	if (c == '0' || c == 'N' || c == 'S'|| c == 'W'|| c == 'E')
+		return 1;
+	return 0;
+}
+
 int key_hook(int keycode, t_data *data)
 {
 	if (keycode == KEY_UP)
 	{
-		if (data->map[(int)(data->pos_y)][(int)(data->pos_x + data->dirX * 0.10)] == '0')
+		if (checkzero_letter(data->map[(int)(data->pos_y)][(int)(data->pos_x + data->dirX * 0.10)]))
 			data->pos_x += data->dirX * 0.10;
-		if (data->map[(int)(data->pos_y - data->dirY * 0.10)][(int)(data->pos_x)] == '0')
+
+		if (checkzero_letter(data->map[(int)(data->pos_y + data->dirY * 0.10)][(int)(data->pos_x)]))
 			data->pos_y += data->dirY * 0.10;
 	}
 	if (keycode == KEY_DOWN)
 	{
-		if (data->map[(int)(data->pos_y)][(int)(data->pos_x - data->dirX * 0.10)] == '0')
+		if (checkzero_letter(data->map[(int)(data->pos_y)][(int)(data->pos_x - data->dirX * 0.10)]))
 			data->pos_x -= data->dirX * 0.10;
-		if (data->map[(int)(data->pos_y - data->dirY * 0.10)][(int)(data->pos_x)] == '0')
+		if (checkzero_letter(data->map[(int)(data->pos_y - data->dirY * 0.10)][(int)(data->pos_x)]))
 			data->pos_y -= data->dirY * 0.10;
 	}
 	if (keycode == KEY_LEFT) //ROTATION A FAIRE
@@ -176,30 +180,26 @@ int key_hook(int keycode, t_data *data)
 		else
 			data->displaymap = 0;
 	}
-		
-
-
 	display(data);
-	return 1;
+	return (1);
 }
 
 void init_struct(t_data *data)
 {
 	data->mlx = mlx_init();
-	data->width = 1080;
-	data->height = 600;
+	// data->width = 1080; definies dans le file ;
+	// data->height = 600;
 	data->win = mlx_new_window(data->mlx, data->width, data->height, "who run the world ?");
 	data->img = mlx_new_image(data->mlx, data->width, data->height);
 	data->imgaddr = mlx_get_data_addr(data->img, &data->bits_per_pixel, &data->line_length, &data->endian);
 	data->map_s = 64; //bloc de 64 px
-	data->angle = 0;
 
 	data->dirX = -1;
 	data->dirY = 0;
 	data->planeX = 0;
 	data->planeY = 0.66;
 
-	data->minimap_size = 30;
+	data->minimap_size = data->width/30;
 	data->displaymap = 1;
 
 }
@@ -224,10 +224,8 @@ void perform_dda(t_data *data)
 			data->side = 1;
 		}
 		//Check if ray has hit a wall
-		if (data->map[data->mapY][data->mapX] > '0')
-		{
+		if (data->map[data->mapY][data->mapX] != '0')
 			hit = 1;
-		}
 	}
 }
 
@@ -261,9 +259,9 @@ void calculate_step(t_data *data)
 void draw (t_data *data, int x)
 {
 	int lineHeight;
-	if (data->perpWallDist != 0)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+	if (data->perpWallDist != 0)
 		lineHeight = (int)(data->height / data->perpWallDist);
-	else 
+	else
 		lineHeight = (int)data->height;
 
       //calculate lowest and highest pixel to fill in current stripe
@@ -274,10 +272,10 @@ void draw (t_data *data, int x)
       int drawEnd = lineHeight / 2 + data->height/ 2;
       if(drawEnd >= data->height)
 	  	drawEnd = data->height - 1;
-		
+
 	if (data->side == 1)
 		data->color = RED;
-	else 
+	else
 		data->color = YELLOW;
 	bresenham(x, drawEnd, x, drawStart, data);
 }
@@ -313,39 +311,25 @@ void dda(t_data *data)
 int main()
 {
 	t_data data;
+	t_display info;
 	int fd;
 	char *file;
 
 	file = NULL;
-	init_struct(&data);
+
 	fd = open("map1.cub", O_RDONLY);
 	if (!fd)
 		printf("Bad argument.\n");
-	ft_parse(fd, &data);
-
-	int i;		
- 	int j;
-	printf ("DATA.maph = %d \n", data.map_h);
-	printf ("DATA.mapZ = %d \n", data.map_w);
-
- 	for (i = 0; i < data.map_h; i++)		
- 	{		
- 		for (j = 0; j < data.map_w; j++)		
- 		{		
- 			printf("[%d][%d]", i, j);		
- 			printf("%c ", data.map[i][j]);		
- 		}		
- 		printf("\n");		
- 	}		
+	data.info = &info;
+	if (ft_parse(fd, &data) < 0)
+		return (-1);
+	init_struct(&data);
 
 	display(&data);
-	//dda(&data);
-//	set_player(&data);
-	//set_map(&data);
-	
+
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 	mlx_hook(data.win, 2, 1L<<0, key_hook, &data);
-	//	mlx_hook(data.win, 17, (1L << 17), red_cross, &data);
+		mlx_hook(data.win, 17, (1L << 17), red_cross, &data);
 
 	mlx_loop(data.mlx);
 }
@@ -366,4 +350,3 @@ int main()
 
 
 
-  
