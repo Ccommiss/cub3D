@@ -203,13 +203,13 @@ void LabelComponent(t_data *data, int* output, int labelNo, unsigned short x, un
 	static int first = 0;
   int index = x + data->map_w * y;
   printf ("LABEL CO : index is %d \n", index);
-  if (data->map[y][x] == '0') 
+  if (data->map[y][x] == '0')
   	return;   /* This pixel is not part of a component */
     /* This pixel has already been labelled  */
 	if (output[index] == 9)
 		printf ("MAP IS CLOSED\n");
-	if (output[index] != 0) 
-  		return; 
+	if (output[index] != 0)
+  		return;
 	if (first != 0)
   		output[index] = labelNo;
 	else if (first == 0)
@@ -220,43 +220,44 @@ void LabelComponent(t_data *data, int* output, int labelNo, unsigned short x, un
 
 
   /* Now label the 4 neighbours: */
-  if (x > 0)        
+  if (x > 0)
   	LabelComponent(data, output, labelNo, x-1, y);   /* left  pixel */
-  if (x < data->map_w-1)  
+  if (x < data->map_w-1)
   	LabelComponent(data, output, labelNo, x+1, y);   /* right pixel */
-  if (y > 0)        
+  if (y > 0)
   	LabelComponent(data, output, labelNo, x, y-1);   /* upper pixel */
-  if (y < data->map_h-1) 
+  if (y < data->map_h-1)
   	LabelComponent(data, output, labelNo, x, y+1);   /* lower pixel */
 }
 
 void LabelImage(t_data *data, int* output)
 {
-	
+
   int labelNo = 0;
   int x = -1;
   int y = 0;
   output = malloc(sizeof(int) * data->map_w * data->map_h);
   ft_memset(output, 0, sizeof(int) * data->map_h * data->map_w);
-  int index = x + data->map_w * y;
+  int index = -1;
   while (y < data->map_h)
-  {  
+  {
     while(x < data->map_w)
-    { 
+    {
 		x++;
       index++;
 	  printf ("index = %d\n", index);
 	  printf ("x = %d\n", x);
-      if (data->map[y][x] == '0') 
+      if (data->map[y][x] == '0')
 	  	continue;   /* This pixel is not part of a component */
-      if (output[index] != 0) 
+      if (output[index] != 0)
 	  	continue;   /* This pixel has already been labelled  */
-     
+
 	  /* New component found */
       labelNo++;
+	  printf ("LABEL %d\n", labelNo);
       LabelComponent(data, output, labelNo, x, y);
 	 // x++;
-	 
+
     }
 	printf ("y = %d\n", y);
 	y++;
