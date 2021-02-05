@@ -149,7 +149,7 @@ int close_check(t_data *data)
 			printf(" Y = %d __ X = %d \n", y, x);
 			if ((y == 0 || y == data->map_h - 1)) //premiere et dernier(e ligne
 			{
-				if (ft_strlen(ft_strtrim(data->map[y], "1 ")) != 0) //s'il ny a pas que 0 ou 1 on ret
+				if (ft_strlen(ft_strtrim(data->map[y], "1 ")) != 0) //s'il ny a pas que espace ou 1 on ret
 					return (error_message(1));
 			}
 
@@ -194,29 +194,23 @@ int close_check(t_data *data)
 // 			y += 1;
 // 		else if ()
 
-
+//si 0 entoure d autre chose que  
 
 // }
 
 void LabelComponent(t_data *data, int* output, int labelNo, unsigned short x, unsigned short y)
 {
-	static int first = 0;
   int index = x + data->map_w * y;
   printf ("LABEL CO : index is %d \n", index);
   if (data->map[y][x] == '0')
   	return;   /* This pixel is not part of a component */
     /* This pixel has already been labelled  */
-	if (output[index] == 9)
-		printf ("MAP IS CLOSED\n");
+
 	if (output[index] != 0)
   		return;
-	if (first != 0)
+	else
   		output[index] = labelNo;
-	else if (first == 0)
-	{
-		output[index] = 9;
-		first = 1;
-	}
+
 
 
   /* Now label the 4 neighbours: */
@@ -256,8 +250,6 @@ void LabelImage(t_data *data, int* output)
       labelNo++;
 	  printf ("LABEL %d\n", labelNo);
       LabelComponent(data, output, labelNo, x, y);
-	 // x++;
-
     }
 	printf ("y = %d\n", y);
 	y++;
@@ -276,6 +268,57 @@ void LabelImage(t_data *data, int* output)
 	k = 0;
   }
 }
+
+
+
+void	fill(t_data *data, int x, int y) 
+{
+    if (x >= 0 && y >= 0 && x < data->map_w && y < data->map_h && data->map[y][x] == '0') 
+	{
+        data->map[y][x] = '3';
+        for (int dx = -1; dx <=1; dx +=1) 
+		{
+            for (int dy=-1; dy<=1; dy += 1) 
+			{
+                fill(data, x+dx, y+dy);
+            }
+        }
+    }
+}
+
+void detect(t_data *data) {
+    for(int y = 0; y + 1 < data->map_h; y++){
+       for(int x = 0; x + 1 < data->map_w; x++){
+           if (data->map[y][x] == '0') {
+               data->map[y][x] = '7';
+               return;
+           }
+           else if (data->map[y][x]== '1' && data->map[y+1][x]=='1' && data->map[y][x+1]== '1' && data->map[y+1][x+1]== '1') 
+		   {
+               data->map[y][x] = -'7';
+               return;
+           }
+       }
+    }
+}
+
+void findCycle(t_data *data)
+{
+    for(int y = 0; y < data->map_h; y++)
+	{
+       for(int x = 0; x < data->map_w; x++)
+	   {
+           if (data->map[y][x] == '0') 
+		   {
+               fill(data, x, y);
+                detect(data);
+               return;
+		   }
+	   }
+	}
+ }
+
+
 
 
 int ft_parse(int fd, t_data *data)
@@ -298,11 +341,12 @@ int ft_parse(int fd, t_data *data)
 	printf("INFO %s\n", data->info->west_text);
 	// la map est en dernier dans la fichier
 
-	checkmap(data);
-	// if (close_check(data) < 0)
+	findCycle(data);
+	//checkmap(data);
+//	if (close_check(data) < 0)
 	// 	return (-1);
-	int *output = NULL;
-	LabelImage(data, output);
+	//int *output = NULL;
+	//LabelImage(data, output);
 
 	return 1;
 }
