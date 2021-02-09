@@ -5,16 +5,24 @@
 
  void display(t_data *data)
  {
+	 printf ("**DISPLAY**\n");
 	 //mlx_clear_window(data->mlx, data->win);
 	fill_black(data);
+	 printf ("**FILL1**\n");
 	fill_ceiling(data);
+	printf ("**FILL2**\n");
 	fill_floor(data);
+	printf ("**DDA**\n");
 	dda(data);
 
+	printf ("**AFTER**\n");
 	if (data->displaymap == 1)
 	{
+		printf ("**DISPLAy 1 OK**\n");
 		set_map(data);
+		printf ("**MAP OK**\n");
 		set_player(data);
+		printf ("**PLAYRE OK**\n");
 		bresenham(data->pos_x * data->minimap_size + data->width/2, data->pos_y * data->minimap_size + data->height - 200 , (data->pos_x + data->dirX) * data->minimap_size + data->width/2 , (data->pos_y + data->dirY ) * data->minimap_size + data->height - 200 , data);
 	}
 	// data->color = 0xADD8E6;
@@ -36,8 +44,10 @@
 
 
 
+	printf ("**YO**\n");
 
 	mlx_new_image(data->mlx,data->width, data->height);
+	printf ("**ICI**\n");
 	mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
 	mlx_string_put(data->mlx, data->win, 30, data->height - 50, BLUE, stringX);
 	mlx_string_put(data->mlx, data->win, 30, data->height - 25, BLUE, stringY);
@@ -180,6 +190,10 @@ int key_hook(int keycode, t_data *data)
 		else
 			data->displaymap = 0;
 	}
+	if (keycode == KEY_S)
+		data->cameraY -= 0.10;
+	if (keycode == KEY_W)
+		data->cameraY += 0.10;
 	display(data);
 	return (1);
 }
@@ -284,7 +298,7 @@ void dda(t_data *data)
 {
 	int x = 0;
 
-	
+
 	while (x++ < data->width)
 	{
 		data->cameraX = 2 * x / (double)data->width - 1; //x-coordinate in camera space
@@ -322,15 +336,21 @@ int main()
 	if (!fd)
 		printf("Bad argument.\n");
 	data.info = &info;
-	if (ft_parse(fd, &data) < 0)
-		return (-1);
+	data.error = 0;
+	data.pos_x = -1;
+	data.pos_y = -1;
+	ft_parse(fd, &data);
+	if (data.error != 0)
+		return (error_message(data.error));
+	printf ("coucou\n");
 	init_struct(&data);
+
 
 	display(&data);
 
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 	mlx_hook(data.win, 2, 1L<<0, key_hook, &data);
-		mlx_hook(data.win, 17, (1L << 17), red_cross, &data);
+	mlx_hook(data.win, 17, (1L << 17), red_cross, &data);
 
 	mlx_loop(data.mlx);
 }

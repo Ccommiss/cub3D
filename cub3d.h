@@ -81,6 +81,7 @@ typedef struct s_data
 	int		map_w;
 	int 	map_h;
 	int		map_s;
+	int 	error;
 
 //window
 	int width;
@@ -109,3 +110,4 @@ void dda(t_data *data);
 void checkmap(t_data *data);
 int checkzero_letter(char c);
 int		red_cross(void);
+int error_message(int index);

@@ -105,6 +105,8 @@ void     set_map(t_data *data)
 	pixw = 0;
 	pixh = 0;
 
+	//printf ("**SEETTING MAP OK**\n");
+
 	while (h < data->map_h)
 	{
 		while (w < data->map_w)

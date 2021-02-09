@@ -1,5 +1,22 @@
 #include "cub3d.h"
 
+
+int error_message(int index)
+{
+	if (index == 1)
+		printf("Map is not closed, blank was found in land or player is not inside the bounds. \n");
+	if (index == 2)
+		printf("No player found. \n");
+	 if (index == 3)
+	 	printf("Unexpected character found in map.\n");
+	if (index == 4)
+		printf("Missing infos.");
+	// if (index = 5)
+
+	return (-1);
+}
+
+
 void *ft_realloc(void *ptr, size_t cursize, size_t newsize)
 {
 	void *newptr;
@@ -23,11 +40,11 @@ int ft_check_chars(char sign, t_data *data, int x, int y)
 	}
 	else if (sign == '0' || sign == '1' || sign == '2' || sign == ' ')
 		return (1);
-	else
-	{
-		printf("bad char found.\n");
-		return (-1);
-	}
+
+	data->error = 3;
+	printf("bad char found.\n");
+	return (-1);
+
 }
 
 int ft_mapcheck(char *str)
@@ -94,6 +111,8 @@ int parse_map(t_data *data, char *line)
 	y++;
 	data->map[y] = 0;
 	x = 0;
+
+
 	return 1;
 }
 
@@ -117,222 +136,68 @@ int ft_parse_info(t_data *data, char *line)
 		data->info->east_text = ft_strdup(block[1]);
 	else if (ft_strncmp(block[0], "S", 1) == 0)
 		data->info->sprite_text = ft_strdup(block[1]);
-
 	return (1);
 }
 
-int error_message(int index)
+
+
+
+void check_borders(t_data *data, int x, int y, char ***mapbis)
 {
-	if (index == 1)
-		printf("Map is not closed (top or bottom). \n");
-	if (index == 2)
-		printf("Map is not closed (borders). \n");
-
-	// if (index = 3)
-	// if (index = 4)
-	// if (index = 5)
-
-	return (-1);
-}
-
-int close_check(t_data *data)
-{
-	int y = 0;
-	int x = 0;
-
-	printf ("map h %d \n", data->map_h);
-
-	while (y < data->map_h)
+	// int i = 0;
+	// while (i < data->map_h)
+	// {
+	// 	printf("%s\n", mapbis[0][i]);
+	// 	i++;
+	// }
+	// printf("\n**END MAP**\n");
+	//printf("testing x = %d || y = %d \n", x, y);
+	if (y < 0 || y >= data->map_h || x < 0 || x >= data->map_w || data->map[y][x] == ' ' || data->map[y][x] == '.')
 	{
-		while (x < data->map_w)
-		{
-			printf(" Y = %d __ X = %d \n", y, x);
-			if ((y == 0 || y == data->map_h - 1)) //premiere et dernier(e ligne
-			{
-				if (ft_strlen(ft_strtrim(data->map[y], "1 ")) != 0) //s'il ny a pas que espace ou 1 on ret
-					return (error_message(1));
-			}
-
-			if ((x == 0 || data->map[y][x - 1] == ' ')) // condition du premier caractere de la ligne
-			{
-				printf("2/ testing map[%d][%d] = %c \n", y, x, data->map[y][x]);
-				if (data->map[y][x] == '0')
-					return (error_message(2));
-				else if (data->map[y][x] == '1' && data->map[y][x + 1] != '1' && data->map[y + 1][x] != '1' && data->map[y + 1][x] != ' ')
-					return (error_message(2));
-			}
-			if ((x == data->map_w || data->map[y][x + 1] == ' ')) // condition du dernier caractere de la ligne
-			{
-				printf("2/ testing map[%d][%d] = %c \n", y, x, data->map[y][x]);
-				if (data->map[y][x] == '0')
-					return (error_message(2));
-				else if (data->map[y][x] == '1' && data->map[y][x + 1] != '1' && data->map[y + 1][x] != '1' && data->map[y + 1][x] != ' ')
-					return (error_message(2));
-			}
-			x++;
-
-		}
-		y++;
-		x = 0;
+		data->error = 1;
+		return;
 	}
-		return 1;
+	if (data->map[y][x] == '1' || mapbis[0][y][x] == 'v')
+		return;
+	if (data->map[y][x] == '0' || data->map[y][x] == 'S' || data->map[y][x] == 'N') //rajouter autres pos
+		mapbis[0][y][x] = 'v';
+	check_borders(data, x + 1, y, mapbis);
+	check_borders(data, x - 1, y, mapbis);
+	check_borders(data, x, y + 1, mapbis);
+	check_borders(data, x, y - 1, mapbis);
+	return;
 }
 
-// int close_check(t_data *data)
-// {
-// 	int x = 0;
-// 	int y = 0;
 
-// 	while(data->map[y][x] != '1')
-// 		x++;
-
-
-// 	if (data->map[y][x] == '1')
-// 		if (x < data->map_w && data->map[y][x+1] == '1')
-// 			x += 1;
-// 		else if (y < data->map_h && data->map[y+1][x] == '1')
-// 			y += 1;
-// 		else if ()
-
-//si 0 entoure d autre chose que  
-
-// }
-
-void LabelComponent(t_data *data, int* output, int labelNo, unsigned short x, unsigned short y)
+int	iscomplete(t_data *data)
 {
-  int index = x + data->map_w * y;
-  printf ("LABEL CO : index is %d \n", index);
-  if (data->map[y][x] == '0')
-  	return;   /* This pixel is not part of a component */
-    /* This pixel has already been labelled  */
+	//rajouter les RGB dans le parser avant de les mettre la
+	if ( !data->info->west_text || !data->info->east_text ||
+	!data->info->sprite_text || !data->info->north_text || !data->info->south_text)
+		return 0;
 
-	if (output[index] != 0)
-  		return;
-	else
-  		output[index] = labelNo;
-
-
-
-  /* Now label the 4 neighbours: */
-  if (x > 0)
-  	LabelComponent(data, output, labelNo, x-1, y);   /* left  pixel */
-  if (x < data->map_w-1)
-  	LabelComponent(data, output, labelNo, x+1, y);   /* right pixel */
-  if (y > 0)
-  	LabelComponent(data, output, labelNo, x, y-1);   /* upper pixel */
-  if (y < data->map_h-1)
-  	LabelComponent(data, output, labelNo, x, y+1);   /* lower pixel */
+	return 1;
 }
-
-void LabelImage(t_data *data, int* output)
-{
-
-  int labelNo = 0;
-  int x = -1;
-  int y = 0;
-  output = malloc(sizeof(int) * data->map_w * data->map_h);
-  ft_memset(output, 0, sizeof(int) * data->map_h * data->map_w);
-  int index = -1;
-  while (y < data->map_h)
-  {
-    while(x < data->map_w)
-    {
-		x++;
-      index++;
-	  printf ("index = %d\n", index);
-	  printf ("x = %d\n", x);
-      if (data->map[y][x] == '0')
-	  	continue;   /* This pixel is not part of a component */
-      if (output[index] != 0)
-	  	continue;   /* This pixel has already been labelled  */
-
-	  /* New component found */
-      labelNo++;
-	  printf ("LABEL %d\n", labelNo);
-      LabelComponent(data, output, labelNo, x, y);
-    }
-	printf ("y = %d\n", y);
-	y++;
-  }
-  int o = 0;
-  int k = 0;
-  printf("%d \n", (x - 1) + data->map_w * (y-1));
-  while (o < (x - 1) + data->map_w * (y - 1))
-  {
-	while (k++ < data->map_w)
-	{
-		printf ("%d ", output[o]);
-		o++;
-	}
-	printf ("\n");
-	k = 0;
-  }
-}
-
-
-
-void	fill(t_data *data, int x, int y) 
-{
-    if (x >= 0 && y >= 0 && x < data->map_w && y < data->map_h && data->map[y][x] == '0') 
-	{
-        data->map[y][x] = '3';
-        for (int dx = -1; dx <=1; dx +=1) 
-		{
-            for (int dy=-1; dy<=1; dy += 1) 
-			{
-                fill(data, x+dx, y+dy);
-            }
-        }
-    }
-}
-
-void detect(t_data *data) {
-    for(int y = 0; y + 1 < data->map_h; y++){
-       for(int x = 0; x + 1 < data->map_w; x++){
-           if (data->map[y][x] == '0') {
-               data->map[y][x] = '7';
-               return;
-           }
-           else if (data->map[y][x]== '1' && data->map[y+1][x]=='1' && data->map[y][x+1]== '1' && data->map[y+1][x+1]== '1') 
-		   {
-               data->map[y][x] = -'7';
-               return;
-           }
-       }
-    }
-}
-
-void findCycle(t_data *data)
-{
-    for(int y = 0; y < data->map_h; y++)
-	{
-       for(int x = 0; x < data->map_w; x++)
-	   {
-           if (data->map[y][x] == '0') 
-		   {
-               fill(data, x, y);
-                detect(data);
-               return;
-		   }
-	   }
-	}
- }
-
-
-
 
 int ft_parse(int fd, t_data *data)
 {
 	char *line = NULL;
 	printf("**PARSING**\n");
+	int info;
+	info = 0;
+	//int ok = 0;
 
 	while (get_next_line(fd, &line))
 	{
-		if (ft_mapcheck(line) == 0 && ft_strlen(ft_strtrim(line, " ")) != 0)
+		if (ft_mapcheck(line) == 0 && ft_strlen(ft_strtrim(line, " ")) != 0 && !iscomplete(data))
 			ft_parse_info(data, line);
-		else if (ft_strlen(ft_strtrim(line, " ")) != 0)
+		else if (ft_strlen(ft_strtrim(line, " ")) != 0 && iscomplete(data) == 1)
 			parse_map(data, line);
 	}
+	if (data->error == 0 && (data->pos_x < 0 || data->pos_y < 0))
+		data->error = 2;
+	if (!iscomplete(data))
+		data->error = 4;
 
 	printf("WIDTH = %d -- HEIGHT = %d  \n", data->width, data->height);
 	printf("INFO %s\n", data->info->north_text);
@@ -341,12 +206,23 @@ int ft_parse(int fd, t_data *data)
 	printf("INFO %s\n", data->info->west_text);
 	// la map est en dernier dans la fichier
 
-	findCycle(data);
-	//checkmap(data);
-//	if (close_check(data) < 0)
-	// 	return (-1);
-	//int *output = NULL;
-	//LabelImage(data, output);
+	checkmap(data);
 
+	char **copymap;
+	int i = 0;
+	copymap = (char **)malloc((sizeof(char *)) * (data->map_h + 1));
+	while (i < data->map_h)
+	{
+		copymap[i] = (char *)malloc(10 * data->map_w);
+		ft_bzero(copymap[i], data->map_w + 1);
+		ft_memset(copymap[i], '.', data->map_w);
+		//	printf("%s \n", copymap[i]);
+
+		i++;
+	}
+	if (data->error == 0)
+		check_borders(data, data->pos_x, data->pos_y, &copymap);
+	if (data->error != 0)
+		return (-1);
 	return 1;
 }
