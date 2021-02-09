@@ -29,6 +29,9 @@ typedef struct s_display
 
 	int		ceiling_rgb;
 	int		floor_rgb;
+	void	*texture;
+	int w;
+	int h;
 
 }	t_display;
 
@@ -109,5 +112,5 @@ void dda(t_data *data);
 
 void checkmap(t_data *data);
 int checkzero_letter(char c);
-int		red_cross(void);
+int		red_cross(t_data *data);
 int error_message(int index);

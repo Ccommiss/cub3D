@@ -1,8 +1,10 @@
 #include "cub3d.h"
 
 
-int		red_cross(void)
-{
+int		red_cross(t_data *data)
+{	
+	free(data->map);
+
 	exit(0);
 	return (0);
 }
@@ -10,7 +12,7 @@ int		red_cross(void)
 
 void checkmap(t_data *data)
 {
-	printf("[%d][%d]", data->map_w, data->map_h);
+	printf("W : [%d] H : [%d]\n", data->map_w, data->map_h);
 	int i;
 	int j;
 		for (i = 0; i < data->map_h; i++)

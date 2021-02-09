@@ -21,12 +21,13 @@ void *ft_realloc(void *ptr, size_t cursize, size_t newsize)
 {
 	void *newptr;
 
-	if (!ptr)
+	if (!ptr || ptr == NULL)
 		return (malloc(newsize));
 	newptr = malloc(newsize);
 	ft_memset(newptr, '.', newsize);
 	ft_memcpy(newptr, ptr, cursize);
-	free(ptr);
+	if (ptr)
+		free(ptr);
 	return (newptr);
 }
 
@@ -36,7 +37,7 @@ int ft_check_chars(char sign, t_data *data, int x, int y)
 	{
 		data->pos_x = x;
 		data->pos_y = y;
-		return (1);
+		return (2);
 	}
 	else if (sign == '0' || sign == '1' || sign == '2' || sign == ' ')
 		return (1);
@@ -90,6 +91,10 @@ int parse_map(t_data *data, char *line)
 	{
 		if (ft_check_chars(*line, data, x, y) == 1)
 			data->map[y][x] = *line++;
+		else if (ft_check_chars(*line++, data, x, y) == 2)
+		{
+			data->map[y][x] = '0';
+		}
 		else
 			return (-1);
 		x++;
@@ -111,8 +116,6 @@ int parse_map(t_data *data, char *line)
 	y++;
 	data->map[y] = 0;
 	x = 0;
-
-
 	return 1;
 }
 
@@ -144,14 +147,14 @@ int ft_parse_info(t_data *data, char *line)
 
 void check_borders(t_data *data, int x, int y, char ***mapbis)
 {
-	// int i = 0;
-	// while (i < data->map_h)
-	// {
-	// 	printf("%s\n", mapbis[0][i]);
-	// 	i++;
-	// }
-	// printf("\n**END MAP**\n");
-	//printf("testing x = %d || y = %d \n", x, y);
+	int i = 0;
+	while (i < data->map_h)
+	{
+		printf("%s\n", mapbis[0][i]);
+		i++;
+	}
+	printf("\n**END MAP**\n");
+	printf("testing x = %d || y = %d \n", x, y);
 	if (y < 0 || y >= data->map_h || x < 0 || x >= data->map_w || data->map[y][x] == ' ' || data->map[y][x] == '.')
 	{
 		data->error = 1;
@@ -185,7 +188,7 @@ int ft_parse(int fd, t_data *data)
 	printf("**PARSING**\n");
 	int info;
 	info = 0;
-	//int ok = 0;
+	//data->map = NULL;
 
 	while (get_next_line(fd, &line))
 	{
@@ -194,6 +197,10 @@ int ft_parse(int fd, t_data *data)
 		else if (ft_strlen(ft_strtrim(line, " ")) != 0 && iscomplete(data) == 1)
 			parse_map(data, line);
 	}
+		if (ft_mapcheck(line) == 0 && ft_strlen(ft_strtrim(line, " ")) != 0 && !iscomplete(data))
+			ft_parse_info(data, line);
+		else if (ft_strlen(ft_strtrim(line, " ")) != 0 && iscomplete(data) == 1)
+			parse_map(data, line);
 	if (data->error == 0 && (data->pos_x < 0 || data->pos_y < 0))
 		data->error = 2;
 	if (!iscomplete(data))

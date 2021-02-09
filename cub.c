@@ -5,25 +5,26 @@
 
  void display(t_data *data)
  {
-	 printf ("**DISPLAY**\n");
+	// printf ("**DISPLAY**\n");
 	 //mlx_clear_window(data->mlx, data->win);
 	fill_black(data);
-	 printf ("**FILL1**\n");
+	// printf ("**FILL1**\n");
 	fill_ceiling(data);
-	printf ("**FILL2**\n");
+	//printf ("**FILL2**\n");
 	fill_floor(data);
-	printf ("**DDA**\n");
+	//printf ("**DDA**\n");
 	dda(data);
 
-	printf ("**AFTER**\n");
+	//printf ("**AFTER**\n");
 	if (data->displaymap == 1)
 	{
-		printf ("**DISPLAy 1 OK**\n");
+		//printf ("**DISPLAy 1 OK**\n");
 		set_map(data);
-		printf ("**MAP OK**\n");
+		//printf ("**MAP OK**\n");
 		set_player(data);
-		printf ("**PLAYRE OK**\n");
-		bresenham(data->pos_x * data->minimap_size + data->width/2, data->pos_y * data->minimap_size + data->height - 200 , (data->pos_x + data->dirX) * data->minimap_size + data->width/2 , (data->pos_y + data->dirY ) * data->minimap_size + data->height - 200 , data);
+	//	printf ("**PLAYRE OK**\n");
+		data->color = 0xffffff;
+		bresenham(data->pos_x * data->minimap_size + data->width/4, data->pos_y * data->minimap_size + data->height * 0.7 , (data->pos_x + data->dirX) * data->minimap_size + data->width/4 , (data->pos_y + data->dirY ) * data->minimap_size + data->height * 0.7 , data);
 	}
 	// data->color = 0xADD8E6;
 	char *positionX = ft_ftoa(data->pos_x, 4);
@@ -44,10 +45,10 @@
 
 
 
-	printf ("**YO**\n");
+	//printf ("**YO**\n");
 
 	mlx_new_image(data->mlx,data->width, data->height);
-	printf ("**ICI**\n");
+	//printf ("**ICI**\n");
 	mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
 	mlx_string_put(data->mlx, data->win, 30, data->height - 50, BLUE, stringX);
 	mlx_string_put(data->mlx, data->win, 30, data->height - 25, BLUE, stringY);
@@ -163,7 +164,7 @@ int key_hook(int keycode, t_data *data)
 		if (checkzero_letter(data->map[(int)(data->pos_y - data->dirY * 0.10)][(int)(data->pos_x)]))
 			data->pos_y -= data->dirY * 0.10;
 	}
-	if (keycode == KEY_LEFT) //ROTATION A FAIRE
+	if (keycode == KEY_RIGHT) //ROTATION A FAIRE
 	{
       //both camera direction and camera plane must be rotated
       double oldDirX = data->dirX;
@@ -174,14 +175,14 @@ int key_hook(int keycode, t_data *data)
 	  data->planeX = data->planeX * cos(0.2) - data->planeY * sin(0.2);
 	  data->planeY = oldPlaneX * sin(0.2) + data->planeY * cos(0.2);
     }
-	if (keycode == KEY_RIGHT)
+	if (keycode == KEY_LEFT)
 	{
 	  double oldDirX = data->dirX;
-      data->dirX = data->dirX * cos(-0.02) - data->dirY * sin(-0.02);
-      data->dirY = oldDirX * sin(-0.02) + data->dirY * cos(-0.02);
+      data->dirX = data->dirX * cos(-0.2) - data->dirY * sin(-0.2);
+      data->dirY = oldDirX * sin(-0.2) + data->dirY * cos(-0.2);
       double oldPlaneX = data->planeX;
-      data->planeX = data->planeX * cos(-0.02) - data->planeY * sin(-0.02);
-      data->planeY = oldPlaneX * sin(-0.02) + data->planeY * cos(-0.02);
+      data->planeX = data->planeX * cos(-0.2) - data->planeY * sin(-0.2);
+      data->planeY = oldPlaneX * sin(-0.2) + data->planeY * cos(-0.2);
 	}
 	if (keycode == KEY_SPACE)
 	{
@@ -211,11 +212,15 @@ void init_struct(t_data *data)
 	data->dirX = -1;
 	data->dirY = 0;
 	data->planeX = 0;
-	data->planeY = 0.66;
+	data->planeY = -0.66;
 
 	data->minimap_size = data->width/30;
 	data->displaymap = 1;
 
+
+
+	data->info->texture = mlx_xpm_file_to_image(data->mlx, "beyonce.xpm", &data->info->w, &data->info->h);
+ 
 }
 
 void perform_dda(t_data *data)
@@ -287,10 +292,28 @@ void draw (t_data *data, int x)
       if(drawEnd >= data->height)
 	  	drawEnd = data->height - 1;
 
-	if (data->side == 1)
-		data->color = RED;
+
+	// if (data->side == 1)
+	// 	data->color = RED;
+	// else
+	// 	data->color = YELLOW;
+	double wallx = 0;
+
+	if (data->side == 0)
+		wallx = data->pos_x + data->perpWallDist * data->rayDirY; 
 	else
-		data->color = YELLOW;
+		wallx = data->pos_x + data->perpWallDist * data->rayDirX; 
+	
+	wallx = floor(wallx);
+
+	 int texX = (int)wallx * (double)data->info->w;
+       texX = data->info->w - texX - 1;
+
+	   double step = 1.0 * data->info->h / lineHeight;
+      // Starting texture coordinate
+      double texPos = (drawStart - data->height / 2 + lineHeight / 2) * step;
+	  data->color = 
+     
 	bresenham(x, drawEnd, x, drawStart, data);
 }
 
