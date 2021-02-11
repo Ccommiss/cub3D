@@ -220,7 +220,7 @@ void init_struct(t_data *data)
 
 
 	data->info->texture = mlx_xpm_file_to_image(data->mlx, "beyonce.xpm", &data->info->w, &data->info->h);
- 
+
 }
 
 void perform_dda(t_data *data)
@@ -300,10 +300,10 @@ void draw (t_data *data, int x)
 	double wallx = 0;
 
 	if (data->side == 0)
-		wallx = data->pos_x + data->perpWallDist * data->rayDirY; 
+		wallx = data->pos_x + data->perpWallDist * data->rayDirY;
 	else
-		wallx = data->pos_x + data->perpWallDist * data->rayDirX; 
-	
+		wallx = data->pos_x + data->perpWallDist * data->rayDirX;
+
 	wallx = floor(wallx);
 
 	 int texX = (int)wallx * (double)data->info->w;
@@ -312,8 +312,15 @@ void draw (t_data *data, int x)
 	   double step = 1.0 * data->info->h / lineHeight;
       // Starting texture coordinate
       double texPos = (drawStart - data->height / 2 + lineHeight / 2) * step;
-	  data->color = 
-     
+	 for(int y = drawStart; y<drawEnd; y++)
+      {
+		  int texY = (int)texPos & (data->info->h - 1);
+        texPos += step;
+		int *try = malloc(1000);
+		try = data->info->texture;
+	   data->color = try[data->info->h * texY + texX];
+	  }
+
 	bresenham(x, drawEnd, x, drawStart, data);
 }
 
