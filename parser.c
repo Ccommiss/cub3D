@@ -26,8 +26,8 @@ void *ft_realloc(void *ptr, size_t cursize, size_t newsize)
 	newptr = malloc(newsize);
 	ft_memset(newptr, '.', newsize);
 	ft_memcpy(newptr, ptr, cursize);
-	if (ptr)
-		free(ptr);
+	if (ptr != NULL)
+		free(&ptr);
 	return (newptr);
 }
 

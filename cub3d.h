@@ -29,11 +29,26 @@ typedef struct s_display
 
 	int		ceiling_rgb;
 	int		floor_rgb;
-	void	*texture;
-	int w;
-	int h;
 
 }	t_display;
+
+
+typedef struct s_text t_text;
+
+typedef struct s_text
+{
+	void	*img;
+	int	*imgaddr;
+	int     bits_per_pixel;
+    int     line_length;
+    int     endian;
+	int 	w;
+	int		h;
+
+	t_text 	*next;
+
+
+}	t_text;
 
 
 
@@ -96,6 +111,7 @@ typedef struct s_data
 
 // colors
 	t_display *info;
+	t_text *t;
 
 }   t_data;
 

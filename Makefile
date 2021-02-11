@@ -13,7 +13,7 @@ OBJS := ${SRCS:c=o}
 
 CC = clang -g $(FLAGS)
 
-FLAGS =  -Wall -Werror -Wextra -O3 -fsanitize=null -fsanitize=address -fsanitize=object-size -fsanitize=nonnull-attribute -fsanitize=pointer-overflow -fsanitize-address-use-after-scope
+FLAGS =  -Wall -Werror -Wextra -O3 -fsanitize=address 
 LIBS = ./libft/
 
 all: $(NAME)
