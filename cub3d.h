@@ -37,6 +37,7 @@ typedef struct s_text t_text;
 
 typedef struct s_text
 {
+	char	side;
 	void	*img;
 	void	*imgaddr;
 	int     bits_per_pixel;
@@ -98,6 +99,7 @@ typedef struct s_data
     char     **map;
 	int		map_w;
 	int 	map_h;
+	
 	int		map_s;
 	int 	error;
 

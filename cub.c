@@ -29,15 +29,6 @@ void display(t_data *data)
 
 	char *positionY = ft_ftoa(data->pos_y, 4);
 	char *stringY = ft_strjoin("Y = ", positionY);
-
-	//data->color = 0xFFFFFF;
-	//	bresenham(data->pos_x * 64, data->pos_y * 64, (data->pos_x + data->dirX + (data->cameraX - 1)) * 64, (data->pos_y + data->dirY + (data->cameraY + 1)) * 64, data);
-	//	bresenham(data->pos_x * 64, data->pos_y * 64, (data->pos_x + data->dirX + data->cameraX) * 64, (data->pos_y + data->dirY + data->cameraY) * 64, data);
-
-	//	bresenham(data->pos_x * 64, data->pos_y * 64, (data->rayDirX) * 64, (data->rayDirY) * 64, data);
-	//	bresenham(data->pos_x * 64, data->pos_y * 64, (data->pos_x + data->dirX + data->planeX * 0) * 64, (data->pos_y + data->dirY + data->planeY* 600) * 64, data);
-	//	bresenham(data->pos_x * 64, data->pos_y * 64, (data->pos_x + data->dirX + data->planeX * 600) * 64, (data->pos_y + data->dirY + data->planeY * 600) * 64, data);
-
 	//printf ("**YO**\n");
 
 	mlx_new_image(data->mlx, data->width, data->height);
@@ -195,16 +186,12 @@ int key_hook(int keycode, t_data *data)
 void init_struct(t_data *data)
 {
 	data->mlx = mlx_init();
-	// data->width = 1080; definies dans le file ;
-	// data->height = 600;
 
 	data->win = mlx_new_window(data->mlx, data->width, data->height, "who run the world ?");
 	data->img = mlx_new_image(data->mlx, data->width, data->height);
 	data->imgaddr = mlx_get_data_addr(data->img, &data->bits_per_pixel, &data->line_length, &data->endian);
 	data->map_s = 64; //bloc de 64 px
 
-	data->dirX = -1;
-	data->dirY = 0;
 	data->planeX = 0;
 	data->planeY = -0.66;
 
@@ -215,7 +202,6 @@ void init_struct(t_data *data)
 void perform_dda(t_data *data)
 {
 	int hit = 0;
-
 	while (hit == 0)
 	{
 		//jump to next map square, OR in x-direction, OR in y-direction
@@ -270,11 +256,11 @@ void draw(t_data *data, int x)
 		lineHeight = (int)data->height;
 
 	//calculate lowest and highest pixel to fill in current stripe
-	int drawStart = -lineHeight / 2 + data->height / 2;
+	int drawStart = (-lineHeight / 2) + (data->height / 2);
 	if (drawStart < 0)
 		drawStart = 0;
 
-	int drawEnd = lineHeight / 2 + data->height / 2;
+	int drawEnd = (lineHeight / 2) + (data->height / 2);
 	if (drawEnd >= data->height)
 		drawEnd = data->height - 1;
 
@@ -286,15 +272,15 @@ void draw(t_data *data, int x)
 	double wallx = 0;
 
 	if (data->side == 0)
-		wallx = data->pos_x + data->perpWallDist * data->rayDirY;
-	else if (data->side == 1)
-		wallx = data->pos_x + data->perpWallDist * data->rayDirX;
+		wallx = data->pos_y + (data->perpWallDist * data->rayDirY);
+	else
+		wallx = data->pos_x + (data->perpWallDist * data->rayDirX);
 
 	wallx -= floor(wallx);
 	//printf("WALLX %f \n", wallx);
 
 
-	int texX = (int)wallx * (double)data->t->w;
+	int texX = (int)(wallx * (double)data->t->w);
 	//printf("TEXX 1 %d \n", texX);
 
 
@@ -304,24 +290,18 @@ void draw(t_data *data, int x)
 		texX = data->t->w - texX - 1;
 	//printf("TEXX 2 %d \n", texX);
 
-	double step = 1.0 * data->t->h / lineHeight;
+	double step = (1.0 * data->t->h) / lineHeight;
 	// Starting texture coordinate
-	double texPos = (drawStart - data->height / 2 + lineHeight / 2) * step;
+	double texPos = (drawStart - (data->height / 2) + (lineHeight / 2)) * step;
 
 
 
 	for (int y = drawStart; y < drawEnd; y++)
 	{
 		int texY = (int)texPos & (data->t->h - 1);
-
 		texPos += step;
-	//	printf("ACCESSING %d \n", data->t->h * texY + texX);
-	//	printf("H %d \n", data->t->h);
-	//	printf("TEXY %d \n", texY);
-	//	printf("TEXX %d \n",  texX);
 		data->color = ((unsigned int *)data->t->imgaddr)[data->t->h * texY + texX];
 		my_mlx_pixel_put(data, x, y, data->color);
-	//	bresenham(x, drawEnd, x, drawStart, data);
 	}
 }
 
@@ -354,17 +334,46 @@ void dda(t_data *data)
 }
 
 void loadimage(t_data *data)
-{
+{	
+	t_text *t; 
 
-	data->t->img = mlx_xpm_file_to_image(data->mlx, "beyonce.xpm", &data->t->w, &data->t->h);
-	data->t->imgaddr = mlx_get_data_addr(data->t->img, &data->t->bits_per_pixel, &data->t->line_length, &data->t->endian);
+	t = (t_text *)malloc(sizeof(t_text));
+
+	t->side = 'n';
+	printf (":: %c \n", t->side);
+	t->img = mlx_xpm_file_to_image(data->mlx, data->info->north_text, &t->w, &t->h);
+	t->imgaddr = mlx_get_data_addr(t->img, &t->bits_per_pixel, &t->line_length, &t->endian);
+
+	t->next = (t_text *)malloc(sizeof(t_text));
+	t->next->side = 's';
+	printf (":: %c \n", t->next->side);
+	t->next->img = mlx_xpm_file_to_image(data->mlx, data->info->south_text, &t->next->w, &t->next->h);
+	printf (":: %p \n", t->next->img);
+
+	t->next->imgaddr = mlx_get_data_addr(t->next->img, &t->bits_per_pixel, &t->line_length, &t->endian);
+
+	// t->next->next = (t_text *)malloc(sizeof(t_text));
+	// t->next->next->side = 's';
+	// t->next->next->img =  mlx_xpm_file_to_image(data->mlx, data->info->west_text, &data->t->w, &data->t->h);
+	// t->next->next->imgaddr = mlx_get_data_addr(data->t->img, &data->t->bits_per_pixel, &data->t->line_length, &data->t->endian);
+
+
+	data->t = t;
+	// data->t = data->t->next;
+
+	// data->t->side = 'w';
+	// data->t->img = mlx_xpm_file_to_image(data->mlx, data->info->west_text, &data->t->w, &data->t->h);
+	// data->t->imgaddr = mlx_get_data_addr(data->t->img, &data->t->bits_per_pixel, &data->t->line_length, &data->t->endian);
+
+
+
 }
 
 int main()
 {
 	t_data data;
 	t_display info;
-	t_text t;
+	//t_text t;
 	int fd;
 	char *file;
 
@@ -374,7 +383,7 @@ int main()
 	if (!fd)
 		printf("Bad argument.\n");
 	data.info = &info;
-	data.t = &t;
+	//data.t = &t;
 	data.error = 0;
 	data.pos_x = -1;
 	data.pos_y = -1;
@@ -383,8 +392,6 @@ int main()
 		return (error_message(data.error));
 	printf("coucou\n");
 	init_struct(&data);
-	data.t->img = mlx_xpm_file_to_image(data.mlx, "beyonce.xpm", &data.t->w, &data.t->h);
-	data.t->imgaddr = (int *)mlx_get_data_addr(data.t->img, &data.t->bits_per_pixel, &data.t->line_length, &data.t->endian);
 	loadimage(&data);
 
 	display(&data);

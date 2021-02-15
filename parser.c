@@ -31,12 +31,28 @@ void *ft_realloc(void *ptr, size_t cursize, size_t newsize)
 	return (newptr);
 }
 
+void	ft_finddir(t_data *data, char dir)
+{
+	data->dirX = 0;
+	data->dirY = 0;
+
+	if (dir == 'N')
+		data->dirY = -1;
+	else if (dir == 'S')
+		data->dirY = 1;
+	else if (dir == 'E')
+		data->dirX = 1;
+	else if (dir == 'W')
+		data->dirX = -1;
+}
+
 int ft_check_chars(char sign, t_data *data, int x, int y)
 {
 	if (sign == 'N' || sign == 'S' || sign == 'E' || sign == 'W')
 	{
 		data->pos_x = x;
 		data->pos_y = y;
+		ft_finddir(data, sign);
 		return (2);
 	}
 	else if (sign == '0' || sign == '1' || sign == '2' || sign == ' ')
@@ -92,19 +108,17 @@ int parse_map(t_data *data, char *line)
 		if (ft_check_chars(*line, data, x, y) == 1)
 			data->map[y][x] = *line++;
 		else if (ft_check_chars(*line++, data, x, y) == 2)
-		{
 			data->map[y][x] = '0';
-		}
 		else
 			return (-1);
 		x++;
 	}
 	data->map[y][x] = '\0';
+	
 	//si jamais la ligne est  plus longue que les autres, sa longueur devient la nouvelle reference pour les autres
 	if (x > data->map_w)
 	{
-		i = 0;
-		// on realloue toutes les cases du tableau a la nouvelle taille de reference
+		i = 0; // on realloue toutes les cases du tableau a la nouvelle taille de reference
 		while (i < y)
 		{ // lancienne taille c data->mapw
 			data->map[i] = (char *)ft_realloc(data->map[i], data->map_w, sizeof(char) * x + 1);
@@ -147,14 +161,14 @@ int ft_parse_info(t_data *data, char *line)
 
 void check_borders(t_data *data, int x, int y, char ***mapbis)
 {
-	int i = 0;
-	while (i < data->map_h)
-	{
-		printf("%s\n", mapbis[0][i]);
-		i++;
-	}
-	printf("\n**END MAP**\n");
-	printf("testing x = %d || y = %d \n", x, y);
+	//int i = 0;
+	// while (i < data->map_h)
+	// {
+	// 	printf("%s\n", mapbis[0][i]);
+	// 	i++;
+	// }
+	// printf("\n**END MAP**\n");
+	// printf("testing x = %d || y = %d \n", x, y);
 	if (y < 0 || y >= data->map_h || x < 0 || x >= data->map_w || data->map[y][x] == ' ' || data->map[y][x] == '.')
 	{
 		data->error = 1;
@@ -162,7 +176,8 @@ void check_borders(t_data *data, int x, int y, char ***mapbis)
 	}
 	if (data->map[y][x] == '1' || mapbis[0][y][x] == 'v')
 		return;
-	if (data->map[y][x] == '0' || data->map[y][x] == 'S' || data->map[y][x] == 'N') //rajouter autres pos
+	if (data->map[y][x] == '0' || data->map[y][x] == 'S' || data->map[y][x] == 'N'
+	|| data->map[y][x] == 'E' || data->map[y][x] == 'W') //rajouter autres pos
 		mapbis[0][y][x] = 'v';
 	check_borders(data, x + 1, y, mapbis);
 	check_borders(data, x - 1, y, mapbis);
