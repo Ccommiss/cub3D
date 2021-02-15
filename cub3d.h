@@ -38,7 +38,7 @@ typedef struct s_text t_text;
 typedef struct s_text
 {
 	void	*img;
-	int	*imgaddr;
+	void	*imgaddr;
 	int     bits_per_pixel;
     int     line_length;
     int     endian;

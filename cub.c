@@ -198,9 +198,6 @@ void init_struct(t_data *data)
 	// data->width = 1080; definies dans le file ;
 	// data->height = 600;
 
-
-
-
 	data->win = mlx_new_window(data->mlx, data->width, data->height, "who run the world ?");
 	data->img = mlx_new_image(data->mlx, data->width, data->height);
 	data->imgaddr = mlx_get_data_addr(data->img, &data->bits_per_pixel, &data->line_length, &data->endian);
@@ -213,8 +210,6 @@ void init_struct(t_data *data)
 
 	data->minimap_size = data->width / 30;
 	data->displaymap = 1;
-
-
 }
 
 void perform_dda(t_data *data)
@@ -287,31 +282,47 @@ void draw(t_data *data, int x)
 	// 	data->color = RED;
 	// else
 	// 	data->color = YELLOW;
+
 	double wallx = 0;
 
 	if (data->side == 0)
 		wallx = data->pos_x + data->perpWallDist * data->rayDirY;
-	else
+	else if (data->side == 1)
 		wallx = data->pos_x + data->perpWallDist * data->rayDirX;
 
-	wallx = floor(wallx);
+	wallx -= floor(wallx);
+	//printf("WALLX %f \n", wallx);
+
 
 	int texX = (int)wallx * (double)data->t->w;
-	texX = data->t->w - texX - 1;
+	//printf("TEXX 1 %d \n", texX);
+
+
+	if(data->side == 0 && data->rayDirX > 0)
+		texX = data->t->w - texX - 1;
+	if(data->side == 1 && data->rayDirY < 0)
+		texX = data->t->w - texX - 1;
+	//printf("TEXX 2 %d \n", texX);
 
 	double step = 1.0 * data->t->h / lineHeight;
 	// Starting texture coordinate
 	double texPos = (drawStart - data->height / 2 + lineHeight / 2) * step;
+
+
+
 	for (int y = drawStart; y < drawEnd; y++)
 	{
 		int texY = (int)texPos & (data->t->h - 1);
-		printf ("%d \n", data->t->h);
-		printf ("img addr %p \n", data->t->imgaddr);
-		texPos += step;
-		data->color = data->t->imgaddr[data->t->h * texY + texX];
-	}
 
-	bresenham(x, drawEnd, x, drawStart, data);
+		texPos += step;
+	//	printf("ACCESSING %d \n", data->t->h * texY + texX);
+	//	printf("H %d \n", data->t->h);
+	//	printf("TEXY %d \n", texY);
+	//	printf("TEXX %d \n",  texX);
+		data->color = ((unsigned int *)data->t->imgaddr)[data->t->h * texY + texX];
+		my_mlx_pixel_put(data, x, y, data->color);
+	//	bresenham(x, drawEnd, x, drawStart, data);
+	}
 }
 
 void dda(t_data *data)
@@ -342,15 +353,12 @@ void dda(t_data *data)
 	}
 }
 
-
-
-void 	loadimage(t_data *data)
+void loadimage(t_data *data)
 {
-	//(void)data;
-	data->t->img = mlx_xpm_file_to_image(data->mlx, "beyonce.xpm", &data->t->w, &data->t->h);
-	data->t->imgaddr = (int *)mlx_get_data_addr(data->t->img, &data->t->bits_per_pixel, &data->t->line_length, &data->t->endian);
-}
 
+	data->t->img = mlx_xpm_file_to_image(data->mlx, "beyonce.xpm", &data->t->w, &data->t->h);
+	data->t->imgaddr = mlx_get_data_addr(data->t->img, &data->t->bits_per_pixel, &data->t->line_length, &data->t->endian);
+}
 
 int main()
 {
@@ -377,7 +385,7 @@ int main()
 	init_struct(&data);
 	data.t->img = mlx_xpm_file_to_image(data.mlx, "beyonce.xpm", &data.t->w, &data.t->h);
 	data.t->imgaddr = (int *)mlx_get_data_addr(data.t->img, &data.t->bits_per_pixel, &data.t->line_length, &data.t->endian);
-	//loadimage(&data);
+	loadimage(&data);
 
 	display(&data);
 

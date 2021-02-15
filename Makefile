@@ -2,6 +2,10 @@
 NAME = test
 
 
+TST = test_minilibx.c
+
+OBJ := ${TST:c=o}
+
 SRCS = cub.c \
 	parser.c \
 	visu2d.c \
@@ -13,7 +17,7 @@ OBJS := ${SRCS:c=o}
 
 CC = clang -g $(FLAGS)
 
-FLAGS =  -Wall -Werror -Wextra -O3 -fsanitize=address 
+FLAGS =  -Wall -Werror -Wextra -O3 -fsanitize=address
 LIBS = ./libft/
 
 all: $(NAME)
