@@ -3,16 +3,12 @@
 void display(t_data *data)
 {
 	// printf ("**DISPLAY**\n");
-	//mlx_clear_window(data->mlx, data->win);
 	fill_black(data);
-	// printf ("**FILL1**\n");
 	fill_ceiling(data);
-	//printf ("**FILL2**\n");
 	fill_floor(data);
-	//printf ("**DDA**\n");
+
 	dda(data);
 
-	//printf ("**AFTER**\n");
 	if (data->displaymap == 1)
 	{
 		//printf ("**DISPLAy 1 OK**\n");
@@ -29,10 +25,8 @@ void display(t_data *data)
 
 	char *positionY = ft_ftoa(data->pos_y, 4);
 	char *stringY = ft_strjoin("Y = ", positionY);
-	//printf ("**YO**\n");
 
 	mlx_new_image(data->mlx, data->width, data->height);
-	//printf ("**ICI**\n");
 	mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
 	mlx_string_put(data->mlx, data->win, 30, data->height - 50, BLUE, stringX);
 	mlx_string_put(data->mlx, data->win, 30, data->height - 25, BLUE, stringY);
@@ -44,85 +38,10 @@ void my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	char *dst;
 
 	dst = data->imgaddr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-	//  printf ("WIDTH = %d -- HEIGHT = %d  \n", data->width, data->height);
 	if (x >= 0 && x < data->width && y >= 0 && y < data->height)
 		*(unsigned int *)dst = color;
 }
 
-void bresenham(int xdep, int ydep, int xfin, int yfin, t_data *data)
-{
-	float a = 0;
-	int temp = 0;
-	int cste = 0;
-
-	unsigned int dy;
-	unsigned int dx;
-
-	dx = abs(xfin - xdep);
-	dy = abs(yfin - ydep);
-	if (dx >= dy && dx != 0 && dy != 0)
-	{
-		if (xdep > xfin)
-		{
-			temp = xdep;
-			xdep = xfin;
-			xfin = temp;
-
-			temp = ydep;
-			ydep = yfin;
-			yfin = temp;
-		}
-		a = ((float)(yfin - ydep) / (xfin - xdep));
-
-		for (unsigned int x = 0; x < dx + 1; x++)
-		{
-			my_mlx_pixel_put(data, x + xdep, ydep + (x * a) + cste, data->color);
-		}
-	}
-
-	if (dx < dy && dx != 0 && dy != 0)
-	{
-		if (ydep > yfin)
-		{
-			temp = ydep;
-			ydep = yfin;
-			yfin = temp;
-
-			temp = xdep;
-			xdep = xfin;
-			xfin = temp;
-		}
-		a = ((float)(xfin - xdep) / (yfin - ydep));
-
-		for (unsigned int y = 0; y < dy + 1; y++)
-		{
-			my_mlx_pixel_put(data, xdep + (y * a) + cste, y + ydep, data->color);
-		}
-	}
-
-	if (dx == 0)
-	{
-		if (ydep > yfin)
-		{
-			temp = ydep;
-			ydep = yfin;
-			yfin = temp;
-		}
-		for (int y = ydep; y < yfin + 1; y++)
-			my_mlx_pixel_put(data, xdep, y, data->color);
-	}
-	if (dy == 0)
-	{
-		if (xdep > xfin)
-		{
-			temp = xdep;
-			xdep = xfin;
-			xfin = temp;
-		}
-		for (int x = xdep; x < xfin + 1; x++)
-			my_mlx_pixel_put(data, x, ydep, data->color);
-	}
-}
 
 int checkzero_letter(char c)
 {
@@ -193,6 +112,8 @@ void init_struct(t_data *data)
 	data->map_s = 64; //bloc de 64 px
 
 	data->planeX = 0;
+// titillier ca pour les pos de depart??? pk??????
+
 	data->planeY = -0.66;
 
 	data->minimap_size = data->width / 30;
@@ -249,6 +170,7 @@ void calculate_step(t_data *data)
 
 void draw(t_data *data, int x)
 {
+	(void)x;
 	int lineHeight;
 	if (data->perpWallDist != 0)
 		lineHeight = (int)(data->height / data->perpWallDist);
@@ -269,6 +191,7 @@ void draw(t_data *data, int x)
 	// else
 	// 	data->color = YELLOW;
 
+	//bresenham(x, drawStart, y, drawEnd, data);
 	double wallx = 0;
 
 	if (data->side == 0)
@@ -303,7 +226,7 @@ void draw(t_data *data, int x)
   			data->t = data->t->next;
 
 
-	printf ("side : %c \n", data->t->side);
+	//printf ("side : %c \n", data->t->side);
 
 	for (int y = drawStart; y < drawEnd; y++)
 	{
@@ -318,6 +241,9 @@ void dda(t_data *data)
 {
 	int x = 0;
 
+	printf ("data dirx =  %f\n", data->dirX);
+	printf ("data diry =  %f\n", data->dirY);
+
 	while (x++ < data->width)
 	{
 		data->cameraX = 2 * x / (double)data->width - 1; //x-coordinate in camera space
@@ -329,11 +255,39 @@ void dda(t_data *data)
 		//printf ("POS %f MAP %d\n", data->pos_x, data->mapX);
 		data->mapY = (int)data->pos_y;
 		//length of ray from one x or y-side to next x or y-side
-		data->delta_x = fabs(1 / data->rayDirX);
-		data->delta_y = fabs(1 / data->rayDirY);
+
+
+
+	    // Alternative code for deltaDist in case division through zero is not supported
+    //  double deltaDistX = (rayDirY == 0) ? 0 : ((rayDirX == 0) ? 1 : abs(1 / rayDirX));
+     // double deltaDistY = (rayDirX == 0) ? 0 : ((rayDirY == 0) ? 1 : abs(1 / rayDirY));
+
+		// if (data->rayDirY == 0 && data->rayDirX != 0)
+		// 	data->delta_x = 0;
+		// else if (data->rayDirX == 0)
+		// 	data->delta_x = 1;
+		// else 
+		printf ("raydir x %f \n", data->rayDirX);
+		printf ("raydir y %f \n", data->rayDirY);
+
+		if (data->rayDirY != 0 && data->rayDirY != 0)
+			data->delta_x = fabs(1 / data->rayDirX);
+		else
+			data->delta_x = 0.66;
+
+
+
+		// if (data->rayDirX == 0)
+		// 	data->delta_y = 0;
+		// else if (data->rayDirY == 0)
+		// 	data->delta_y = 1;
+		// else
+			data->delta_y = fabs(1 / data->rayDirY);
 
 		calculate_step(data);
 		perform_dda(data);
+
+
 		if (data->side == 0)
 			data->perpWallDist = (data->mapX - data->pos_x + (1 - data->stepX) / 2) / data->rayDirX;
 		else
@@ -352,66 +306,38 @@ void loadimage(t_data *data)
 	head = t;
 
 	t->side = 'n';
-	printf (":: %c \n", t->side);
+
 	t->img = mlx_xpm_file_to_image(data->mlx, data->info->north_text, &t->w, &t->h);
 	t->imgaddr = mlx_get_data_addr(t->img, &t->bits_per_pixel, &t->line_length, &t->endian);
 	t->next = (t_text *)malloc(sizeof(t_text));
 
 	t = t->next;
 	t->side = 's';
-	printf (":: %c \n", t->side);
+
 	t->img = mlx_xpm_file_to_image(data->mlx, data->info->south_text, &t->w, &t->h);
 	t->imgaddr = mlx_get_data_addr(t->img, &t->bits_per_pixel, &t->line_length, &t->endian);
 	t->next = (t_text *)malloc(sizeof(t_text));
 
 	t = t->next;
 	t->side = 'w';
-	printf (":: %c \n", t->side);
+
 	t->img = mlx_xpm_file_to_image(data->mlx, data->info->west_text, &t->w, &t->h);
 	t->imgaddr = mlx_get_data_addr(t->img, &t->bits_per_pixel, &t->line_length, &t->endian);
 	t->next = (t_text *)malloc(sizeof(t_text));
 
 	t = t->next;
-	t->side = 'e';
-	printf (":: %c \n", t->side);
+
 	t->img = mlx_xpm_file_to_image(data->mlx, data->info->east_text, &t->w, &t->h);
 	t->imgaddr = mlx_get_data_addr(t->img, &t->bits_per_pixel, &t->line_length, &t->endian);
 	t->next = head;
 
 	data->t = head;
-
-
-	// t->next->side = 's';
-	// printf (":: %c \n", t->next->side);
-	// t->next->img = mlx_xpm_file_to_image(data->mlx, data->info->south_text, &t->next->w, &t->next->h);
-	// printf ("::next  %p \n", t->next->img);
-	// t->next->imgaddr = mlx_get_data_addr(t->next->img, &t->bits_per_pixel, &t->line_length, &t->endian);
-
-	// t->next->next = (t_text *)malloc(sizeof(t_text));
-	// printf ("::t=nextnext %p \n", t->next->next);
-
-	// t->next->next->side = 'w';
-	// printf (":: %c \n", t->next->next->side);
-	// t->next->next->img =  mlx_xpm_file_to_image(data->mlx, data->info->west_text, &t->next->next->w, &t->next->h);
-	// printf ("::nextnext %p \n", t->next->next->img);
-	// t->next->next->imgaddr = mlx_get_data_addr(t->next->next->img, &t->next->next->bits_per_pixel, &t->next->next->line_length, &t->next->next->endian);
-
-
-	// t->next->next->next = (t_text *)malloc(sizeof(t_text));
-	// t->next->next->next->side = 'e';
-	// t->next->next->next->img = mlx_xpm_file_to_image(data->mlx, data->info->east_text, &t->next->next->next->w, &t->next->next->next->h);
-	// printf (":: %p \n", t->next->next->next->img);
-	// t->next->next->next->imgaddr = mlx_get_data_addr(data->t->img, &t->next->next->bits_per_pixel, &data->t->line_length, &data->t->endian);
-
-
-
 }
 
 int main()
 {
 	t_data data;
 	t_display info;
-	//t_text t;
 	int fd;
 	char *file;
 
@@ -421,7 +347,6 @@ int main()
 	if (!fd)
 		printf("Bad argument.\n");
 	data.info = &info;
-	//data.t = &t;
 	data.error = 0;
 	data.pos_x = -1;
 	data.pos_y = -1;
