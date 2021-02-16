@@ -295,6 +295,15 @@ void draw(t_data *data, int x)
 	double texPos = (drawStart - (data->height / 2) + (lineHeight / 2)) * step;
 
 
+	if (data->side == 1)
+		while (data->t->side != 's')
+  			data->t = data->t->next;
+	else
+		while (data->t->side != 'n')
+  			data->t = data->t->next;
+
+
+	printf ("side : %c \n", data->t->side);
 
 	for (int y = drawStart; y < drawEnd; y++)
 	{
@@ -334,36 +343,65 @@ void dda(t_data *data)
 }
 
 void loadimage(t_data *data)
-{	
-	t_text *t; 
+{
+	t_text *t;
+	t_text *head;
+
 
 	t = (t_text *)malloc(sizeof(t_text));
+	head = t;
 
 	t->side = 'n';
 	printf (":: %c \n", t->side);
 	t->img = mlx_xpm_file_to_image(data->mlx, data->info->north_text, &t->w, &t->h);
 	t->imgaddr = mlx_get_data_addr(t->img, &t->bits_per_pixel, &t->line_length, &t->endian);
-
 	t->next = (t_text *)malloc(sizeof(t_text));
-	t->next->side = 's';
-	printf (":: %c \n", t->next->side);
-	t->next->img = mlx_xpm_file_to_image(data->mlx, data->info->south_text, &t->next->w, &t->next->h);
-	printf (":: %p \n", t->next->img);
 
-	t->next->imgaddr = mlx_get_data_addr(t->next->img, &t->bits_per_pixel, &t->line_length, &t->endian);
+	t = t->next;
+	t->side = 's';
+	printf (":: %c \n", t->side);
+	t->img = mlx_xpm_file_to_image(data->mlx, data->info->south_text, &t->w, &t->h);
+	t->imgaddr = mlx_get_data_addr(t->img, &t->bits_per_pixel, &t->line_length, &t->endian);
+	t->next = (t_text *)malloc(sizeof(t_text));
+
+	t = t->next;
+	t->side = 'w';
+	printf (":: %c \n", t->side);
+	t->img = mlx_xpm_file_to_image(data->mlx, data->info->west_text, &t->w, &t->h);
+	t->imgaddr = mlx_get_data_addr(t->img, &t->bits_per_pixel, &t->line_length, &t->endian);
+	t->next = (t_text *)malloc(sizeof(t_text));
+
+	t = t->next;
+	t->side = 'e';
+	printf (":: %c \n", t->side);
+	t->img = mlx_xpm_file_to_image(data->mlx, data->info->east_text, &t->w, &t->h);
+	t->imgaddr = mlx_get_data_addr(t->img, &t->bits_per_pixel, &t->line_length, &t->endian);
+	t->next = head;
+
+	data->t = head;
+
+
+	// t->next->side = 's';
+	// printf (":: %c \n", t->next->side);
+	// t->next->img = mlx_xpm_file_to_image(data->mlx, data->info->south_text, &t->next->w, &t->next->h);
+	// printf ("::next  %p \n", t->next->img);
+	// t->next->imgaddr = mlx_get_data_addr(t->next->img, &t->bits_per_pixel, &t->line_length, &t->endian);
 
 	// t->next->next = (t_text *)malloc(sizeof(t_text));
-	// t->next->next->side = 's';
-	// t->next->next->img =  mlx_xpm_file_to_image(data->mlx, data->info->west_text, &data->t->w, &data->t->h);
-	// t->next->next->imgaddr = mlx_get_data_addr(data->t->img, &data->t->bits_per_pixel, &data->t->line_length, &data->t->endian);
+	// printf ("::t=nextnext %p \n", t->next->next);
+
+	// t->next->next->side = 'w';
+	// printf (":: %c \n", t->next->next->side);
+	// t->next->next->img =  mlx_xpm_file_to_image(data->mlx, data->info->west_text, &t->next->next->w, &t->next->h);
+	// printf ("::nextnext %p \n", t->next->next->img);
+	// t->next->next->imgaddr = mlx_get_data_addr(t->next->next->img, &t->next->next->bits_per_pixel, &t->next->next->line_length, &t->next->next->endian);
 
 
-	data->t = t;
-	// data->t = data->t->next;
-
-	// data->t->side = 'w';
-	// data->t->img = mlx_xpm_file_to_image(data->mlx, data->info->west_text, &data->t->w, &data->t->h);
-	// data->t->imgaddr = mlx_get_data_addr(data->t->img, &data->t->bits_per_pixel, &data->t->line_length, &data->t->endian);
+	// t->next->next->next = (t_text *)malloc(sizeof(t_text));
+	// t->next->next->next->side = 'e';
+	// t->next->next->next->img = mlx_xpm_file_to_image(data->mlx, data->info->east_text, &t->next->next->next->w, &t->next->next->next->h);
+	// printf (":: %p \n", t->next->next->next->img);
+	// t->next->next->next->imgaddr = mlx_get_data_addr(data->t->img, &t->next->next->bits_per_pixel, &data->t->line_length, &data->t->endian);
 
 
 
