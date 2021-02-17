@@ -111,10 +111,23 @@ void init_struct(t_data *data)
 	data->imgaddr = mlx_get_data_addr(data->img, &data->bits_per_pixel, &data->line_length, &data->endian);
 	data->map_s = 64; //bloc de 64 px
 
-	data->planeX = 0;
+
+	if (data->dirX == -1 || data->dirX == 1)
+		data->planeX = 0;
+	else if (data->dirX == 0 && data->dirY == -1)
+		data->planeX = 0.66;
+	else if (data->dirX == 0 && data->dirY == 1)
+		data->planeX = -0.66;
+
 // titillier ca pour les pos de depart??? pk??????
 
-	data->planeY = -0.66;
+	if (data->dirY == -1 || data->dirY == 1)
+		data->planeY = 0;
+	else if (data->dirY == 0 && data->dirX == -1)
+		data->planeY = -0.66;
+	else if (data->dirY == 0 && data->dirX == 1)
+		data->planeY = 0.66;
+
 
 	data->minimap_size = data->width / 30;
 	data->displaymap = 1;
@@ -239,17 +252,28 @@ void draw(t_data *data, int x)
 
 void dda(t_data *data)
 {
-	int x = 0;
+	int x = -1;
 
+	printf ("LOL chula \n\n");
 	printf ("data dirx =  %f\n", data->dirX);
 	printf ("data diry =  %f\n", data->dirY);
+	printf ("PLANE X = %f\n", data->planeX);
+	printf ("PLANE Y = %f\n", data->planeY);
+
+
+
 
 	while (x++ < data->width)
 	{
 		data->cameraX = 2 * x / (double)data->width - 1; //x-coordinate in camera space
-		data->rayDirX = data->dirX + data->planeX * data->cameraX;
-		data->rayDirY = data->dirY + data->planeY * data->cameraX;
-		//printf("RAYDIR X - Y = %f - %f \n", data->rayDirX, data->rayDirY);
+		if (x == 0)
+				printf ("CAMERA X = %f\n", data->cameraX);
+		data->rayDirX = data->dirX + (data->planeX * data->cameraX);
+
+		data->rayDirY = data->dirY + (data->planeY * data->cameraX);
+
+	if (x == 0)
+		printf("RAYDIR X - Y = %f - %f \n", data->rayDirX, data->rayDirY);
 
 		data->mapX = (int)data->pos_x;
 		//printf ("POS %f MAP %d\n", data->pos_x, data->mapX);
@@ -259,21 +283,21 @@ void dda(t_data *data)
 
 
 	    // Alternative code for deltaDist in case division through zero is not supported
-    //  double deltaDistX = (rayDirY == 0) ? 0 : ((rayDirX == 0) ? 1 : abs(1 / rayDirX));
-     // double deltaDistY = (rayDirX == 0) ? 0 : ((rayDirY == 0) ? 1 : abs(1 / rayDirY));
+     data->delta_x= (data->rayDirY == 0) ? 0 : ((data->rayDirX == 0) ? 1 : fabs(1 / data->rayDirX));
+     data->delta_y = (data->rayDirY == 0) ? 0 : ((data->rayDirY == 0) ? 1 : fabs(1 / data->rayDirY));
 
 		// if (data->rayDirY == 0 && data->rayDirX != 0)
 		// 	data->delta_x = 0;
 		// else if (data->rayDirX == 0)
 		// 	data->delta_x = 1;
-		// else 
-		printf ("raydir x %f \n", data->rayDirX);
-		printf ("raydir y %f \n", data->rayDirY);
+		// else
+		//printf ("raydir x %f \n", data->rayDirX);
+		//printf ("raydir y %f \n", data->rayDirY);
 
-		if (data->rayDirY != 0 && data->rayDirY != 0)
-			data->delta_x = fabs(1 / data->rayDirX);
-		else
-			data->delta_x = 0.66;
+		// if (data->rayDirY != 0 && data->rayDirY != 0)
+		// 	data->delta_x = fabs(1 / data->rayDirX);
+		// else
+		// 	data->delta_x = 0.66;
 
 
 
@@ -358,6 +382,7 @@ int main()
 	loadimage(&data);
 
 	display(&data);
+
 
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 	mlx_hook(data.win, 2, 1L << 0, key_hook, &data);
