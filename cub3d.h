@@ -18,6 +18,16 @@
 #define GREEN 0Xbef574
 
 
+enum e_sides
+{
+
+	NORTH = 0,
+	SOUTH,
+	EAST,
+	WEST
+};
+
+
 typedef struct s_display
 {
 	char	*sprite_text;
@@ -99,7 +109,7 @@ typedef struct s_data
     char     **map;
 	int		map_w;
 	int 	map_h;
-	
+
 	int		map_s;
 	int 	error;
 

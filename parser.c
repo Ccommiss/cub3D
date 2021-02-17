@@ -31,13 +31,13 @@ void *ft_realloc(void *ptr, size_t cursize, size_t newsize)
 	return (newptr);
 }
 
-void	ft_finddir(t_data *data, char dir)//chamboule tout,marche pas avec autre config que W qui est le truc de base 
+void	ft_finddir(t_data *data, char dir)//chamboule tout,marche pas avec autre config que W qui est le truc de base
 {
 	data->dirX = 0.0;
 	data->dirY = 0.0;
 
 	if (dir == 'N')
-		data->dirY = -1; 
+		data->dirY = -1;
 	else if (dir == 'S')
 		data->dirY = 1;
 	else if (dir == 'E')
@@ -55,11 +55,11 @@ int ft_check_chars(char sign, t_data *data, int x, int y)
 		ft_finddir(data, sign);
 		return (2);
 	}
-	else if (sign == '0' || sign == '1' || sign == '2' || sign == ' ')
+	else if (sign == '0' || sign == '1' || sign == '2' || sign == ' ' || sign == '	')
 		return (1);
 
 	data->error = 3;
-	printf("bad char found.\n");
+	printf("bad char found : %c at y %d x %d .\n", sign, x, y);
 	return (-1);
 
 }
@@ -72,7 +72,7 @@ int ft_mapcheck(char *str)
 	while (str[i])
 	{
 		if (str[i] != 'N' && str[i] != 'S' && str[i] != 'E' && str[i] != 'W' &&
-			str[i] != '0' && str[i] != '1' && str[i] != '2' && str[i] != ' ')
+			str[i] != '0' && str[i] != '1' && str[i] != '2' && str[i] != ' ' && str[i] != '	')
 			return (0);
 		i++;
 	}
@@ -114,7 +114,7 @@ int parse_map(t_data *data, char *line)
 		x++;
 	}
 	data->map[y][x] = '\0';
-	
+
 	//si jamais la ligne est  plus longue que les autres, sa longueur devient la nouvelle reference pour les autres
 	if (x > data->map_w)
 	{
@@ -171,6 +171,7 @@ void check_borders(t_data *data, int x, int y, char ***mapbis)
 	// printf("testing x = %d || y = %d \n", x, y);
 	if (y < 0 || y >= data->map_h || x < 0 || x >= data->map_w || data->map[y][x] == ' ' || data->map[y][x] == '.')
 	{
+		printf("mapxy %c at x %d y %d\n", data->map[y][x], x, y);
 		data->error = 1;
 		return;
 	}

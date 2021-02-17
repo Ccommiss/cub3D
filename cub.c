@@ -45,8 +45,8 @@ void my_mlx_pixel_put(t_data *data, int x, int y, int color)
 
 int checkzero_letter(char c)
 {
-	if (c == '0' || c == 'N' || c == 'S' || c == 'W' || c == 'E')
-		return 1;
+	if (c == '0')
+		return (1);
 	return 0;
 }
 
@@ -54,17 +54,16 @@ int key_hook(int keycode, t_data *data)
 {
 	if (keycode == KEY_UP)
 	{
-		if (checkzero_letter(data->map[(int)(data->pos_y)][(int)(data->pos_x + data->dirX * 0.10)]))
+		if (checkzero_letter(data->map[(int)(data->pos_y)][(int)(data->pos_x + data->dirX * 0.11)]))
 			data->pos_x += data->dirX * 0.10;
-
-		if (checkzero_letter(data->map[(int)(data->pos_y + data->dirY * 0.10)][(int)(data->pos_x)]))
+		if (checkzero_letter(data->map[(int)(data->pos_y + data->dirY * 0.11)][(int)(data->pos_x)]))
 			data->pos_y += data->dirY * 0.10;
 	}
 	if (keycode == KEY_DOWN)
 	{
-		if (checkzero_letter(data->map[(int)(data->pos_y)][(int)(data->pos_x - data->dirX * 0.10)]))
+		if (checkzero_letter(data->map[(int)(data->pos_y)][(int)(data->pos_x - data->dirX * 0.11)]))
 			data->pos_x -= data->dirX * 0.10;
-		if (checkzero_letter(data->map[(int)(data->pos_y - data->dirY * 0.10)][(int)(data->pos_x)]))
+		if (checkzero_letter(data->map[(int)(data->pos_y - data->dirY * 0.11)][(int)(data->pos_x)]))
 			data->pos_y -= data->dirY * 0.10;
 	}
 	if (keycode == KEY_RIGHT) //ROTATION A FAIRE
@@ -105,12 +104,10 @@ int key_hook(int keycode, t_data *data)
 void init_struct(t_data *data)
 {
 	data->mlx = mlx_init();
-
 	data->win = mlx_new_window(data->mlx, data->width, data->height, "who run the world ?");
 	data->img = mlx_new_image(data->mlx, data->width, data->height);
 	data->imgaddr = mlx_get_data_addr(data->img, &data->bits_per_pixel, &data->line_length, &data->endian);
-	data->map_s = 64; //bloc de 64 px
-
+	data->map_s = 64;
 
 	if (data->dirX == -1 || data->dirX == 1)
 		data->planeX = 0;
@@ -119,15 +116,12 @@ void init_struct(t_data *data)
 	else if (data->dirX == 0 && data->dirY == 1)
 		data->planeX = -0.66;
 
-// titillier ca pour les pos de depart??? pk??????
-
 	if (data->dirY == -1 || data->dirY == 1)
 		data->planeY = 0;
 	else if (data->dirY == 0 && data->dirX == -1)
 		data->planeY = -0.66;
 	else if (data->dirY == 0 && data->dirX == 1)
 		data->planeY = 0.66;
-
 
 	data->minimap_size = data->width / 30;
 	data->displaymap = 1;
@@ -143,13 +137,19 @@ void perform_dda(t_data *data)
 		{
 			data->dx += data->delta_x;
 			data->mapX += data->stepX;
-			data->side = 0;
+			if (data->stepX < 0)
+				data->side = WEST;
+			else
+				data->side = EAST;
 		}
 		else
 		{
 			data->dy += data->delta_y;
 			data->mapY += data->stepY;
-			data->side = 1;
+			if (data->stepY < 0)
+				data->side = NORTH;
+			else
+				data->side = SOUTH;
 		}
 		//Check if ray has hit a wall
 		if (data->map[data->mapY][data->mapX] != '0')
@@ -207,7 +207,7 @@ void draw(t_data *data, int x)
 	//bresenham(x, drawStart, y, drawEnd, data);
 	double wallx = 0;
 
-	if (data->side == 0)
+	if (data->side == WEST || data->side == EAST )
 		wallx = data->pos_y + (data->perpWallDist * data->rayDirY);
 	else
 		wallx = data->pos_x + (data->perpWallDist * data->rayDirX);
@@ -220,9 +220,9 @@ void draw(t_data *data, int x)
 	//printf("TEXX 1 %d \n", texX);
 
 
-	if(data->side == 0 && data->rayDirX > 0)
+	if((data->side == EAST ||(data->side == WEST)) && data->rayDirX > 0)
 		texX = data->t->w - texX - 1;
-	if(data->side == 1 && data->rayDirY < 0)
+	if((data->side == NORTH || data->side == SOUTH)  && data->rayDirY < 0)
 		texX = data->t->w - texX - 1;
 	//printf("TEXX 2 %d \n", texX);
 
@@ -231,12 +231,19 @@ void draw(t_data *data, int x)
 	double texPos = (drawStart - (data->height / 2) + (lineHeight / 2)) * step;
 
 
-	if (data->side == 1)
+	if (data->side == SOUTH)
 		while (data->t->side != 's')
   			data->t = data->t->next;
-	else
+	else if (data->side == WEST)
+		while (data->t->side != 'w')
+  			data->t = data->t->next;
+	else if (data->side == EAST)
+		while (data->t->side != 'e')
+  			data->t = data->t->next;
+	else if (data->side == NORTH)
 		while (data->t->side != 'n')
   			data->t = data->t->next;
+
 
 
 	//printf ("side : %c \n", data->t->side);
@@ -312,7 +319,7 @@ void dda(t_data *data)
 		perform_dda(data);
 
 
-		if (data->side == 0)
+		if (data->side == WEST || data->side == EAST)
 			data->perpWallDist = (data->mapX - data->pos_x + (1 - data->stepX) / 2) / data->rayDirX;
 		else
 			data->perpWallDist = (data->mapY - data->pos_y + (1 - data->stepY) / 2) / data->rayDirY;
@@ -351,6 +358,7 @@ void loadimage(t_data *data)
 
 	t = t->next;
 
+	t->side = 'e';
 	t->img = mlx_xpm_file_to_image(data->mlx, data->info->east_text, &t->w, &t->h);
 	t->imgaddr = mlx_get_data_addr(t->img, &t->bits_per_pixel, &t->line_length, &t->endian);
 	t->next = head;
