@@ -28,6 +28,25 @@ enum e_sides
 };
 
 
+typedef struct s_spr t_spr;
+
+typedef struct s_spr 
+{
+
+	t_spr *head;
+	int index; // a trier selon la distance  
+
+	double distance; // distance perp  au jouerur  
+	double x; // x du sprite
+	double y; // y du sprite
+
+	t_spr *next;
+
+} 		t_spr;
+
+
+
+
 typedef struct s_display
 {
 	char	*sprite_text;
@@ -124,6 +143,7 @@ typedef struct s_data
 // colors
 	t_display *info;
 	t_text *t;
+	t_spr *spr;
 
 }   t_data;
 

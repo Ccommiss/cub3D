@@ -269,7 +269,6 @@ void dda(t_data *data)
 
 
 
-
 	while (x++ < data->width)
 	{
 		data->cameraX = 2 * x / (double)data->width - 1; //x-coordinate in camera space
@@ -293,31 +292,8 @@ void dda(t_data *data)
      data->delta_x= (data->rayDirY == 0) ? 0 : ((data->rayDirX == 0) ? 1 : fabs(1 / data->rayDirX));
      data->delta_y = (data->rayDirY == 0) ? 0 : ((data->rayDirY == 0) ? 1 : fabs(1 / data->rayDirY));
 
-		// if (data->rayDirY == 0 && data->rayDirX != 0)
-		// 	data->delta_x = 0;
-		// else if (data->rayDirX == 0)
-		// 	data->delta_x = 1;
-		// else
-		//printf ("raydir x %f \n", data->rayDirX);
-		//printf ("raydir y %f \n", data->rayDirY);
-
-		// if (data->rayDirY != 0 && data->rayDirY != 0)
-		// 	data->delta_x = fabs(1 / data->rayDirX);
-		// else
-		// 	data->delta_x = 0.66;
-
-
-
-		// if (data->rayDirX == 0)
-		// 	data->delta_y = 0;
-		// else if (data->rayDirY == 0)
-		// 	data->delta_y = 1;
-		// else
-			data->delta_y = fabs(1 / data->rayDirY);
-
 		calculate_step(data);
 		perform_dda(data);
-
 
 		if (data->side == WEST || data->side == EAST)
 			data->perpWallDist = (data->mapX - data->pos_x + (1 - data->stepX) / 2) / data->rayDirX;

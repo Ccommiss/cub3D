@@ -157,7 +157,48 @@ int ft_parse_info(t_data *data, char *line)
 }
 
 
+void	load_sprite(t_data *data, int x, int y)
+{
+	static int i = 0;
 
+	printf ("SPR %p \n", data->spr);
+
+
+	printf ("*** LOAD SPRITE ***\n");
+//	printf ("1 : %d \n", data->spr->index);
+
+	if (!data->spr)
+	{
+		data->spr = NULL;
+		data->spr = (t_spr *)malloc((sizeof(t_spr)));
+		data->spr->head = data->spr;
+		printf ("%p data->str->head\n", data->spr->head);
+		printf ("%p data->str\n", data->spr);
+		printf ("YOOOOOO\n");
+	}
+	else 
+	{
+		data->spr->next = (t_spr *)malloc((sizeof(t_spr)));
+		data->spr = data->spr->next;
+	}
+
+	// while (data->spr->next != NULL) pas besoin car on repart du dernier a chaque fois
+	// {
+	// 	printf ("YO\n");
+	// 	data->spr = data->spr->next;
+	// }
+
+
+	data->spr->index = i;
+	data->spr->x = x;
+	data->spr->y = y;
+	printf ("X = %f __ Y = %f \n\n", data->spr->x, data->spr->y);
+	printf ("i = %d \n", i );
+	printf ("%d \n", data->spr->index );
+	printf ("NEW SPR %p \n", data->spr);
+	i++;
+	data->spr->next = NULL;
+}
 
 void check_borders(t_data *data, int x, int y, char ***mapbis)
 {
@@ -169,6 +210,9 @@ void check_borders(t_data *data, int x, int y, char ***mapbis)
 	// }
 	// printf("\n**END MAP**\n");
 	// printf("testing x = %d || y = %d \n", x, y);
+
+
+
 	if (y < 0 || y >= data->map_h || x < 0 || x >= data->map_w || data->map[y][x] == ' ' || data->map[y][x] == '.')
 	{
 		printf("mapxy %c at x %d y %d\n", data->map[y][x], x, y);
@@ -178,8 +222,13 @@ void check_borders(t_data *data, int x, int y, char ***mapbis)
 	if (data->map[y][x] == '1' || mapbis[0][y][x] == 'v')
 		return;
 	if (data->map[y][x] == '0' || data->map[y][x] == 'S' || data->map[y][x] == 'N'
-	|| data->map[y][x] == 'E' || data->map[y][x] == 'W') //rajouter autres pos
+	|| data->map[y][x] == 'E' || data->map[y][x] == 'W' ) //rajouter autres pos
 		mapbis[0][y][x] = 'v';
+	if (data->map[y][x] == '2')
+	{
+		mapbis[0][y][x] = 'v';
+		load_sprite(data, x, y);
+	}
 	check_borders(data, x + 1, y, mapbis);
 	check_borders(data, x - 1, y, mapbis);
 	check_borders(data, x, y + 1, mapbis);
@@ -201,11 +250,18 @@ int	iscomplete(t_data *data)
 int ft_parse(int fd, t_data *data)
 {
 	char *line = NULL;
-	printf("**PARSING**\n");
-	int info;
-	info = 0;
-	//data->map = NULL;
 
+	//t_spr *head;
+
+	//data->spr = NULL;
+	// data->spr = (t_spr *)malloc(sizeof(t_spr));
+	//data->spr->next = NULL;
+	//head = data->spr;
+	//printf ("HEAD %p \n", head);
+	printf ("SPR %p \n", data->spr);
+
+
+	printf("**PARSING**\n");
 	while (get_next_line(fd, &line))
 	{
 		if (ft_mapcheck(line) == 0 && ft_strlen(ft_strtrim(line, " ")) != 0 && !iscomplete(data))
@@ -245,7 +301,18 @@ int ft_parse(int fd, t_data *data)
 	}
 	if (data->error == 0)
 		check_borders(data, data->pos_x, data->pos_y, &copymap);
+	
+ 	//data->spr = head;
+	data->spr = data->spr->head;
+
 	if (data->error != 0)
 		return (-1);
+
+	printf ("%p - head", data->spr->head);
+	while (data->spr != NULL)
+	{
+		printf ("INDEX = %d -- X = %f Y = %f \n", data->spr->index, data->spr->x, data->spr->y);
+		data->spr = data->spr->next;
+	}
 	return 1;
 }
