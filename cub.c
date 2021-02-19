@@ -42,10 +42,9 @@ void my_mlx_pixel_put(t_data *data, int x, int y, int color)
 		*(unsigned int *)dst = color;
 }
 
-
 int checkzero_letter(char c)
 {
-	if (c == '0')
+	if (c == '0') // || c == '2') //et 2 sil faut traverser
 		return (1);
 	return 0;
 }
@@ -125,6 +124,8 @@ void init_struct(t_data *data)
 
 	data->minimap_size = data->width / 30;
 	data->displaymap = 1;
+	data->zbuffer = (double *)malloc(sizeof(double) * (data->width + 1));
+	ft_bzero(data->zbuffer, data->width);
 }
 
 void perform_dda(t_data *data)
@@ -152,7 +153,7 @@ void perform_dda(t_data *data)
 				data->side = SOUTH;
 		}
 		//Check if ray has hit a wall
-		if (data->map[data->mapY][data->mapX] != '0')
+		if (data->map[data->mapY][data->mapX] != '0' && data->map[data->mapY][data->mapX] != '2')
 			hit = 1;
 	}
 }
@@ -181,6 +182,130 @@ void calculate_step(t_data *data)
 	}
 }
 
+t_spr *sort_sprites(t_data *data, t_spr *head)
+{
+	t_spr *tmp;
+	t_spr *tmp_next;
+	int tmpx;
+	int tmpy;
+	int tmpdist;
+
+	tmp = data->spr;
+	tmp_next = data->spr->next;
+	while (tmp_next != NULL)
+	{
+		while (tmp_next != tmp)
+		{
+			if (tmp_next->distance > tmp->distance)
+			{
+				tmpx = tmp->x;
+				tmpy = tmp->y;
+				tmpdist = tmp->distance;
+				tmp->x = tmp_next->x;
+				tmp->y = tmp_next->y;
+				tmp->distance = tmp_next->distance;
+				tmp_next->x = tmpx;
+				tmp_next->y = tmpy;
+				tmp_next->distance = tmpdist;
+
+			}
+			tmp = tmp->next;
+		}
+		tmp = head;
+		tmp_next = tmp_next->next;
+	}
+	return (tmp); // Place holder
+}
+
+void sprite_casting(t_data *data)
+{
+	//printf("INDEX IN SPR CASTING = %d \n", data->spr->index);
+	t_spr *head;
+	head = data->spr->head; //on make sure on est bien au debut
+
+	while (data->spr != NULL)
+	{
+		data->spr->distance = (pow((data->pos_x - data->spr->x), 2) + pow((data->pos_y - data->spr->y), 2));
+		//printf(" INDEX = %d, distance = %f \n", data->spr->index, data->spr->distance);
+		data->spr = data->spr->next;
+	}
+	data->spr = head;
+	data->spr = sort_sprites(data, head);
+	data->spr = head;
+}
+
+
+void sprite_drawing(t_data *data, int x)
+{
+	t_spr *head = data->spr->head;
+//	for(int i = 0; i < numSprites; i++)
+	while (data->spr != NULL)
+    {
+      //translate sprite position to relative to camera
+      double spriteX = data->spr->x - data->pos_x;
+      double spriteY = data->spr->y - data->pos_y;
+
+      //transform sprite with the inverse camera matrix
+      // [ planeX   dirX ] -1                                       [ dirY      -dirX ]
+      // [               ]       =  1/(planeX*dirY-dirX*planeY) *   [                 ]
+      // [ planeY   dirY ]                                          [ -planeY  planeX ]
+
+      double invDet = 1.0 / (data->planeX * data->dirY - data->dirX * data->planeY); //required for correct matrix multiplication
+
+      double transformX = invDet * (data->dirY * spriteX - data->dirX * spriteY);
+      double transformY = invDet * ((-data->planeY * spriteX) + (data->planeX * spriteY)); //this is actually the depth inside the screen, that what Z is in 3D
+
+      int spriteScreenX = (int)((data->width / 2) * (1 + transformX / transformY));
+
+      //calculate height of the sprite on screen
+      int spriteHeight = abs((int)(data->height / (transformY))); //using 'transformY' instead of the real distance prevents fisheye
+      //calculate lowest and highest pixel to fill in current stripe
+      int drawStartY = -spriteHeight / 2 + data->height / 2;
+      if(drawStartY < 0)
+	  	drawStartY = 0;
+      int drawEndY = spriteHeight / 2 + data->height / 2;
+      if(drawEndY >= data->height)
+	  	drawEndY = data->height - 1;
+
+      //calculate width of the sprite
+      int spriteWidth = abs( (int) (data->height / (transformY)));
+      int drawStartX = -spriteWidth / 2 + spriteScreenX;
+      if(drawStartX < 0)
+	  	drawStartX = 0;
+      int drawEndX = spriteWidth / 2 + spriteScreenX;
+
+	  if(drawEndX >= data->width)
+	  	drawEndX = data->width - 1;
+
+      //loop through every vertical stripe of the sprite on screen
+      for(int stripe = drawStartX; stripe < drawEndX; stripe++)
+      {
+        int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX)) * data->spw / spriteWidth) / 256;
+        //the conditions in the if are:
+        //1) it's in front of camera plane so you don't see things behind you
+        //2) it's on the screen (left)
+        //3) it's on the screen (right)
+        //4) ZBuffer, with perpendicular distance
+
+		unsigned int color;
+
+        if(transformY > 0 && stripe > 0 && stripe < data->width && transformY < data->zbuffer[stripe])
+        for(int y = drawStartY; y < drawEndY; y++) //for every pixel of the current stripe
+        {
+          int d = (y) * 256 - data->height * 128 + spriteHeight * 128; //256 and 128 factors to avoid floats
+          int texY = ((d * 64) / spriteHeight) / 256;
+		  color = ((unsigned int *)data->sprimgaddr)[data->spw * texY + texX];
+		if((color & 0x00FFFFFF) != 0)
+		  my_mlx_pixel_put(data, stripe, y, color);
+		  (void)x;
+        }
+      }
+	  data->spr = data->spr->next;
+    }
+	data->spr = head;
+}
+
+
 void draw(t_data *data, int x)
 {
 	(void)x;
@@ -199,15 +324,8 @@ void draw(t_data *data, int x)
 	if (drawEnd >= data->height)
 		drawEnd = data->height - 1;
 
-	// if (data->side == 1)
-	// 	data->color = RED;
-	// else
-	// 	data->color = YELLOW;
-
-	//bresenham(x, drawStart, y, drawEnd, data);
 	double wallx = 0;
-
-	if (data->side == WEST || data->side == EAST )
+	if (data->side == WEST || data->side == EAST)
 		wallx = data->pos_y + (data->perpWallDist * data->rayDirY);
 	else
 		wallx = data->pos_x + (data->perpWallDist * data->rayDirX);
@@ -215,14 +333,12 @@ void draw(t_data *data, int x)
 	wallx -= floor(wallx);
 	//printf("WALLX %f \n", wallx);
 
-
 	int texX = (int)(wallx * (double)data->t->w);
 	//printf("TEXX 1 %d \n", texX);
 
-
-	if((data->side == EAST ||(data->side == WEST)) && data->rayDirX > 0)
+	if ((data->side == EAST || (data->side == WEST)) && data->rayDirX > 0)
 		texX = data->t->w - texX - 1;
-	if((data->side == NORTH || data->side == SOUTH)  && data->rayDirY < 0)
+	if ((data->side == NORTH || data->side == SOUTH) && data->rayDirY < 0)
 		texX = data->t->w - texX - 1;
 	//printf("TEXX 2 %d \n", texX);
 
@@ -230,21 +346,18 @@ void draw(t_data *data, int x)
 	// Starting texture coordinate
 	double texPos = (drawStart - (data->height / 2) + (lineHeight / 2)) * step;
 
-
 	if (data->side == SOUTH)
 		while (data->t->side != 's')
-  			data->t = data->t->next;
+			data->t = data->t->next;
 	else if (data->side == WEST)
 		while (data->t->side != 'w')
-  			data->t = data->t->next;
+			data->t = data->t->next;
 	else if (data->side == EAST)
 		while (data->t->side != 'e')
-  			data->t = data->t->next;
+			data->t = data->t->next;
 	else if (data->side == NORTH)
 		while (data->t->side != 'n')
-  			data->t = data->t->next;
-
-
+			data->t = data->t->next;
 
 	//printf ("side : %c \n", data->t->side);
 
@@ -255,42 +368,39 @@ void draw(t_data *data, int x)
 		data->color = ((unsigned int *)data->t->imgaddr)[data->t->h * texY + texX];
 		my_mlx_pixel_put(data, x, y, data->color);
 	}
+
+
 }
 
 void dda(t_data *data)
 {
 	int x = -1;
 
-	printf ("LOL chula \n\n");
-	printf ("data dirx =  %f\n", data->dirX);
-	printf ("data diry =  %f\n", data->dirY);
-	printf ("PLANE X = %f\n", data->planeX);
-	printf ("PLANE Y = %f\n", data->planeY);
-
-
+	printf("data dirx =  %f\n", data->dirX);
+	printf("data diry =  %f\n", data->dirY);
+	printf("PLANE X = %f\n", data->planeX);
+	printf("PLANE Y = %f\n", data->planeY);
 
 	while (x++ < data->width)
 	{
 		data->cameraX = 2 * x / (double)data->width - 1; //x-coordinate in camera space
 		if (x == 0)
-				printf ("CAMERA X = %f\n", data->cameraX);
+			printf("CAMERA X = %f\n", data->cameraX);
 		data->rayDirX = data->dirX + (data->planeX * data->cameraX);
 
 		data->rayDirY = data->dirY + (data->planeY * data->cameraX);
 
-	if (x == 0)
-		printf("RAYDIR X - Y = %f - %f \n", data->rayDirX, data->rayDirY);
+		if (x == 0)
+			printf("RAYDIR X - Y = %f - %f \n", data->rayDirX, data->rayDirY);
 
 		data->mapX = (int)data->pos_x;
 		//printf ("POS %f MAP %d\n", data->pos_x, data->mapX);
 		data->mapY = (int)data->pos_y;
 		//length of ray from one x or y-side to next x or y-side
 
-
-
-	    // Alternative code for deltaDist in case division through zero is not supported
-     data->delta_x= (data->rayDirY == 0) ? 0 : ((data->rayDirX == 0) ? 1 : fabs(1 / data->rayDirX));
-     data->delta_y = (data->rayDirY == 0) ? 0 : ((data->rayDirY == 0) ? 1 : fabs(1 / data->rayDirY));
+		// Alternative code for deltaDist in case division through zero is not supported
+		data->delta_x = (data->rayDirY == 0) ? 0 : ((data->rayDirX == 0) ? 1 : fabs(1 / data->rayDirX));
+		data->delta_y = (data->rayDirY == 0) ? 0 : ((data->rayDirY == 0) ? 1 : fabs(1 / data->rayDirY));
 
 		calculate_step(data);
 		perform_dda(data);
@@ -300,14 +410,16 @@ void dda(t_data *data)
 		else
 			data->perpWallDist = (data->mapY - data->pos_y + (1 - data->stepY) / 2) / data->rayDirY;
 		draw(data, x);
+		data->zbuffer[x] = data->perpWallDist;
 	}
+	sprite_casting(data);
+	sprite_drawing(data, x);
 }
 
 void loadimage(t_data *data)
 {
 	t_text *t;
 	t_text *head;
-
 
 	t = (t_text *)malloc(sizeof(t_text));
 	head = t;
@@ -340,6 +452,14 @@ void loadimage(t_data *data)
 	t->next = head;
 
 	data->t = head;
+
+// texture
+	data->sprimg = mlx_xpm_file_to_image(data->mlx, data->info->sprite_text, &data->spw, &data->sph);
+	data->sprimgaddr = mlx_get_data_addr(data->sprimg, &data->sprbpx, &data->spline, &data->end);
+
+
+
+
 }
 
 int main()
@@ -366,7 +486,6 @@ int main()
 	loadimage(&data);
 
 	display(&data);
-
 
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 	mlx_hook(data.win, 2, 1L << 0, key_hook, &data);

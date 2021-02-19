@@ -170,32 +170,26 @@ void	load_sprite(t_data *data, int x, int y)
 	if (!data->spr)
 	{
 		data->spr = NULL;
-		data->spr = (t_spr *)malloc((sizeof(t_spr)));
+		data->spr = (t_spr *)malloc(sizeof(t_spr));
 		data->spr->head = data->spr;
 		printf ("%p data->str->head\n", data->spr->head);
 		printf ("%p data->str\n", data->spr);
 		printf ("YOOOOOO\n");
 	}
-	else 
+	else
 	{
 		data->spr->next = (t_spr *)malloc((sizeof(t_spr)));
+		data->spr->next->head = data->spr->head; //on sauvegarde la tete, ainsi chaque maillon contient le ptr vers le debut de la liste
 		data->spr = data->spr->next;
 	}
-
-	// while (data->spr->next != NULL) pas besoin car on repart du dernier a chaque fois
-	// {
-	// 	printf ("YO\n");
-	// 	data->spr = data->spr->next;
-	// }
-
 
 	data->spr->index = i;
 	data->spr->x = x;
 	data->spr->y = y;
-	printf ("X = %f __ Y = %f \n\n", data->spr->x, data->spr->y);
-	printf ("i = %d \n", i );
-	printf ("%d \n", data->spr->index );
-	printf ("NEW SPR %p \n", data->spr);
+	// printf ("X = %f __ Y = %f \n\n", data->spr->x, data->spr->y);
+	// printf ("i = %d \n", i );
+	// printf ("%d \n", data->spr->index );
+	// printf ("NEW SPR %p \n", data->spr);
 	i++;
 	data->spr->next = NULL;
 }
@@ -210,7 +204,6 @@ void check_borders(t_data *data, int x, int y, char ***mapbis)
 	// }
 	// printf("\n**END MAP**\n");
 	// printf("testing x = %d || y = %d \n", x, y);
-
 
 
 	if (y < 0 || y >= data->map_h || x < 0 || x >= data->map_w || data->map[y][x] == ' ' || data->map[y][x] == '.')
@@ -251,15 +244,6 @@ int ft_parse(int fd, t_data *data)
 {
 	char *line = NULL;
 
-	//t_spr *head;
-
-	//data->spr = NULL;
-	// data->spr = (t_spr *)malloc(sizeof(t_spr));
-	//data->spr->next = NULL;
-	//head = data->spr;
-	//printf ("HEAD %p \n", head);
-	printf ("SPR %p \n", data->spr);
-
 
 	printf("**PARSING**\n");
 	while (get_next_line(fd, &line))
@@ -296,23 +280,23 @@ int ft_parse(int fd, t_data *data)
 		ft_bzero(copymap[i], data->map_w + 1);
 		ft_memset(copymap[i], '.', data->map_w);
 		//	printf("%s \n", copymap[i]);
-
 		i++;
 	}
 	if (data->error == 0)
 		check_borders(data, data->pos_x, data->pos_y, &copymap);
-	
- 	//data->spr = head;
-	data->spr = data->spr->head;
-
-	if (data->error != 0)
+	else
 		return (-1);
 
-	printf ("%p - head", data->spr->head);
-	while (data->spr != NULL)
+	data->spr = data->spr->head; // on a saubvegarde tous les sprites
+	printf ("%p - head", data->spr);
+
+	while (data->spr->next != NULL)
 	{
 		printf ("INDEX = %d -- X = %f Y = %f \n", data->spr->index, data->spr->x, data->spr->y);
 		data->spr = data->spr->next;
 	}
+	data->spr = data->spr->head;
+
+
 	return 1;
 }

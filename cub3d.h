@@ -30,13 +30,13 @@ enum e_sides
 
 typedef struct s_spr t_spr;
 
-typedef struct s_spr 
+typedef struct s_spr
 {
 
 	t_spr *head;
-	int index; // a trier selon la distance  
+	int index; // a trier selon la distance
 
-	double distance; // distance perp  au jouerur  
+	double distance; // distance perp  au jouerur
 	double x; // x du sprite
 	double y; // y du sprite
 
@@ -140,10 +140,21 @@ typedef struct s_data
 	int speed;
 	int displaymap;
 
+
+	double *zbuffer; // a malloc
+
 // colors
 	t_display *info;
 	t_text *t;
 	t_spr *spr;
+
+	void	*sprimg;
+	void	*sprimgaddr;
+	int     sprbpx;
+    int     spline;
+    int     end;
+	int 	spw;
+	int		sph;
 
 }   t_data;
 
