@@ -222,10 +222,13 @@ void check_borders(t_data *data, int x, int y, char ***mapbis)
 		mapbis[0][y][x] = 'v';
 		load_sprite(data, x, y);
 	}
+	if (data->error == 0)
+	{
 	check_borders(data, x + 1, y, mapbis);
 	check_borders(data, x - 1, y, mapbis);
 	check_borders(data, x, y + 1, mapbis);
 	check_borders(data, x, y - 1, mapbis);
+	}
 	return;
 }
 

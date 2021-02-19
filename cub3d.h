@@ -173,3 +173,6 @@ void checkmap(t_data *data);
 int checkzero_letter(char c);
 int		red_cross(t_data *data);
 int error_message(int index);
+
+
+void set_compass(t_data *data); 
