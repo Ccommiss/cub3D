@@ -6,12 +6,14 @@ void display(t_data *data)
 	fill_black(data);
 	fill_ceiling(data);
 	fill_floor(data);
-//	set_compass(data);
+
 
 	dda(data);
 
+
 	if (data->displaymap == 1)
 	{
+		set_compass(data);
 		//printf ("**DISPLAy 1 OK**\n");
 		set_map(data);
 		//printf ("**MAP OK**\n");
@@ -312,6 +314,8 @@ void sprite_drawing(t_data *data, int x)
 					int d = (y)*256 - data->height * 128 + spriteHeight * 128; //256 and 128 factors to avoid floats
 					int texY = ((d * data->sph) / spriteHeight) / 256;
 					color = ((unsigned int *)data->sprimgaddr)[data->spw * texY + texX];
+					//color = (1 - 0.25) * color + 0.25 * 0x000001; // FOG TRY
+
 					if ((color & 0x00FFFFFF) != 0)
 						my_mlx_pixel_put(data, stripe, y, color);
 					(void)x;
@@ -383,8 +387,11 @@ void draw(t_data *data, int x)
 		int texY = (int)texPos & (data->t->h - 1);
 		texPos += step;
 		data->color = ((unsigned int *)data->t->imgaddr)[data->t->h * texY + texX];
+		data->color = (1 - 0.75) * data->color + 0.75 * 0x000000; // FOG TRY
 		my_mlx_pixel_put(data, x, y, data->color);
 	}
+	//printf ("ppd %f \n", data->perpWallDist);
+
 }
 
 void dda(t_data *data)
@@ -429,6 +436,7 @@ void dda(t_data *data)
 	}
 	sprite_casting(data);
 	sprite_drawing(data, x);
+
 }
 
 void loadimage(t_data *data)

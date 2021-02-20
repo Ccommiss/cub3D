@@ -51,7 +51,8 @@ void fill_ceiling(t_data *data)
 	{
 		while (j < data->width)
 		{
-			my_mlx_pixel_put(data, j, i, BLUE);
+			data->color = (1 - 0.75) * BLUE + 0.75 * 0x000000; // FOG TRY
+			my_mlx_pixel_put(data, j, i, data->color);
 			j++;
 		}
 		j = 0;
@@ -68,7 +69,8 @@ void fill_floor(t_data *data)
 	{
 		while (j < data->width)
 		{
-			my_mlx_pixel_put(data, j, i, GREEN);
+			data->color = (1 - 0.75) * GREEN + 0.75 * 0x000000; // FOG TRY
+			my_mlx_pixel_put(data, j, i, data->color);
 			j++;
 		}
 		j = 0;
@@ -139,23 +141,46 @@ void set_compass(t_data *data)
 	int h;
 	int sl;
 
-	void *img = mlx_xpm_file_to_image(data->mlx, "pics/compass.xpm", &w, &h);
+	void *img = mlx_xpm_file_to_image(data->mlx, "pics/compass_S.xpm", &w, &h);
 	void *imginfo = mlx_get_data_addr(img, &bpp, &sl, &endian);
 
 	int x = 0;
 	int y = 0;
 	int color;
-	while (y <= 512)
+
+	while (y < h)
 	{
-		while (x <= 428)
+		while (x < w)
 		{
-			color = ((unsigned int *)imginfo)[128 * y + x];
+			color = ((unsigned int *)imginfo)[w*y + x];
 			//printf ("compass");
-			//if ((color & 0x00FFFFFF) != 0)
+			if (color == 0x000000)
+				color = 0x000001;
+
+			if ((color & 0x00FFFFFF) != 0)
 				my_mlx_pixel_put(data, x, y, color);
+
+			// if (x == w / 2 && y == h /2)
+			// {
+
+			// 	printf ("x = %d \n", x);
+			// }
+
+
+
+			//if (color != 0x000000)
 			x++;
 		}
 		x = 0;
 		y++;
 	}
+	data->color = RED;
+	bresenham(w/2, h/2 - 4, (w/2) + data->dirX * 40, (h/2 - 4) + data->dirY * 40, data);
+	bresenham(w/2, h/2 - 3, (w/2) + data->dirX * 40, (h/2 - 3) + data->dirY * 40, data);
+
+
+//	bresenham(w/2 - 1, h/2 - 1, (w/2 - 1) + data->dirX * 40, (h/2 - 1) + data->dirY * 40, data);
+//	bresenham(w/2, h/2, w/2 + data->dirX * 40, h/2 + data->dirY * 40, data);
+//	bresenham(w/2 + 1, h/2 + 1, (w/2 + 1) + data->dirX * 40, (h/2 + 1) + data->dirY * 40, data);
+
 }
