@@ -12,6 +12,9 @@ SRCS = cub.c \
 	bresenham.c\
 	init.c \
 	parser_utils.c \
+	display.c \
+	events.c \
+	sprites.c \
 	./getnextline/get_next_line.c \
 	./getnextline/get_next_line_utils.c \
 

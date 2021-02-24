@@ -27,7 +27,7 @@ enum e_sides
 
 typedef struct s_spr t_spr;
 
-typedef struct s_spr
+typedef struct s_spr // list chainee 
 {
 
 	t_spr *head;
@@ -40,6 +40,19 @@ typedef struct s_spr
 	t_spr *next;
 
 } t_spr;
+
+typedef struct s_spr_geo
+{
+	double x;
+	double y;
+	double inv; 
+	double trans_x;
+	double trans_y;
+	int screen_x;
+	int height;
+	int width;
+
+} t_spr_geo;
 
 typedef struct s_display
 {
@@ -176,12 +189,24 @@ void set_map(t_data *data);
 int set_player(t_data *data);
 void set_compass(t_data *data);
 
+/*
+ *  [display.c] Displaying fucntions
+ */
 
-
+void display(t_data *data);
 void my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void fill_black(t_data *data);
 void fill_ceiling(t_data *data);
 void fill_floor(t_data *data);
+
+void sprite_drawing(t_data *data, int x);
+void sprite_casting(t_data *data);
+
+
+int key_hook(int keycode, t_data *data);
+
+
+
 void bresenham(int xdep, int ydep, int xfin, int yfin, t_data *data);
 void dda(t_data *data);
 
