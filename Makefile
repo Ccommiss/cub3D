@@ -11,6 +11,7 @@ SRCS = cub.c \
 	visu2d.c \
 	bresenham.c\
 	init.c \
+	parser_utils.c \
 	./getnextline/get_next_line.c \
 	./getnextline/get_next_line_utils.c \
 

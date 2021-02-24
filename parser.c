@@ -2,19 +2,25 @@
 
 int error_message(t_data *data, int index)
 {
-	data->error = index;
-	if (index == 1)
-		printf("Map is not closed, blank was found in land or player is not inside the bounds. \n");
-	if (index == 2)
-		printf("No player found. \n");
-	if (index == 3)
-		printf("Unexpected character found in map.\n");
-	if (index == 4)
-		printf("Missing infos.");
-	if (index == 5)
-		printf("Two players found in map.");
-	if (index == 7)
-		printf("Bad RGB color formatting.");
+	if (data->error == 0)
+	{
+		printf("Error :\n");
+		data->error = index;
+		if (index == 1)
+			printf("Map is not closed, blank was found in land or player is not inside the bounds. \n");
+		if (index == 2)
+			printf("No player found. \n");
+		if (index == 3)
+			printf("Unexpected character found in map.\n");
+		if (index == 4)
+			printf("Missing infos.");
+		if (index == 5)
+			printf("Two players found in map.");
+		if (index == 6)
+			printf("Texture reference could not be found.");
+		if (index == 7)
+			printf("Bad RGB color formatting.");
+	}
 	return (-1);
 }
 
@@ -36,7 +42,6 @@ void ft_finddir(t_data *data, char dir) //chamboule tout,marche pas avec autre c
 {
 	data->dirX = 0.0;
 	data->dirY = 0.0;
-
 	if (dir == 'N')
 		data->dirY = -1;
 	else if (dir == 'S')
@@ -45,41 +50,6 @@ void ft_finddir(t_data *data, char dir) //chamboule tout,marche pas avec autre c
 		data->dirX = 1;
 	else if (dir == 'W')
 		data->dirX = -1;
-}
-
-int ft_check_chars(char sign, t_data *data, int x, int y)
-{
-	//printf ("CHECKED SIGN %c \n", sign);
-	if (sign == 'N' || sign == 'S' || sign == 'E' || sign == 'W')
-	{
-	//	printf ("%d x - %d y", x, y);
-		//printf("chek char x %f y %f \n", data->pos_x, data->pos_y);
-		if (data->pos_x != -1 && data->pos_y != -1 && data->pos_x != x && data->pos_y != y)
-			return (error_message(data, 5));
-		data->pos_x = x;
-		data->pos_y = y;
-		ft_finddir(data, sign);
-		return (2);
-	}
-	else if (sign == '0' || sign == '1' || sign == '2' || sign == ' ' || sign == '	')
-		return (1);
-	printf("bad char found : %c at y %d x %d .\n", sign, x, y);
-	return (error_message(data, 3));
-}
-
-int ft_mapcheck(char *str)
-{
-	int i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] != 'N' && str[i] != 'S' && str[i] != 'E' && str[i] != 'W' &&
-			str[i] != '0' && str[i] != '1' && str[i] != '2' && str[i] != ' ' && str[i] != '	')
-			return (0);
-		i++;
-	}
-	return (1);
 }
 
 int parse_map(t_data *data, char *line)
@@ -106,7 +76,7 @@ int parse_map(t_data *data, char *line)
 		ft_memset(data->map[y], '.', data->map_w + 1);
 	}
 	// on copie la ligne dans le tableau
-	while (*line)
+	while (*line && data->error == 0)
 	{
 		if (ft_check_chars(*line, data, x, y) == -1)
 			return (-1);
@@ -142,12 +112,10 @@ int ft_getrgb(t_data *data, char *rgb)
 	int r;
 	int g;
 	int b;
-
-
 	block = ft_split(rgb, ',');
-		printf (" %s \n",block[0]);
-		printf (" %s \n",block[1]);
-		printf (" %s \n",block[2]);
+	printf("%s \n", block[0]);
+	printf("%s \n", block[1]);
+	printf("%s \n", block[2]);
 	if (!block[0] || !block[1] || !block[2])
 		return (error_message(data, 7));
 	r = ft_atoi(block[0]);
@@ -168,10 +136,6 @@ int ft_parse_info(t_data *data, char *line)
 		data->width = ft_atoi(block[1]);
 		data->height = ft_atoi(block[2]);
 	}
-	// if (block[2] && block[3])
-	// {
-	// 	block[1] = ft_strconcat(block[1], block[2], ft_strlen(block[1] + ft_strlen(block[2])));
-	// 	block[1] = ft_strconcat(block[1], block[3])
 	else if (ft_strncmp(block[0], "NO", 2) == 0)
 		data->info->north_text = ft_strdup(block[1]);
 	else if (ft_strncmp(block[0], "SO", 2) == 0)
@@ -183,20 +147,15 @@ int ft_parse_info(t_data *data, char *line)
 	else if (ft_strncmp(block[0], "S", 1) == 0)
 		data->info->sprite_text = ft_strdup(block[1]);
 	else if (ft_strncmp(block[0], "F", 1) == 0)
-		data->info->floor_rgb = ft_getrgb(data, block[1]);
+		data->info->floor_rgb = ft_getrgb(data, ft_strtrim(line, " F "));
 	else if (ft_strncmp(block[0], "C", 1) == 0)
-		data->info->ceiling_rgb = ft_getrgb(data, block[1]);
+		data->info->ceiling_rgb = ft_getrgb(data, ft_strtrim(line, " C "));
 	return (1);
 }
 
 void load_sprite(t_data *data, int x, int y)
 {
 	static int i = 0;
-
-	printf("SPR %p \n", data->spr);
-
-	printf("*** LOAD SPRITE ***\n");
-	//	printf ("1 : %d \n", data->spr->index);
 
 	if (!data->spr)
 	{
@@ -213,14 +172,9 @@ void load_sprite(t_data *data, int x, int y)
 		data->spr->next->head = data->spr->head; //on sauvegarde la tete, ainsi chaque maillon contient le ptr vers le debut de la liste
 		data->spr = data->spr->next;
 	}
-
 	data->spr->index = i;
 	data->spr->x = x;
 	data->spr->y = y;
-	// printf ("X = %f __ Y = %f \n\n", data->spr->x, data->spr->y);
-	// printf ("i = %d \n", i );
-	// printf ("%d \n", data->spr->index );
-	// printf ("NEW SPR %p \n", data->spr);
 	i++;
 	data->spr->next = NULL;
 }
@@ -234,24 +188,22 @@ void check_borders(t_data *data, int x, int y, char ***mapbis)
 	// 	i++;
 	// }
 	// printf("\n**END MAP**\n");
-	// printf("testing x = %d || y = %d \n", x, y);
-
+	//printf("testing x = %d || y = %d \n", x, y);
 	if (y < 0 || y >= data->map_h || x < 0 || x >= data->map_w || data->map[y][x] == ' ' || data->map[y][x] == '.')
 	{
-		printf("mapxy %c at x %d y %d\n", data->map[y][x], x, y);
-		data->error = 1;
+		if (data->error == 0)
+			error_message(data, 1);
 		return;
 	}
 	if (data->map[y][x] == '1' || mapbis[0][y][x] == 'v')
 		return;
 	if (data->map[y][x] == '0' || data->map[y][x] == 'S' || data->map[y][x] == 'N' || data->map[y][x] == 'E' || data->map[y][x] == 'W') //rajouter autres pos
 		mapbis[0][y][x] = 'v';
-	if (data->map[y][x] == '2')
+	if (data->map[y][x] == '2' && data->error == 0)
 	{
 		mapbis[0][y][x] = 'v';
 		load_sprite(data, x, y);
 	}
-
 	if (data->error == 0)
 	{
 		check_borders(data, x + 1, y, mapbis);
@@ -264,47 +216,14 @@ void check_borders(t_data *data, int x, int y, char ***mapbis)
 
 int iscomplete(t_data *data)
 {
-	printf ("%d %d \n", data->info->ceiling_rgb, data->info->floor_rgb);
-	//rajouter les RGB dans le parser avant de les mettre la
 	if (!data->info->west_text || !data->info->east_text ||
 		!data->info->sprite_text || !data->info->north_text || !data->info->south_text || data->info->floor_rgb == -1 || data->info->ceiling_rgb == -1)
 		return (0);
-
 	return (1);
 }
 
-int ft_parse(int fd, t_data *data)
+int flood_fill(t_data *data)
 {
-	char *line = NULL;
-	data->info->ceiling_rgb = -1;
-	data->info->floor_rgb = -1;
-
-	printf("**PARSING**\n");
-	while (get_next_line(fd, &line))
-	{
-		if (ft_mapcheck(line) == 0 && ft_strlen(ft_strtrim(line, " ")) != 0 && !iscomplete(data))
-			ft_parse_info(data, line);
-		else if (ft_strlen(ft_strtrim(line, " ")) != 0 && iscomplete(data) == 1)
-			parse_map(data, line);
-	}
-	if (ft_strlen(ft_strtrim(line, " ")) != 0 && iscomplete(data) == 1)
-		parse_map(data, line);
-
-	if (!iscomplete(data))
-		return (error_message(data, 4));
-	if (data->error == 0 && (data->pos_x < 0 || data->pos_y < 0))
-		return (error_message(data, 2));
-
-
-	printf("WIDTH = %d -- HEIGHT = %d  \n", data->width, data->height);
-	printf("INFO %s\n", data->info->north_text);
-	printf("INFO %s\n", data->info->south_text);
-	printf("INFO %s\n", data->info->east_text);
-	printf("INFO %s\n", data->info->west_text);
-	// la map est en dernier dans la fichier
-
-	checkmap(data);
-
 	char **copymap;
 	int i = 0;
 	copymap = (char **)malloc((sizeof(char *)) * (data->map_h + 1));
@@ -315,20 +234,33 @@ int ft_parse(int fd, t_data *data)
 		ft_memset(copymap[i], '.', data->map_w);
 		i++;
 	}
-	if (data->error == 0)
-		check_borders(data, data->pos_x, data->pos_y, &copymap);
-	else
-		return (-1);
+	check_borders(data, data->pos_x, data->pos_y, &copymap);
+	if (data->error != 0)
+		return (error_message(data, data->error));
+	return (1);
+}
 
-	data->spr = data->spr->head; // on a saubvegarde tous les sprites
-	printf("%p - head", data->spr);
+int ft_parse(int fd, t_data *data)
+{
+	char *line = NULL;
 
-	while (data->spr->next != NULL)
+	printf("**PARSING**\n");
+	while (get_next_line(fd, &line) && data->error == 0)
 	{
-		printf("INDEX = %d -- X = %f Y = %f \n", data->spr->index, data->spr->x, data->spr->y);
-		data->spr = data->spr->next;
+		if (ft_mapcheck(line) == 0 && ft_strlen(ft_strtrim(line, " ")) != 0 && !iscomplete(data))
+			ft_parse_info(data, line);
+		else if (ft_strlen(ft_strtrim(line, " ")) != 0 && iscomplete(data) == 1)
+			parse_map(data, line);
 	}
-	data->spr = data->spr->head;
-
-	return 1;
+	if (data->error != 0)
+		return (error_message(data, data->error));
+	if (ft_strlen(ft_strtrim(line, " ")) != 0 && iscomplete(data) == 1)
+		parse_map(data, line);
+	if (!iscomplete(data))
+		return (error_message(data, 4));
+	if (data->error == 0 && (data->pos_x < 0 || data->pos_y < 0))
+		return (error_message(data, 2));
+	checkmap(data);
+	flood_fill(data);
+	return (1);
 }

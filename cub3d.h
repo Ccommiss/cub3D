@@ -150,9 +150,9 @@ typedef struct s_data
  *  [init.c] Initialisation functions
  */
 
-void init_struct(t_data *data);
+int init_struct(t_data *data);
 void init_plane(t_data *data);
-void loadimage(t_data *data);
+int loadimage(t_data *data);
 
 /*
  *  [parser.c] Parsing functions
@@ -161,6 +161,11 @@ void loadimage(t_data *data);
 int ft_parse(int fd, t_data *data);
 void checkmap(t_data *data);
 int checkzero_letter(char c);
+
+int ft_check_chars(char sign, t_data *data, int x, int y);
+int ft_mapcheck(char *str);
+void ft_finddir(t_data *data, char dir) ;
+
 
 /*
  *  [visu2d.c] Minimap fucntions

@@ -36,7 +36,7 @@ void init_plane(t_data *data)
  * 	[return] : none
  */
 
-void init_struct(t_data *data)
+int init_struct(t_data *data)
 {
 	data->mlx = mlx_init();
 	data->win = mlx_new_window(data->mlx, data->width, data->height, "who run the world ?");
@@ -46,9 +46,10 @@ void init_struct(t_data *data)
 	data->minimap_size = data->width / 50;
 	data->displaymap = 1;
 	data->zbuffer = (double *)malloc(sizeof(double) * (data->width + 1));
-
-
 	ft_bzero(data->zbuffer, data->width);
+	if (loadimage(data) == -1)
+		return(-1);
+	return (1);
 }
 
 /*
@@ -59,26 +60,21 @@ void init_struct(t_data *data)
  * 	[return] : none
  */
 
-void	alloc_image(t_data *data, t_text *t, void *text)
+int	alloc_image(t_data *data, t_text *t, void *text)
 {
-
 	t->img = mlx_xpm_file_to_image(data->mlx, text, &t->w, &t->h);
-		if (!t->img)
-	{
-		printf ("IMAGE NOT FOUND MOTHERFUCKER\n");
-		//c bon mais mettre une couleur a la place ?
-		return ;
-	}
+	if (!t->img)
+		return (error_message(data, 6));
 	t->imgaddr = mlx_get_data_addr(t->img, &t->bits_per_pixel, &t->line_length, &t->endian);
-
 	if (text != data->info->east_text)
 	{
 		printf ("YO \n");
 		t->next = (t_text *)malloc(sizeof(t_text));
 	}
+	return (1);
 }
 
-void loadimage(t_data *data)
+int loadimage(t_data *data)
 {
 	t_text *t;
 	t_text *head;
@@ -86,19 +82,24 @@ void loadimage(t_data *data)
 	t = (t_text *)malloc(sizeof(t_text));
 	head = t;
 	t->side = 'n';
-	alloc_image(data, t, data->info->north_text);
+	if (alloc_image(data, t, data->info->north_text) == -1)
+		return (-1);
 	t = t->next;
 	t->side = 's';
-	alloc_image(data, t, data->info->south_text);
+	if (alloc_image(data, t, data->info->south_text) == -1)
+		return (-1);
 	t = t->next;
 	t->side = 'w';
-	alloc_image(data, t, data->info->west_text);
+	if (alloc_image(data, t, data->info->west_text) == -1)
+		return (-1);
 	t = t->next;
 	t->side = 'e';
-	alloc_image(data, t, data->info->east_text);
+	if (alloc_image(data, t, data->info->east_text) == -1)
+		return (-1);
 	t->next = head;
 	data->t = head;
 	data->sprimg = mlx_xpm_file_to_image(data->mlx, data->info->sprite_text, &data->spw, &data->sph);
 	data->sprimgaddr = mlx_get_data_addr(data->sprimg, &data->sprbpx, &data->spline, &data->end);
+	return (1);
 }
 

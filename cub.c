@@ -417,6 +417,14 @@ void dda(t_data *data)
 
 }
 
+void init_base(t_data *data)
+{
+	data->error = 0;
+	data->pos_x = -1;
+	data->pos_y = -1;
+	data->info->ceiling_rgb = -1;
+	data->info->floor_rgb = -1;
+}
 
 int main()
 {
@@ -426,26 +434,21 @@ int main()
 	char *file;
 
 	file = NULL;
-
 	fd = open("map1.cub", O_RDONLY);
 	if (!fd)
 		printf("Bad argument.\n");
 	data.info = &info;
-	data.error = 0;
-	data.pos_x = -1;
-	data.pos_y = -1;
+	init_base(&data);
 	ft_parse(fd, &data);
 	if (data.error != 0)
 		return (-1);
 	printf("coucou\n");
-	init_struct(&data);
-	loadimage(&data);
-
+	if (init_struct(&data) == -1)
+		return (-1);
 	display(&data);
 
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 	mlx_hook(data.win, 2, 1L << 0, key_hook, &data);
 	mlx_hook(data.win, 17, (1L << 17), red_cross, &data);
-
 	mlx_loop(data.mlx);
 }
