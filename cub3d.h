@@ -10,13 +10,11 @@
 #include "libft/libft.h"
 #include "mlx/mlx.h"
 
-
 #define RED 0xFF0000
 #define WHITE 0xFFFAFA
 #define YELLOW 0xFFDEAD
 #define BLUE 0x00CCCC
 #define GREEN 0Xbef574
-
 
 enum e_sides
 {
@@ -27,7 +25,6 @@ enum e_sides
 	WEST
 };
 
-
 typedef struct s_spr t_spr;
 
 typedef struct s_spr
@@ -37,75 +34,68 @@ typedef struct s_spr
 	int index; // a trier selon la distance
 
 	double distance; // distance perp  au jouerur
-	double x; // x du sprite
-	double y; // y du sprite
+	double x;		 // x du sprite
+	double y;		 // y du sprite
 
 	t_spr *next;
 
-} 		t_spr;
-
-
-
+} t_spr;
 
 typedef struct s_display
 {
-	char	*sprite_text;
+	char *sprite_text;
 
-	char	*north_text;
-	char	*south_text;
-	char	*east_text;
-	char	*west_text;
+	char *north_text;
+	char *south_text;
+	char *east_text;
+	char *west_text;
 
-	int		ceiling_rgb;
-	int		floor_rgb;
+	int ceiling_rgb;
+	int floor_rgb;
 
-}	t_display;
-
+} t_display;
 
 typedef struct s_text t_text;
 
 typedef struct s_text
 {
-	char	side;
-	void	*img;
-	void	*imgaddr;
-	int     bits_per_pixel;
-    int     line_length;
-    int     endian;
-	int 	w;
-	int		h;
+	char side;
+	void *img;
+	void *imgaddr;
+	int bits_per_pixel;
+	int line_length;
+	int endian;
+	int w;
+	int h;
 
-	t_text 	*next;
+	t_text *next;
 
-
-}	t_text;
-
-
+} t_text;
 
 typedef struct s_data
 {
-    void    *mlx;
-    void    *win;
-	void	*img;
-	void	*imgaddr;
-	int     bits_per_pixel;
-    int     line_length;
-    int     endian;
+	void *mlx;
+	void *win;
+	void *img;
+	void *imgaddr;
+	int bits_per_pixel;
+	int line_length;
+	int endian;
 
-//Player
+	//Player
 
-    double     pos_x;
-    double     pos_y;
-	double		dirX;
-	double		dirY;
+	double pos_x;
+	double pos_y;
+	double dirX;
+	double dirY;
 
-//vue
+	//vue
 	double cameraX;
 	double cameraY;
 	double planeX;
 	double planeY;
 
-// Rayon
+	// Rayon
 	int mapX;
 	int mapY;
 	double rayDirX;
@@ -113,66 +103,85 @@ typedef struct s_data
 
 	double dx; //offset to tile
 	double dy;
-	double	delta_x; // space between next x and next next x
-	double	delta_y;
+	double delta_x; // space between next x and next next x
+	double delta_y;
 
 	double perpWallDist;
-
 
 	int stepX;
 	int stepY;
 
-	int side;	 //was a NS or a EW wall hit?
+	int side; //was a NS or a EW wall hit?
 
-// map
-    char     **map;
-	int		map_w;
-	int 	map_h;
+	// map
+	char **map;
+	int map_w;
+	int map_h;
 
-	int		map_s;
-	int 	error;
+	int map_s;
+	int error;
 
-//window
+	//window
 	int width;
-    int height;
+	int height;
 	int color;
 	int minimap_size;
 	int speed;
 	int displaymap;
 
-
 	double *zbuffer; // a malloc
 
-// colors
+	// colors
 	t_display *info;
 	t_text *t;
 	t_spr *spr;
 
-	void	*sprimg;
-	void	*sprimgaddr;
-	int     sprbpx;
-    int     spline;
-    int     end;
-	int 	spw;
-	int		sph;
+	void *sprimg;
+	void *sprimgaddr;
+	int sprbpx;
+	int spline;
+	int end;
+	int spw;
+	int sph;
 
-}   t_data;
+} t_data;
 
-int			ft_parse(int fd, t_data *data);
-void    draw_tab(t_data *data);
-void     set_map(t_data *data);
-int     set_player(t_data *data);
-void            my_mlx_pixel_put(t_data *data, int x, int y, int color);
+/*
+ *  [init.c] Initialisation functions
+ */
+
+void init_struct(t_data *data);
+void init_plane(t_data *data);
+void loadimage(t_data *data);
+
+/*
+ *  [parser.c] Parsing functions
+ */
+
+int ft_parse(int fd, t_data *data);
+void checkmap(t_data *data);
+int checkzero_letter(char c);
+
+/*
+ *  [visu2d.c] Minimap fucntions
+ */
+
+void draw_tab(t_data *data);
+void set_map(t_data *data);
+int set_player(t_data *data);
+void set_compass(t_data *data);
+
+
+
+void my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void fill_black(t_data *data);
 void fill_ceiling(t_data *data);
 void fill_floor(t_data *data);
-void 	bresenham(int xdep, int ydep, int xfin, int yfin, t_data *data);
+void bresenham(int xdep, int ydep, int xfin, int yfin, t_data *data);
 void dda(t_data *data);
 
-void checkmap(t_data *data);
-int checkzero_letter(char c);
-int		red_cross(t_data *data);
-int error_message(int index);
+
+int red_cross(t_data *data);
+int error_message(t_data *data, int index);
 
 
-void set_compass(t_data *data); 

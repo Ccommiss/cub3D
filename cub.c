@@ -103,33 +103,7 @@ int key_hook(int keycode, t_data *data)
 	return (1);
 }
 
-void init_struct(t_data *data)
-{
-	data->mlx = mlx_init();
-	data->win = mlx_new_window(data->mlx, data->width, data->height, "who run the world ?");
-	data->img = mlx_new_image(data->mlx, data->width, data->height);
-	data->imgaddr = mlx_get_data_addr(data->img, &data->bits_per_pixel, &data->line_length, &data->endian);
-	data->map_s = 64;
 
-	if (data->dirX == -1 || data->dirX == 1)
-		data->planeX = 0;
-	else if (data->dirX == 0 && data->dirY == -1)
-		data->planeX = 0.66;
-	else if (data->dirX == 0 && data->dirY == 1)
-		data->planeX = -0.66;
-
-	if (data->dirY == -1 || data->dirY == 1)
-		data->planeY = 0;
-	else if (data->dirY == 0 && data->dirX == -1)
-		data->planeY = -0.66;
-	else if (data->dirY == 0 && data->dirX == 1)
-		data->planeY = 0.66;
-
-	data->minimap_size = data->width / 30;
-	data->displaymap = 1;
-	data->zbuffer = (double *)malloc(sizeof(double) * (data->width + 1));
-	ft_bzero(data->zbuffer, data->width);
-}
 
 void perform_dda(t_data *data)
 {
@@ -382,12 +356,16 @@ void draw(t_data *data, int x)
 
 	//printf ("side : %c \n", data->t->side);
 
+//	int fog = 0x38eeff;
+
 	for (int y = drawStart; y < drawEnd; y++)
 	{
 		int texY = (int)texPos & (data->t->h - 1);
 		texPos += step;
 		data->color = ((unsigned int *)data->t->imgaddr)[data->t->h * texY + texX];
-		data->color = (1 - 0.75) * data->color + 0.75 * 0x000000; // FOG TRY
+	//	data->color = (1 - 0.75) * (data->color >> 4) + 0.75 * RED;
+	//	data->color = ((1 - (data->zbuffer[x] * 0.75 ))  * data->color) + ((data->zbuffer[x] * 0.75 * BLUE)); // FOG TRY
+		//printf ("%f", (data->zbuffer[x] * 0.75));
 		my_mlx_pixel_put(data, x, y, data->color);
 	}
 	//printf ("ppd %f \n", data->perpWallDist);
@@ -439,47 +417,6 @@ void dda(t_data *data)
 
 }
 
-void loadimage(t_data *data)
-{
-	t_text *t;
-	t_text *head;
-
-	t = (t_text *)malloc(sizeof(t_text));
-	head = t;
-
-	t->side = 'n';
-
-	t->img = mlx_xpm_file_to_image(data->mlx, data->info->north_text, &t->w, &t->h);
-	t->imgaddr = mlx_get_data_addr(t->img, &t->bits_per_pixel, &t->line_length, &t->endian);
-	t->next = (t_text *)malloc(sizeof(t_text));
-
-	t = t->next;
-	t->side = 's';
-
-	t->img = mlx_xpm_file_to_image(data->mlx, data->info->south_text, &t->w, &t->h);
-	t->imgaddr = mlx_get_data_addr(t->img, &t->bits_per_pixel, &t->line_length, &t->endian);
-	t->next = (t_text *)malloc(sizeof(t_text));
-
-	t = t->next;
-	t->side = 'w';
-
-	t->img = mlx_xpm_file_to_image(data->mlx, data->info->west_text, &t->w, &t->h);
-	t->imgaddr = mlx_get_data_addr(t->img, &t->bits_per_pixel, &t->line_length, &t->endian);
-	t->next = (t_text *)malloc(sizeof(t_text));
-
-	t = t->next;
-
-	t->side = 'e';
-	t->img = mlx_xpm_file_to_image(data->mlx, data->info->east_text, &t->w, &t->h);
-	t->imgaddr = mlx_get_data_addr(t->img, &t->bits_per_pixel, &t->line_length, &t->endian);
-	t->next = head;
-
-	data->t = head;
-
-	// texture
-	data->sprimg = mlx_xpm_file_to_image(data->mlx, data->info->sprite_text, &data->spw, &data->sph);
-	data->sprimgaddr = mlx_get_data_addr(data->sprimg, &data->sprbpx, &data->spline, &data->end);
-}
 
 int main()
 {
@@ -499,7 +436,7 @@ int main()
 	data.pos_y = -1;
 	ft_parse(fd, &data);
 	if (data.error != 0)
-		return (error_message(data.error));
+		return (-1);
 	printf("coucou\n");
 	init_struct(&data);
 	loadimage(&data);

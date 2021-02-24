@@ -51,8 +51,7 @@ void fill_ceiling(t_data *data)
 	{
 		while (j < data->width)
 		{
-			data->color = (1 - 0.75) * BLUE + 0.75 * 0x000000; // FOG TRY
-			my_mlx_pixel_put(data, j, i, data->color);
+			my_mlx_pixel_put(data, j, i, data->info->ceiling_rgb);
 			j++;
 		}
 		j = 0;
@@ -69,8 +68,7 @@ void fill_floor(t_data *data)
 	{
 		while (j < data->width)
 		{
-			data->color = (1 - 0.75) * GREEN + 0.75 * 0x000000; // FOG TRY
-			my_mlx_pixel_put(data, j, i, data->color);
+			my_mlx_pixel_put(data, j, i, data->info->floor_rgb);
 			j++;
 		}
 		j = 0;

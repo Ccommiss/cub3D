@@ -1,21 +1,22 @@
 #include "cub3d.h"
 
-
-int error_message(int index)
+int error_message(t_data *data, int index)
 {
+	data->error = index;
 	if (index == 1)
 		printf("Map is not closed, blank was found in land or player is not inside the bounds. \n");
 	if (index == 2)
 		printf("No player found. \n");
-	 if (index == 3)
-	 	printf("Unexpected character found in map.\n");
+	if (index == 3)
+		printf("Unexpected character found in map.\n");
 	if (index == 4)
 		printf("Missing infos.");
-	// if (index = 5)
-
+	if (index == 5)
+		printf("Two players found in map.");
+	if (index == 7)
+		printf("Bad RGB color formatting.");
 	return (-1);
 }
-
 
 void *ft_realloc(void *ptr, size_t cursize, size_t newsize)
 {
@@ -31,7 +32,7 @@ void *ft_realloc(void *ptr, size_t cursize, size_t newsize)
 	return (newptr);
 }
 
-void	ft_finddir(t_data *data, char dir)//chamboule tout,marche pas avec autre config que W qui est le truc de base
+void ft_finddir(t_data *data, char dir) //chamboule tout,marche pas avec autre config que W qui est le truc de base
 {
 	data->dirX = 0.0;
 	data->dirY = 0.0;
@@ -48,8 +49,13 @@ void	ft_finddir(t_data *data, char dir)//chamboule tout,marche pas avec autre co
 
 int ft_check_chars(char sign, t_data *data, int x, int y)
 {
+	//printf ("CHECKED SIGN %c \n", sign);
 	if (sign == 'N' || sign == 'S' || sign == 'E' || sign == 'W')
 	{
+	//	printf ("%d x - %d y", x, y);
+		//printf("chek char x %f y %f \n", data->pos_x, data->pos_y);
+		if (data->pos_x != -1 && data->pos_y != -1 && data->pos_x != x && data->pos_y != y)
+			return (error_message(data, 5));
 		data->pos_x = x;
 		data->pos_y = y;
 		ft_finddir(data, sign);
@@ -57,11 +63,8 @@ int ft_check_chars(char sign, t_data *data, int x, int y)
 	}
 	else if (sign == '0' || sign == '1' || sign == '2' || sign == ' ' || sign == '	')
 		return (1);
-
-	data->error = 3;
 	printf("bad char found : %c at y %d x %d .\n", sign, x, y);
-	return (-1);
-
+	return (error_message(data, 3));
 }
 
 int ft_mapcheck(char *str)
@@ -105,12 +108,12 @@ int parse_map(t_data *data, char *line)
 	// on copie la ligne dans le tableau
 	while (*line)
 	{
-		if (ft_check_chars(*line, data, x, y) == 1)
+		if (ft_check_chars(*line, data, x, y) == -1)
+			return (-1);
+		else if (ft_check_chars(*line, data, x, y) == 1)
 			data->map[y][x] = *line++;
 		else if (ft_check_chars(*line++, data, x, y) == 2)
 			data->map[y][x] = '0';
-		else
-			return (-1);
 		x++;
 	}
 	data->map[y][x] = '\0';
@@ -133,6 +136,28 @@ int parse_map(t_data *data, char *line)
 	return 1;
 }
 
+int ft_getrgb(t_data *data, char *rgb)
+{
+	char **block;
+	int r;
+	int g;
+	int b;
+
+
+	block = ft_split(rgb, ',');
+		printf (" %s \n",block[0]);
+		printf (" %s \n",block[1]);
+		printf (" %s \n",block[2]);
+	if (!block[0] || !block[1] || !block[2])
+		return (error_message(data, 7));
+	r = ft_atoi(block[0]);
+	g = ft_atoi(block[1]);
+	b = ft_atoi(block[2]);
+	if (r == 0 && g == 0 && b == 0)
+		return (0x000000);
+	return (((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff));
+}
+
 int ft_parse_info(t_data *data, char *line)
 {
 	char **block;
@@ -143,6 +168,10 @@ int ft_parse_info(t_data *data, char *line)
 		data->width = ft_atoi(block[1]);
 		data->height = ft_atoi(block[2]);
 	}
+	// if (block[2] && block[3])
+	// {
+	// 	block[1] = ft_strconcat(block[1], block[2], ft_strlen(block[1] + ft_strlen(block[2])));
+	// 	block[1] = ft_strconcat(block[1], block[3])
 	else if (ft_strncmp(block[0], "NO", 2) == 0)
 		data->info->north_text = ft_strdup(block[1]);
 	else if (ft_strncmp(block[0], "SO", 2) == 0)
@@ -153,28 +182,30 @@ int ft_parse_info(t_data *data, char *line)
 		data->info->east_text = ft_strdup(block[1]);
 	else if (ft_strncmp(block[0], "S", 1) == 0)
 		data->info->sprite_text = ft_strdup(block[1]);
+	else if (ft_strncmp(block[0], "F", 1) == 0)
+		data->info->floor_rgb = ft_getrgb(data, block[1]);
+	else if (ft_strncmp(block[0], "C", 1) == 0)
+		data->info->ceiling_rgb = ft_getrgb(data, block[1]);
 	return (1);
 }
 
-
-void	load_sprite(t_data *data, int x, int y)
+void load_sprite(t_data *data, int x, int y)
 {
 	static int i = 0;
 
-	printf ("SPR %p \n", data->spr);
+	printf("SPR %p \n", data->spr);
 
-
-	printf ("*** LOAD SPRITE ***\n");
-//	printf ("1 : %d \n", data->spr->index);
+	printf("*** LOAD SPRITE ***\n");
+	//	printf ("1 : %d \n", data->spr->index);
 
 	if (!data->spr)
 	{
 		data->spr = NULL;
 		data->spr = (t_spr *)malloc(sizeof(t_spr));
 		data->spr->head = data->spr;
-		printf ("%p data->str->head\n", data->spr->head);
-		printf ("%p data->str\n", data->spr);
-		printf ("YOOOOOO\n");
+		printf("%p data->str->head\n", data->spr->head);
+		printf("%p data->str\n", data->spr);
+		printf("YOOOOOO\n");
 	}
 	else
 	{
@@ -205,7 +236,6 @@ void check_borders(t_data *data, int x, int y, char ***mapbis)
 	// printf("\n**END MAP**\n");
 	// printf("testing x = %d || y = %d \n", x, y);
 
-
 	if (y < 0 || y >= data->map_h || x < 0 || x >= data->map_w || data->map[y][x] == ' ' || data->map[y][x] == '.')
 	{
 		printf("mapxy %c at x %d y %d\n", data->map[y][x], x, y);
@@ -214,39 +244,40 @@ void check_borders(t_data *data, int x, int y, char ***mapbis)
 	}
 	if (data->map[y][x] == '1' || mapbis[0][y][x] == 'v')
 		return;
-	if (data->map[y][x] == '0' || data->map[y][x] == 'S' || data->map[y][x] == 'N'
-	|| data->map[y][x] == 'E' || data->map[y][x] == 'W' ) //rajouter autres pos
+	if (data->map[y][x] == '0' || data->map[y][x] == 'S' || data->map[y][x] == 'N' || data->map[y][x] == 'E' || data->map[y][x] == 'W') //rajouter autres pos
 		mapbis[0][y][x] = 'v';
 	if (data->map[y][x] == '2')
 	{
 		mapbis[0][y][x] = 'v';
 		load_sprite(data, x, y);
 	}
+
 	if (data->error == 0)
 	{
-	check_borders(data, x + 1, y, mapbis);
-	check_borders(data, x - 1, y, mapbis);
-	check_borders(data, x, y + 1, mapbis);
-	check_borders(data, x, y - 1, mapbis);
+		check_borders(data, x + 1, y, mapbis);
+		check_borders(data, x - 1, y, mapbis);
+		check_borders(data, x, y + 1, mapbis);
+		check_borders(data, x, y - 1, mapbis);
 	}
 	return;
 }
 
-
-int	iscomplete(t_data *data)
+int iscomplete(t_data *data)
 {
+	printf ("%d %d \n", data->info->ceiling_rgb, data->info->floor_rgb);
 	//rajouter les RGB dans le parser avant de les mettre la
-	if ( !data->info->west_text || !data->info->east_text ||
-	!data->info->sprite_text || !data->info->north_text || !data->info->south_text)
-		return 0;
+	if (!data->info->west_text || !data->info->east_text ||
+		!data->info->sprite_text || !data->info->north_text || !data->info->south_text || data->info->floor_rgb == -1 || data->info->ceiling_rgb == -1)
+		return (0);
 
-	return 1;
+	return (1);
 }
 
 int ft_parse(int fd, t_data *data)
 {
 	char *line = NULL;
-
+	data->info->ceiling_rgb = -1;
+	data->info->floor_rgb = -1;
 
 	printf("**PARSING**\n");
 	while (get_next_line(fd, &line))
@@ -256,14 +287,14 @@ int ft_parse(int fd, t_data *data)
 		else if (ft_strlen(ft_strtrim(line, " ")) != 0 && iscomplete(data) == 1)
 			parse_map(data, line);
 	}
-		if (ft_mapcheck(line) == 0 && ft_strlen(ft_strtrim(line, " ")) != 0 && !iscomplete(data))
-			ft_parse_info(data, line);
-		else if (ft_strlen(ft_strtrim(line, " ")) != 0 && iscomplete(data) == 1)
-			parse_map(data, line);
-	if (data->error == 0 && (data->pos_x < 0 || data->pos_y < 0))
-		data->error = 2;
+	if (ft_strlen(ft_strtrim(line, " ")) != 0 && iscomplete(data) == 1)
+		parse_map(data, line);
+
 	if (!iscomplete(data))
-		data->error = 4;
+		return (error_message(data, 4));
+	if (data->error == 0 && (data->pos_x < 0 || data->pos_y < 0))
+		return (error_message(data, 2));
+
 
 	printf("WIDTH = %d -- HEIGHT = %d  \n", data->width, data->height);
 	printf("INFO %s\n", data->info->north_text);
@@ -282,7 +313,6 @@ int ft_parse(int fd, t_data *data)
 		copymap[i] = (char *)malloc(10 * data->map_w);
 		ft_bzero(copymap[i], data->map_w + 1);
 		ft_memset(copymap[i], '.', data->map_w);
-		//	printf("%s \n", copymap[i]);
 		i++;
 	}
 	if (data->error == 0)
@@ -291,15 +321,14 @@ int ft_parse(int fd, t_data *data)
 		return (-1);
 
 	data->spr = data->spr->head; // on a saubvegarde tous les sprites
-	printf ("%p - head", data->spr);
+	printf("%p - head", data->spr);
 
 	while (data->spr->next != NULL)
 	{
-		printf ("INDEX = %d -- X = %f Y = %f \n", data->spr->index, data->spr->x, data->spr->y);
+		printf("INDEX = %d -- X = %f Y = %f \n", data->spr->index, data->spr->x, data->spr->y);
 		data->spr = data->spr->next;
 	}
 	data->spr = data->spr->head;
-
 
 	return 1;
 }
