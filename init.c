@@ -38,7 +38,15 @@ void init_plane(t_data *data)
 
 int init_struct(t_data *data)
 {
+	
 	data->mlx = mlx_init();
+	if (loadimage(data) == -1)
+	{
+		printf("POMPELOP\n");
+		return (-1);
+	}
+
+
 	data->win = mlx_new_window(data->mlx, data->width, data->height, "who run the world ?");
 	data->img = mlx_new_image(data->mlx, data->width, data->height);
 	data->imgaddr = mlx_get_data_addr(data->img, &data->bits_per_pixel, &data->line_length, &data->endian);
@@ -47,8 +55,6 @@ int init_struct(t_data *data)
 	data->displaymap = 1;
 	data->zbuffer = (double *)malloc(sizeof(double) * (data->width + 1));
 	ft_bzero(data->zbuffer, data->width);
-	if (loadimage(data) == -1)
-		return(-1);
 	return (1);
 }
 

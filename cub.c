@@ -374,37 +374,19 @@ void draw(t_data *data, int x)
 
 void dda(t_data *data)
 {
-	int x = -1;
-
-	printf("data dirx =  %f\n", data->dirX);
-	printf("data diry =  %f\n", data->dirY);
-	printf("PLANE X = %f\n", data->planeX);
-	printf("PLANE Y = %f\n", data->planeY);
-
+	int x;
+	x = -1;
 	while (x++ < data->width)
 	{
 		data->cameraX = 2 * x / (double)data->width - 1; //x-coordinate in camera space
-		if (x == 0)
-			printf("CAMERA X = %f\n", data->cameraX);
 		data->rayDirX = data->dirX + (data->planeX * data->cameraX);
-
 		data->rayDirY = data->dirY + (data->planeY * data->cameraX);
-
-		if (x == 0)
-			printf("RAYDIR X - Y = %f - %f \n", data->rayDirX, data->rayDirY);
-
 		data->mapX = (int)data->pos_x;
-		//printf ("POS %f MAP %d\n", data->pos_x, data->mapX);
 		data->mapY = (int)data->pos_y;
-		//length of ray from one x or y-side to next x or y-side
-
-		// Alternative code for deltaDist in case division through zero is not supported
 		data->delta_x = (data->rayDirY == 0) ? 0 : ((data->rayDirX == 0) ? 1 : fabs(1 / data->rayDirX));
 		data->delta_y = (data->rayDirY == 0) ? 0 : ((data->rayDirY == 0) ? 1 : fabs(1 / data->rayDirY));
-
 		calculate_step(data);
 		perform_dda(data);
-
 		if (data->side == WEST || data->side == EAST)
 			data->perpWallDist = (data->mapX - data->pos_x + (1 - data->stepX) / 2) / data->rayDirX;
 		else
@@ -412,8 +394,11 @@ void dda(t_data *data)
 		draw(data, x);
 		data->zbuffer[x] = data->perpWallDist;
 	}
-	sprite_casting(data);
-	sprite_drawing(data, x);
+	if (data->spr != NULL)
+	{
+		sprite_casting(data);
+		sprite_drawing(data, x);
+	}
 
 }
 
@@ -442,13 +427,12 @@ int main()
 	ft_parse(fd, &data);
 	if (data.error != 0)
 		return (-1);
-	printf("coucou\n");
 	if (init_struct(&data) == -1)
 		return (-1);
 	display(&data);
-
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 	mlx_hook(data.win, 2, 1L << 0, key_hook, &data);
 	mlx_hook(data.win, 17, (1L << 17), red_cross, &data);
 	mlx_loop(data.mlx);
+	
 }

@@ -34,7 +34,7 @@ void *ft_realloc(void *ptr, size_t cursize, size_t newsize)
 	ft_memset(newptr, '.', newsize);
 	ft_memcpy(newptr, ptr, cursize);
 	if (ptr != NULL)
-		free(&ptr);
+		free(ptr);
 	return (newptr);
 }
 
@@ -52,30 +52,18 @@ void ft_finddir(t_data *data, char dir) //chamboule tout,marche pas avec autre c
 		data->dirX = -1;
 }
 
-int parse_map(t_data *data, char *line)
-{
-	int x = 0;
-	static int y = 0;
-	int i = 0;
 
-	data->map_h = y + 1;
-	// on ajoute une case au double tab a chaque nvelle ligne lue
-	data->map = (char **)ft_realloc(data->map, (data->map_h - 1) * sizeof(char *), (data->map_h + 1) * sizeof(char *));
-	data->map[data->map_h] = 0;
-	// on malloc de la taille de la ligne
-	if (data->map_w == 0 || ft_strlen(line) > (size_t)data->map_w)
-	{
-		if (!(data->map[y] = (char *)malloc(sizeof(char) * (ft_strlen(line) + 1))))
-			return (0);
-		ft_memset(data->map[y], '.', ft_strlen(line) + 1);
-	}
-	else
-	{
-		if (!(data->map[y] = (char *)malloc(sizeof(char) * (data->map_w + 1))))
-			return (0);
-		ft_memset(data->map[y], '.', data->map_w + 1);
-	}
-	// on copie la ligne dans le tableau
+
+
+
+
+int		fill_maptab(t_data *data, char *line, int y)
+{
+	int x;
+	int i;
+
+	x = 0;
+	i = 0;
 	while (*line && data->error == 0)
 	{
 		if (ft_check_chars(*line, data, x, y) == -1)
@@ -87,11 +75,8 @@ int parse_map(t_data *data, char *line)
 		x++;
 	}
 	data->map[y][x] = '\0';
-
-	//si jamais la ligne est  plus longue que les autres, sa longueur devient la nouvelle reference pour les autres
 	if (x > data->map_w)
-	{
-		i = 0; // on realloue toutes les cases du tableau a la nouvelle taille de reference
+	{    // on realloue toutes les cases du tableau a la nouvelle taille de reference
 		while (i < y)
 		{ // lancienne taille c data->mapw
 			data->map[i] = (char *)ft_realloc(data->map[i], data->map_w, sizeof(char) * x + 1);
@@ -100,6 +85,28 @@ int parse_map(t_data *data, char *line)
 		}
 		data->map_w = x;
 	}
+	return (1);
+}
+
+
+
+int parse_map(t_data *data, char *line)
+{
+	int x = 0;
+	static int y = 0;
+
+	data->map_h = y + 1;
+	data->map = (char **)ft_realloc(data->map, (data->map_h - 1) * sizeof(char *), (data->map_h + 1) * sizeof(char *));
+	data->map[data->map_h] = 0;
+	if (data->map_w == 0 || ft_strlen(line) > (size_t)data->map_w)
+		data->map[y] = (char *)malloc(sizeof(char) * (ft_strlen(line) + 1));
+	else 
+		data->map[y] = (char *)malloc(sizeof(char) * (data->map_w + 1));
+	if (!(data->map[y]))
+		return (-1);
+	fill_maptab(data, line, y);
+	//si jamais la ligne est  plus longue que les autres, sa longueur devient la nouvelle reference pour les autres
+
 	y++;
 	data->map[y] = 0;
 	x = 0;

@@ -102,8 +102,6 @@ void set_map(t_data *data)
 	pixw = 0;
 	pixh = 0;
 
-	//printf ("**SEETTING MAP OK**\n");
-
 	while (h < data->map_h)
 	{
 		while (w < data->map_w)
@@ -154,19 +152,8 @@ void set_compass(t_data *data)
 			//printf ("compass");
 			if (color == 0x000000)
 				color = 0x000001;
-
 			if ((color & 0x00FFFFFF) != 0)
 				my_mlx_pixel_put(data, x, y, color);
-
-			// if (x == w / 2 && y == h /2)
-			// {
-
-			// 	printf ("x = %d \n", x);
-			// }
-
-
-
-			//if (color != 0x000000)
 			x++;
 		}
 		x = 0;
@@ -175,10 +162,5 @@ void set_compass(t_data *data)
 	data->color = RED;
 	bresenham(w/2, h/2 - 4, (w/2) + data->dirX * 40, (h/2 - 4) + data->dirY * 40, data);
 	bresenham(w/2, h/2 - 3, (w/2) + data->dirX * 40, (h/2 - 3) + data->dirY * 40, data);
-
-
-//	bresenham(w/2 - 1, h/2 - 1, (w/2 - 1) + data->dirX * 40, (h/2 - 1) + data->dirY * 40, data);
-//	bresenham(w/2, h/2, w/2 + data->dirX * 40, h/2 + data->dirY * 40, data);
-//	bresenham(w/2 + 1, h/2 + 1, (w/2 + 1) + data->dirX * 40, (h/2 + 1) + data->dirY * 40, data);
 
 }

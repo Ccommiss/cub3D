@@ -5,9 +5,9 @@ int ft_check_chars(char sign, t_data *data, int x, int y)
 	//printf ("CHECKED SIGN %c \n", sign);
 	if (sign == 'N' || sign == 'S' || sign == 'E' || sign == 'W')
 	{
-		//	printf ("%d x - %d y", x, y);
-		//printf("chek char x %f y %f \n", data->pos_x, data->pos_y);
-		if (data->pos_x != -1 && data->pos_y != -1 && data->pos_x != x && data->pos_y != y)
+			printf ("%d x - %d y", x, y);
+		printf("chek char x %f y %f \n", data->pos_x, data->pos_y);
+		if ((data->pos_x != -1 && data->pos_y != -1) && (data->pos_x != x || data->pos_y != y))
 			return (error_message(data, 5));
 		data->pos_x = x;
 		data->pos_y = y;

@@ -20,7 +20,7 @@ OBJS := ${SRCS:c=o}
 
 CC = clang -g $(FLAGS)
 
-FLAGS =  -Wall -Werror -Wextra -O3 -fsanitize=address
+FLAGS =  -Wall -Werror -Wextra -fsanitize=address
 LIBS = ./libft/
 
 all: $(NAME)
