@@ -11,17 +11,17 @@
 
 void init_plane(t_data *data)
 {
-	if (data->dirX == -1 || data->dirX == 1)
+	if (data->dirx == -1 || data->dirx == 1)
 		data->planeX = 0;
-	else if (data->dirX == 0 && data->dirY == -1)
+	else if (data->dirx == 0 && data->diry == -1)
 		data->planeX = 0.66;
-	else if (data->dirX == 0 && data->dirY == 1)
+	else if (data->dirx == 0 && data->diry == 1)
 		data->planeX = -0.66;
-	if (data->dirY == -1 || data->dirY == 1)
+	if (data->diry == -1 || data->diry == 1)
 		data->planeY = 0;
-	else if (data->dirY == 0 && data->dirX == -1)
+	else if (data->diry == 0 && data->dirx == -1)
 		data->planeY = -0.66;
-	else if (data->dirY == 0 && data->dirX == 1)
+	else if (data->diry == 0 && data->dirx == 1)
 		data->planeY = 0.66;
 }
 
@@ -56,6 +56,24 @@ int init_struct(t_data *data)
 	data->zbuffer = (double *)malloc(sizeof(double) * (data->width + 1));
 	ft_bzero(data->zbuffer, data->width);
 	return (1);
+}
+
+/*
+ *  init_base
+ *
+ * 	[synopsis] :
+ * 		> init some variables later modified by parser
+ * 		> Helps to handle errors detection
+ * 	[return] : none
+ */
+
+void init_base(t_data *data)
+{
+	data->error = 0;
+	data->pos_x = -1;
+	data->pos_y = -1;
+	data->info->ceiling_rgb = -1;
+	data->info->floor_rgb = -1;
 }
 
 /*

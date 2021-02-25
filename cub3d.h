@@ -63,6 +63,8 @@ typedef struct s_draw
 
 	int tex_x;
 	int tex_y;
+
+	int pos;
 	int y;
 	unsigned int color;
 
@@ -113,27 +115,27 @@ typedef struct s_data
 
 	double pos_x;
 	double pos_y;
-	double dirX;
-	double dirY;
+	double dirx;
+	double diry;
 
 	//vue
-	double cameraX;
-	double cameraY;
+	double camera_x;
+	double camera_y;
 	double planeX;
 	double planeY;
 
 	// Rayon
-	int mapX;
-	int mapY;
-	double rayDirX;
-	double rayDirY;
+	int map_x;
+	int map_y;
+	double raydir_x;
+	double raydir_y;
 
 	double dx; //offset to tile
 	double dy;
 	double delta_x; // space between next x and next next x
 	double delta_y;
 
-	double perpWallDist;
+	double perpwalldist;
 
 	int stepX;
 	int stepY;
@@ -179,6 +181,7 @@ typedef struct s_data
 
 int init_struct(t_data *data);
 void init_plane(t_data *data);
+void init_base(t_data *data);
 int loadimage(t_data *data);
 
 /*

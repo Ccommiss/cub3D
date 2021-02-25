@@ -40,16 +40,16 @@ void *ft_realloc(void *ptr, size_t cursize, size_t newsize)
 
 void ft_finddir(t_data *data, char dir) //chamboule tout,marche pas avec autre config que W qui est le truc de base
 {
-	data->dirX = 0.0;
-	data->dirY = 0.0;
+	data->dirx = 0.0;
+	data->diry = 0.0;
 	if (dir == 'N')
-		data->dirY = -1;
+		data->diry = -1;
 	else if (dir == 'S')
-		data->dirY = 1;
+		data->diry = 1;
 	else if (dir == 'E')
-		data->dirX = 1;
+		data->dirx = 1;
 	else if (dir == 'W')
-		data->dirX = -1;
+		data->dirx = -1;
 }
 
 

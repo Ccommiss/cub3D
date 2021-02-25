@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 11:01:14 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/02/25 11:01:17 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/02/25 12:50:29 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void	compute_data(t_data *data, t_spr_geo *sp, t_draw *draw)
 {
 	sp->x = (data->spr->x + 0.5) - data->pos_x;
 	sp->y = (data->spr->y + 0.5) - data->pos_y;
-	sp->inv = 1.0 / (data->planeX * data->dirY - data->dirX * data->planeY);
-	sp->trans_x = sp->inv * (data->dirY * sp->x - data->dirX * sp->y);
+	sp->inv = 1.0 / (data->planeX * data->diry - data->dirx * data->planeY);
+	sp->trans_x = sp->inv * (data->diry * sp->x - data->dirx * sp->y);
 	sp->trans_y = sp->inv * ((-data->planeY * sp->x) + (data->planeX * sp->y));
 	sp->screen_x = (int)((data->width / 2) * (1 + sp->trans_x / sp->trans_y));
 	sp->height = abs((int)(data->height / (sp->trans_y)));

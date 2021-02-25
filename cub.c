@@ -1,25 +1,23 @@
 #include "cub3d.h"
 
-int checkzero_letter(char c)
+int		checkzero_letter(char c)
 {
-	if (c == '0') // || c == '2') //et 2 sil faut traverser
+	if (c == '0') // || c == '2') et 2 sil faut traverser
 		return (1);
-	return 0;
+	return (0);
 }
 
-
-
-
-void perform_dda(t_data *data)
+void	hit_check(t_data *data)
 {
-	int hit = 0;
+	int hit;
+
+	hit = 0;
 	while (hit == 0)
 	{
-		//jump to next map square, OR in x-direction, OR in y-direction
 		if (data->dx < data->dy)
 		{
 			data->dx += data->delta_x;
-			data->mapX += data->stepX;
+			data->map_x += data->stepX;
 			if (data->stepX < 0)
 				data->side = WEST;
 			else
@@ -28,83 +26,66 @@ void perform_dda(t_data *data)
 		else
 		{
 			data->dy += data->delta_y;
-			data->mapY += data->stepY;
+			data->map_y += data->stepY;
 			if (data->stepY < 0)
 				data->side = NORTH;
 			else
 				data->side = SOUTH;
 		}
-		//Check if ray has hit a wall
-		if (data->map[data->mapY][data->mapX] != '0' && data->map[data->mapY][data->mapX] != '2')
+		if (data->map[data->map_y][data->map_x] != '0'
+			&& data->map[data->map_y][data->map_x] != '2')
 			hit = 1;
 	}
 }
 
-void calculate_step(t_data *data)
+void	calculate_step(t_data *data)
 {
-	if (data->rayDirX < 0)
+	if (data->raydir_x < 0)
 	{
 		data->stepX = -1;
-		data->dx = (data->pos_x - data->mapX) * data->delta_x;
+		data->dx = (data->pos_x - data->map_x) * data->delta_x;
 	}
 	else
 	{
 		data->stepX = 1;
-		data->dx = (data->mapX + 1.0 - data->pos_x) * data->delta_x;
+		data->dx = (data->map_x + 1.0 - data->pos_x) * data->delta_x;
 	}
-	if (data->rayDirY < 0)
+	if (data->raydir_y < 0)
 	{
 		data->stepY = -1;
-		data->dy = (data->pos_y - data->mapY) * data->delta_y;
+		data->dy = (data->pos_y - data->map_y) * data->delta_y;
 	}
 	else
 	{
 		data->stepY = 1;
-		data->dy = (data->mapY + 1.0 - data->pos_y) * data->delta_y;
+		data->dy = (data->map_y + 1.0 - data->pos_y) * data->delta_y;
 	}
 }
 
-
-
-
-void draw(t_data *data)
+void	calculate_wall(t_data *data, t_draw *d, int line_h)
 {
-	
+	double wallx;
 
-	int lineHeight;
-	
-	lineHeight = (int)(data->height / data->perpWallDist);
-	
-
-	//calculate lowest and highest pixel to fill in current stripe
-	int drawStart = (-lineHeight / 2) + (data->height / 2);
-	if (drawStart < 0)
-		drawStart = 0;
-
-	int drawEnd = (lineHeight / 2) + (data->height / 2);
-	if (drawEnd >= data->height)
-		drawEnd = data->height - 1;
-
-	double wallx = 0;
+	d->start_y = (-line_h / 2) + (data->height / 2);
+	if (d->start_y < 0)
+		d->start_y = 0;
+	d->end_y = (line_h / 2) + (data->height / 2);
+	if (d->end_y >= data->height)
+		d->end_y = data->height - 1;
 	if (data->side == WEST || data->side == EAST)
-		wallx = data->pos_y + (data->perpWallDist * data->rayDirY);
+		wallx = data->pos_y + (data->perpwalldist * data->raydir_y);
 	else
-		wallx = data->pos_x + (data->perpWallDist * data->rayDirX);
-
+		wallx = data->pos_x + (data->perpwalldist * data->raydir_x);
 	wallx -= floor(wallx);
+	d->tex_x = (int)(wallx * (double)data->t->w);
+	if ((data->side == EAST || (data->side == WEST)) && data->raydir_x > 0)
+		d->tex_x = data->t->w - d->tex_x - 1;
+	if ((data->side == NORTH || data->side == SOUTH) && data->raydir_y < 0)
+		d->tex_x = data->t->w - d->tex_x - 1;
+}
 
-	int texX = (int)(wallx * (double)data->t->w);
-
-	if ((data->side == EAST || (data->side == WEST)) && data->rayDirX > 0)
-		texX = data->t->w - texX - 1;
-	if ((data->side == NORTH || data->side == SOUTH) && data->rayDirY < 0)
-		texX = data->t->w - texX - 1;
-
-
-	double step = (1.0 * data->t->h) / lineHeight;
-
-	double texPos = (drawStart - (data->height / 2) + (lineHeight / 2)) * step;
-
+void	set_texture(t_data *data)
+{
 	if (data->side == SOUTH)
 		while (data->t->side != 's')
 			data->t = data->t->next;
@@ -117,62 +98,68 @@ void draw(t_data *data)
 	else if (data->side == NORTH)
 		while (data->t->side != 'n')
 			data->t = data->t->next;
+}
 
+void	draw(t_data *data, int x)
+{
+	t_draw	d;
+	int		line_h;
+	double	step;
+	double	t_pos;
+	int		y;
 
-	for (int y = drawStart; y < drawEnd; y++)
+	line_h = (int)(data->height / data->perpwalldist);
+	calculate_wall(data, &d, line_h);
+	step = (1.0 * data->t->h) / line_h;
+	t_pos = (d.start_y - (data->height / 2) + (line_h / 2)) * step;
+	set_texture(data);
+	y = d.start_y - 1;
+	while (++y < d.end_y)
 	{
-		int texY = (int)texPos & (data->t->h - 1);
-		texPos += step;
-		data->color = ((unsigned int *)data->t->imgaddr)[data->t->h * texY + texX];
+		d.tex_y = (int)t_pos & (data->t->h - 1);
+		t_pos += step;
+		data->color = ((unsigned int *)data->t->imgaddr)
+			[data->t->h * d.tex_y + d.tex_x];
 		my_mlx_pixel_put(data, x, y, data->color);
 	}
 }
 
-void dda(t_data *data)
+void	dda(t_data *data)
 {
 	int x;
+
 	x = -1;
 	while (x++ < data->width)
 	{
-		data->cameraX = 2 * x / (double)data->width - 1; //x-coordinate in camera space
-		data->rayDirX = data->dirX + (data->planeX * data->cameraX);
-		data->rayDirY = data->dirY + (data->planeY * data->cameraX);
-		data->mapX = (int)data->pos_x;
-		data->mapY = (int)data->pos_y;
-		data->delta_x = (data->rayDirY == 0) ? 0 : ((data->rayDirX == 0) ? 1 : fabs(1 / data->rayDirX));
-		data->delta_y = (data->rayDirY == 0) ? 0 : ((data->rayDirY == 0) ? 1 : fabs(1 / data->rayDirY));
+		data->camera_x = 2 * x / (double)data->width - 1;
+		data->raydir_x = data->dirx + (data->planeX * data->camera_x);
+		data->raydir_y = data->diry + (data->planeY * data->camera_x);
+		data->map_x = (int)data->pos_x;
+		data->map_y = (int)data->pos_y;
+		data->delta_x = (data->raydir_y == 0) ? 0 : ((data->raydir_x == 0) ? 1 : fabs(1 / data->raydir_x));
+		data->delta_y = (data->raydir_y == 0) ? 0 : ((data->raydir_y == 0) ? 1 : fabs(1 / data->raydir_y));
 		calculate_step(data);
-		perform_dda(data);
+		hit_check(data);
 		if (data->side == WEST || data->side == EAST)
-			data->perpWallDist = (data->mapX - data->pos_x + (1 - data->stepX) / 2) / data->rayDirX;
+			data->perpwalldist = (data->map_x - data->pos_x + (1 - data->stepX) / 2) / data->raydir_x;
 		else
-			data->perpWallDist = (data->mapY - data->pos_y + (1 - data->stepY) / 2) / data->rayDirY;
+			data->perpwalldist = (data->map_y - data->pos_y + (1 - data->stepY) / 2) / data->raydir_y;
 		draw(data, x);
-		data->zbuffer[x] = data->perpWallDist;
+		data->zbuffer[x] = data->perpwalldist;
 	}
 	if (data->spr != NULL)
 	{
 		sprite_casting(data);
 		sprite_drawing(data);
 	}
-
 }
 
-void init_base(t_data *data)
+int	main(void)
 {
-	data->error = 0;
-	data->pos_x = -1;
-	data->pos_y = -1;
-	data->info->ceiling_rgb = -1;
-	data->info->floor_rgb = -1;
-}
-
-int main()
-{
-	t_data data;
-	t_display info;
-	int fd;
-	char *file;
+	t_data		data;
+	t_display	info;
+	int			fd;
+	char		*file;
 
 	file = NULL;
 	fd = open("map1.cub", O_RDONLY);
@@ -190,5 +177,4 @@ int main()
 	mlx_hook(data.win, 2, 1L << 0, key_hook, &data);
 	mlx_hook(data.win, 17, (1L << 17), red_cross, &data);
 	mlx_loop(data.mlx);
-	
 }

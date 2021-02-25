@@ -3,39 +3,41 @@
 
 int key_hook(int keycode, t_data *data)
 {
+	double olddirx;
+	double oldplanex;
+
 	if (keycode == KEY_W)
 	{
-		if (checkzero_letter(data->map[(int)(data->pos_y)][(int)(data->pos_x + data->dirX * 0.11)]))
-			data->pos_x += data->dirX * 0.10;
-		if (checkzero_letter(data->map[(int)(data->pos_y + data->dirY * 0.11)][(int)(data->pos_x)]))
-			data->pos_y += data->dirY * 0.10;
+		if (checkzero_letter(data->map[(int)(data->pos_y)][(int)(data->pos_x + data->dirx * 0.11)]))
+			data->pos_x += data->dirx * 0.10;
+		if (checkzero_letter(data->map[(int)(data->pos_y + data->diry * 0.11)][(int)(data->pos_x)]))
+			data->pos_y += data->diry * 0.10;
 	}
 	if (keycode == KEY_S)
 	{
-		if (checkzero_letter(data->map[(int)(data->pos_y)][(int)(data->pos_x - data->dirX * 0.11)]))
-			data->pos_x -= data->dirX * 0.10;
-		if (checkzero_letter(data->map[(int)(data->pos_y - data->dirY * 0.11)][(int)(data->pos_x)]))
-			data->pos_y -= data->dirY * 0.10;
+		if (checkzero_letter(data->map[(int)(data->pos_y)][(int)(data->pos_x - data->dirx * 0.11)]))
+			data->pos_x -= data->dirx * 0.10;
+		if (checkzero_letter(data->map[(int)(data->pos_y - data->diry * 0.11)][(int)(data->pos_x)]))
+			data->pos_y -= data->diry * 0.10;
 	}
-	if (keycode == KEY_D) //ROTATION A FAIRE
+	if (keycode == KEY_D) 
 	{
-		//both camera direction and camera plane must be rotated
-		double oldDirX = data->dirX;
-		data->dirX = data->dirX * cos(0.2) - data->dirY * sin(0.2);
-		data->dirY = oldDirX * sin(0.2) + data->dirY * cos(0.2);
+		olddirx = data->dirx;
+		data->dirx = data->dirx * cos(0.2) - data->diry * sin(0.2);
+		data->diry = olddirx * sin(0.2) + data->diry * cos(0.2);
 
-		double oldPlaneX = data->planeX;
+		oldplanex = data->planeX;
 		data->planeX = data->planeX * cos(0.2) - data->planeY * sin(0.2);
-		data->planeY = oldPlaneX * sin(0.2) + data->planeY * cos(0.2);
+		data->planeY = oldplanex * sin(0.2) + data->planeY * cos(0.2);
 	}
 	if (keycode == KEY_A)
 	{
-		double oldDirX = data->dirX;
-		data->dirX = data->dirX * cos(-0.2) - data->dirY * sin(-0.2);
-		data->dirY = oldDirX * sin(-0.2) + data->dirY * cos(-0.2);
-		double oldPlaneX = data->planeX;
+		olddirx = data->dirx;
+		data->dirx = data->dirx * cos(-0.2) - data->diry * sin(-0.2);
+		data->diry = olddirx * sin(-0.2) + data->diry * cos(-0.2);
+		oldplanex = data->planeX;
 		data->planeX = data->planeX * cos(-0.2) - data->planeY * sin(-0.2);
-		data->planeY = oldPlaneX * sin(-0.2) + data->planeY * cos(-0.2);
+		data->planeY = oldplanex * sin(-0.2) + data->planeY * cos(-0.2);
 	}
 	if (keycode == KEY_SPACE)
 	{
@@ -45,9 +47,9 @@ int key_hook(int keycode, t_data *data)
 			data->displaymap = 0;
 	}
 	if (keycode == KEY_S)
-		data->cameraY -= 0.10;
+		data->camera_y -= 0.10;
 	if (keycode == KEY_W)
-		data->cameraY += 0.10;
+		data->camera_y += 0.10;
 	display(data);
 	return (1);
 }

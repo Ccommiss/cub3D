@@ -180,8 +180,8 @@ void 	init_struct(t_data *data)
 	data->map_s = 64; //bloc de 64 px
 	data->angle = 0;
 
-	data->dirX = -1;
-	data->dirY = 0;
+	data->dirx = -1;
+	data->diry = 0;
 	data->planeX = 0;
 	data->planeY = 0.66;
 
@@ -227,10 +227,10 @@ int main()
 
 	while (x++ < data.width)
 	{
-	 data.cameraX = 2 * x / (double)data.width - 1; //x-coordinate in camera space
-     data.rayDirX = data.dirX + data.planeX * data.cameraX;
-     data.rayDirY = data.dirY + data.planeY * data.cameraX;
-	 printf ("RAYDIR X - Y = %f - %f ",data.rayDirX, data.rayDirY);
+	 data.camera_x = 2 * x / (double)data.width - 1; //x-coordinate in camera space
+     data.raydir_x = data.dirx + data.planeX * data.camera_x;
+     data.raydir_y = data.diry + data.planeY * data.camera_x;
+	 printf ("RAYDIR X - Y = %f - %f ",data.raydir_x, data.raydir_y);
 	}
 	set_player(data.pos_x , data.pos_y, 64, 64, &data);
 
