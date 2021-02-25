@@ -25,7 +25,6 @@ int key_hook(int keycode, t_data *data)
 		olddirx = data->dirx;
 		data->dirx = data->dirx * cos(0.2) - data->diry * sin(0.2);
 		data->diry = olddirx * sin(0.2) + data->diry * cos(0.2);
-
 		oldplanex = data->planeX;
 		data->planeX = data->planeX * cos(0.2) - data->planeY * sin(0.2);
 		data->planeY = oldplanex * sin(0.2) + data->planeY * cos(0.2);
