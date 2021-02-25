@@ -54,6 +54,20 @@ typedef struct s_spr_geo
 
 } t_spr_geo;
 
+typedef struct s_draw
+{
+	int start_x;
+	int start_y;
+	int end_x;
+	int end_y;
+
+	int tex_x;
+	int tex_y;
+	int y;
+	unsigned int color;
+
+} t_draw;
+
 typedef struct s_display
 {
 	char *sprite_text;
@@ -199,7 +213,7 @@ void fill_black(t_data *data);
 void fill_ceiling(t_data *data);
 void fill_floor(t_data *data);
 
-void sprite_drawing(t_data *data, int x);
+void sprite_drawing(t_data *data);
 void sprite_casting(t_data *data);
 
 

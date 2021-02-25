@@ -14,7 +14,8 @@ SRCS = cub.c \
 	parser_utils.c \
 	display.c \
 	events.c \
-	sprites.c \
+	sprite_cast.c \
+	sprite_draw.c \
 	./getnextline/get_next_line.c \
 	./getnextline/get_next_line_utils.c \
 

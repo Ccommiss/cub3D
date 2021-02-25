@@ -3,21 +3,21 @@
 
 int key_hook(int keycode, t_data *data)
 {
-	if (keycode == KEY_UP)
+	if (keycode == KEY_W)
 	{
 		if (checkzero_letter(data->map[(int)(data->pos_y)][(int)(data->pos_x + data->dirX * 0.11)]))
 			data->pos_x += data->dirX * 0.10;
 		if (checkzero_letter(data->map[(int)(data->pos_y + data->dirY * 0.11)][(int)(data->pos_x)]))
 			data->pos_y += data->dirY * 0.10;
 	}
-	if (keycode == KEY_DOWN)
+	if (keycode == KEY_S)
 	{
 		if (checkzero_letter(data->map[(int)(data->pos_y)][(int)(data->pos_x - data->dirX * 0.11)]))
 			data->pos_x -= data->dirX * 0.10;
 		if (checkzero_letter(data->map[(int)(data->pos_y - data->dirY * 0.11)][(int)(data->pos_x)]))
 			data->pos_y -= data->dirY * 0.10;
 	}
-	if (keycode == KEY_RIGHT) //ROTATION A FAIRE
+	if (keycode == KEY_D) //ROTATION A FAIRE
 	{
 		//both camera direction and camera plane must be rotated
 		double oldDirX = data->dirX;
@@ -28,7 +28,7 @@ int key_hook(int keycode, t_data *data)
 		data->planeX = data->planeX * cos(0.2) - data->planeY * sin(0.2);
 		data->planeY = oldPlaneX * sin(0.2) + data->planeY * cos(0.2);
 	}
-	if (keycode == KEY_LEFT)
+	if (keycode == KEY_A)
 	{
 		double oldDirX = data->dirX;
 		data->dirX = data->dirX * cos(-0.2) - data->dirY * sin(-0.2);

@@ -67,14 +67,14 @@ void calculate_step(t_data *data)
 
 
 
-void draw(t_data *data, int x)
+void draw(t_data *data)
 {
-	(void)x;
+	
+
 	int lineHeight;
-	//if (data->perpWallDist != 0)
-		lineHeight = (int)(data->height / data->perpWallDist);
-	//else
-	//	lineHeight = (int)data->height;
+	
+	lineHeight = (int)(data->height / data->perpWallDist);
+	
 
 	//calculate lowest and highest pixel to fill in current stripe
 	int drawStart = (-lineHeight / 2) + (data->height / 2);
@@ -92,19 +92,17 @@ void draw(t_data *data, int x)
 		wallx = data->pos_x + (data->perpWallDist * data->rayDirX);
 
 	wallx -= floor(wallx);
-	//printf("WALLX %f \n", wallx);
 
 	int texX = (int)(wallx * (double)data->t->w);
-	//printf("TEXX 1 %d \n", texX);
 
 	if ((data->side == EAST || (data->side == WEST)) && data->rayDirX > 0)
 		texX = data->t->w - texX - 1;
 	if ((data->side == NORTH || data->side == SOUTH) && data->rayDirY < 0)
 		texX = data->t->w - texX - 1;
-	//printf("TEXX 2 %d \n", texX);
+
 
 	double step = (1.0 * data->t->h) / lineHeight;
-	// Starting texture coordinate
+
 	double texPos = (drawStart - (data->height / 2) + (lineHeight / 2)) * step;
 
 	if (data->side == SOUTH)
@@ -120,22 +118,14 @@ void draw(t_data *data, int x)
 		while (data->t->side != 'n')
 			data->t = data->t->next;
 
-	//printf ("side : %c \n", data->t->side);
-
-//	int fog = 0x38eeff;
 
 	for (int y = drawStart; y < drawEnd; y++)
 	{
 		int texY = (int)texPos & (data->t->h - 1);
 		texPos += step;
 		data->color = ((unsigned int *)data->t->imgaddr)[data->t->h * texY + texX];
-	//	data->color = (1 - 0.75) * (data->color >> 4) + 0.75 * RED;
-	//	data->color = ((1 - (data->zbuffer[x] * 0.75 ))  * data->color) + ((data->zbuffer[x] * 0.75 * BLUE)); // FOG TRY
-		//printf ("%f", (data->zbuffer[x] * 0.75));
 		my_mlx_pixel_put(data, x, y, data->color);
 	}
-	//printf ("ppd %f \n", data->perpWallDist);
-
 }
 
 void dda(t_data *data)
@@ -163,7 +153,7 @@ void dda(t_data *data)
 	if (data->spr != NULL)
 	{
 		sprite_casting(data);
-		sprite_drawing(data, x);
+		sprite_drawing(data);
 	}
 
 }
