@@ -154,7 +154,7 @@ void	dda(t_data *data)
 	}
 }
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	t_data		data;
 	t_display	info;
@@ -162,9 +162,14 @@ int	main(void)
 	char		*file;
 
 	file = NULL;
-	fd = open("map1.cub", O_RDONLY);
-	if (!fd)
+	(void)argc;
+	fd = open(argv[1], O_RDONLY);
+	int test = read(fd, 0, 0);
+	if (test < 0)
+	{
 		printf("Bad argument.\n");
+		return (-1);
+	}
 	data.info = &info;
 	init_base(&data);
 	ft_parse(fd, &data);
@@ -172,8 +177,16 @@ int	main(void)
 		return (-1);
 	if (init_struct(&data) == -1)
 		return (-1);
+
+	if (argc == 3 && ft_strncmp(argv[2], "--save", 7) == 0)
+	{
+		printf ("SAVE TO BMP \n");
+		save_bmp(&data);
+		return (1);
+	}
 	display(&data);
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
+	display_pos(&data);
 	mlx_hook(data.win, 2, 1L << 0, key_hook, &data);
 	mlx_hook(data.win, 17, (1L << 17), red_cross, &data);
 	mlx_loop(data.mlx);

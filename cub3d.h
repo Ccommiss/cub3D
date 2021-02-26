@@ -27,7 +27,7 @@ enum e_sides
 
 typedef struct s_spr t_spr;
 
-typedef struct s_spr // list chainee 
+typedef struct s_spr // list chainee
 {
 
 	t_spr *head;
@@ -45,7 +45,7 @@ typedef struct s_spr_geo
 {
 	double x;
 	double y;
-	double inv; 
+	double inv;
 	double trans_x;
 	double trans_y;
 	int screen_x;
@@ -73,12 +73,10 @@ typedef struct s_draw
 typedef struct s_display
 {
 	char *sprite_text;
-
 	char *north_text;
 	char *south_text;
 	char *east_text;
 	char *west_text;
-
 	int ceiling_rgb;
 	int floor_rgb;
 
@@ -100,6 +98,42 @@ typedef struct s_text
 	t_text *next;
 
 } t_text;
+
+typedef struct s_bmp
+{
+
+	// BitMapFileHeader
+	char bmfh_type1;		  // "BM"
+	char bmfh_type2;
+	int bmfh_size;			  // size of file in bytes
+	short int bmfh_reserved1; //2 bytes
+	short int bmfh_reserved2; //2 bytes
+	int bmfh_offset;		  //offset from beggining of file, 1078
+
+	// BitMapInfoHeader
+	int bmih_size;		  // size of bitmapinfoh
+	int bmih_w;			  //img width
+	int bmih_h;			  //img height
+	short int bmih_plane; // must be set to 0 (??)
+	short int bmih_bpp;	  //bitsperpixel, 24 for 16M colors
+	int bmih_compression; //set to 0;
+	int bmih_sizeimage;	  //size of the image data, in bytes.
+	int bi_pxpermeterx;	  //set to 0
+	int bi_pxpermetery;	  //idem
+	int bi_colorused;	  //specifies the number of colors used in the bitmap, if set to zero the number of colors is calculated using the biBitCount member.
+	int bi_clrimp;		  // 0 if all important
+
+	int clr_r;	 //red intesnsity
+	int clr_g;	 //green intensity
+	int clr_b;	 //blue intensity
+	int clr_res; // 0
+
+	void *image_data; // ????an array of
+						//bytes that defines the bitmap bits. These are the actual image data, represented by consecutive rows, or "scan lines," of the bitmap. Each scan line consists of consecutive bytes representing the pixels in the scan line, in left-to-right order. The system maps pixels beginning with the bottom scan line of the rectangular region and ending with the top scan line.
+
+
+
+} t_bmp;
 
 typedef struct s_data
 {
@@ -194,8 +228,7 @@ int checkzero_letter(char c);
 
 int ft_check_chars(char sign, t_data *data, int x, int y);
 int ft_mapcheck(char *str);
-void ft_finddir(t_data *data, char dir) ;
-
+void ft_finddir(t_data *data, char dir);
 
 /*
  *  [visu2d.c] Minimap fucntions
@@ -215,20 +248,21 @@ void my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void fill_black(t_data *data);
 void fill_ceiling(t_data *data);
 void fill_floor(t_data *data);
+void		display_pos(t_data *data);
+
 
 void sprite_drawing(t_data *data);
 void sprite_casting(t_data *data);
 
-
 int key_hook(int keycode, t_data *data);
-
-
 
 void bresenham(int xdep, int ydep, int xfin, int yfin, t_data *data);
 void dda(t_data *data);
 
 
+
+void 	save_bmp(t_data *data);
+
+
 int red_cross(t_data *data);
 int error_message(t_data *data, int index);
-
-

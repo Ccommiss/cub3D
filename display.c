@@ -11,8 +11,8 @@ void my_mlx_pixel_put(t_data *data, int x, int y, int color)
 
 void display_pos(t_data *data)
 {
-	char *stringX; 
-	char *stringY; 
+	char *stringX;
+	char *stringY;
 
     stringX = ft_strjoin("X = ", ft_ftoa(data->pos_x, 4));
     stringY = ft_strjoin("Y = ", ft_ftoa(data->pos_y, 4));
@@ -38,4 +38,6 @@ void display(t_data *data)
 	mlx_new_image(data->mlx, data->width, data->height);
 	mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
 	display_pos(data);
+
+
 }
