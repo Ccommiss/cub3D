@@ -19,7 +19,8 @@ t_bmp	fill_header(t_data *data)
 	info.bmih_plane = 1;
 	info.bmih_bpp = data->bits_per_pixel;
 	info.bmih_compression = 0;
-	info.bmih_sizeimage = 0; //4 * info.bmih_h * info.bmih_w;	  //size of the image data, in bytes.
+	info.bmih_sizeimage = info.bmfh_offset + ((info.bmih_w * info.bmih_h) * 4);
+	//0; //4 * info.bmih_h * info.bmih_w;	  //size of the image data, in bytes.
 	info.bi_pxpermeterx = 0;
 	info.bi_pxpermetery = 0;
 	info.bi_colorused = 256;
@@ -42,9 +43,15 @@ void 	save_bmp(t_data *data)
 	t_bmp info;
 
 
-	//file = fopen("test.bmp", "w");
+	//On draw l'image dans les data
+	fill_black(data);
+	fill_ceiling(data);
+	fill_floor(data);
+
+	//
+
 	fd = open("test.bmp", O_CREAT | O_WRONLY);
 	info = fill_header(data);
-	write(fd, (void *)info, 448);
+	write(fd, &info, 447);
 
 }
