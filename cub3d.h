@@ -107,7 +107,7 @@ typedef struct s_bmp
 	char bmfh_type2;
 	int bmfh_size;			  // size of file in bytes
 	short int bmfh_reserved1; //2 bytes
-	short int bmfh_reserved2; //2 bytes
+	short int bmfh_reserved2;
 	int bmfh_offset;		  //offset from beggining of file, 1078
 
 	// BitMapInfoHeader
@@ -123,10 +123,8 @@ typedef struct s_bmp
 	int bi_colorused;	  //specifies the number of colors used in the bitmap, if set to zero the number of colors is calculated using the biBitCount member.
 	int bi_clrimp;		  // 0 if all important
 
-	int clr_r;	 //red intesnsity
-	int clr_g;	 //green intensity
-	int clr_b;	 //blue intensity
-	int clr_res; // 0
+	char padding[24];
+
 
 	void *image_data; // ????an array of
 						//bytes that defines the bitmap bits. These are the actual image data, represented by consecutive rows, or "scan lines," of the bitmap. Each scan line consists of consecutive bytes representing the pixels in the scan line, in left-to-right order. The system maps pixels beginning with the bottom scan line of the rectangular region and ending with the top scan line.

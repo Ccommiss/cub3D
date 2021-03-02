@@ -15,11 +15,13 @@ int error_message(t_data *data, int index)
 		if (index == 4)
 			printf("Missing infos.");
 		if (index == 5)
-			printf("Two players found in map.");
+			printf("Two players found in map.\n");
 		if (index == 6)
-			printf("Texture reference could not be found.");
+			printf("Texture reference could not be found.\n");
 		if (index == 7)
-			printf("Bad RGB color formatting.");
+			printf("Bad RGB color formatting.\n");
+		if (index == 8)
+			printf("RGB values can't be over 255 or below 0.\n");
 	}
 	return (-1);
 }
@@ -98,10 +100,18 @@ int parse_map(t_data *data, char *line)
 	data->map_h = y + 1;
 	data->map = (char **)ft_realloc(data->map, (data->map_h - 1) * sizeof(char *), (data->map_h + 1) * sizeof(char *));
 	data->map[data->map_h] = 0;
+	if ((y == 0) && ft_strlen(ft_strtrim(line, " 	")) == 0)
+		return 0;
 	if (data->map_w == 0 || ft_strlen(line) > (size_t)data->map_w)
+	{
 		data->map[y] = (char *)malloc(sizeof(char) * (ft_strlen(line) + 1));
-	else 
+		ft_memset(data->map[y], '.', ft_strlen(line) + 1);
+	}
+	else
+	{
 		data->map[y] = (char *)malloc(sizeof(char) * (data->map_w + 1));
+		ft_memset(data->map[y], '.', data->map_w + 1);
+	}
 	if (!(data->map[y]))
 		return (-1);
 	fill_maptab(data, line, y);
@@ -130,6 +140,8 @@ int ft_getrgb(t_data *data, char *rgb)
 	b = ft_atoi(block[2]);
 	if (r == 0 && g == 0 && b == 0)
 		return (0x000000);
+	else if (r > 255 || g > 255 || b > 255 || r < 0 || g < 0 || b < 0)
+		return (error_message(data, 8));
 	return (((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff));
 }
 
@@ -169,9 +181,6 @@ void load_sprite(t_data *data, int x, int y)
 		data->spr = NULL;
 		data->spr = (t_spr *)malloc(sizeof(t_spr));
 		data->spr->head = data->spr;
-		printf("%p data->str->head\n", data->spr->head);
-		printf("%p data->str\n", data->spr);
-		printf("YOOOOOO\n");
 	}
 	else
 	{
@@ -188,14 +197,6 @@ void load_sprite(t_data *data, int x, int y)
 
 void check_borders(t_data *data, int x, int y, char ***mapbis)
 {
-	//int i = 0;
-	// while (i < data->map_h)
-	// {
-	// 	printf("%s\n", mapbis[0][i]);
-	// 	i++;
-	// }
-	// printf("\n**END MAP**\n");
-	//printf("testing x = %d || y = %d \n", x, y);
 	if (y < 0 || y >= data->map_h || x < 0 || x >= data->map_w || data->map[y][x] == ' ' || data->map[y][x] == '.')
 	{
 		if (data->error == 0)
@@ -256,8 +257,10 @@ int ft_parse(int fd, t_data *data)
 	{
 		if (ft_mapcheck(line) == 0 && ft_strlen(ft_strtrim(line, " ")) != 0 && !iscomplete(data))
 			ft_parse_info(data, line);
-		else if (ft_strlen(ft_strtrim(line, " ")) != 0 && iscomplete(data) == 1)
+		else if (ft_mapcheck(line) == 1 && iscomplete(data) == 1)
 			parse_map(data, line);
+		else if (ft_strlen(ft_strtrim(line, "	 ")) == 0 && iscomplete(data) == 1)
+			printf ("BLANK LINE ?\n");
 	}
 	if (data->error != 0)
 		return (error_message(data, data->error));
