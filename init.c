@@ -1,5 +1,8 @@
 #include "cub3d.h"
 
+/// FREE TO DO IN CASE OF ERROR
+
+
 /*
  *  init_plane
  *
@@ -41,12 +44,7 @@ int init_struct(t_data *data)
 	
 	data->mlx = mlx_init();
 	if (loadimage(data) == -1)
-	{
-		printf("POMPELOP\n");
 		return (-1);
-	}
-
-
 	data->win = mlx_new_window(data->mlx, data->width, data->height, "who run the world ?");
 	data->img = mlx_new_image(data->mlx, data->width, data->height);
 	data->imgaddr = mlx_get_data_addr(data->img, &data->bits_per_pixel, &data->line_length, &data->endian);
@@ -54,6 +52,10 @@ int init_struct(t_data *data)
 	data->minimap_size = data->width / 50;
 	data->displaymap = 1;
 	data->zbuffer = (double *)malloc(sizeof(double) * (data->width + 1));
+	if (!data->zbuffer)
+		{ //free des trucs
+			return (-1);
+		}
 	ft_bzero(data->zbuffer, data->width);
 	return (1);
 }
@@ -92,8 +94,9 @@ int	alloc_image(t_data *data, t_text *t, void *text)
 	t->imgaddr = mlx_get_data_addr(t->img, &t->bits_per_pixel, &t->line_length, &t->endian);
 	if (text != data->info->east_text)
 	{
-		printf ("YO \n");
 		t->next = (t_text *)malloc(sizeof(t_text));
+		if (!t->next)
+			return (-1);
 	}
 	return (1);
 }
@@ -104,22 +107,24 @@ int loadimage(t_data *data)
 	t_text *head;
 
 	t = (t_text *)malloc(sizeof(t_text));
+	if (!t)
+		return (-1);
 	head = t;
 	t->side = 'n';
 	if (alloc_image(data, t, data->info->north_text) == -1)
-		return (-1);
+		return (free_textures(data, head));
 	t = t->next;
 	t->side = 's';
 	if (alloc_image(data, t, data->info->south_text) == -1)
-		return (-1);
+		return (free_textures(data, head));
 	t = t->next;
 	t->side = 'w';
 	if (alloc_image(data, t, data->info->west_text) == -1)
-		return (-1);
+		return (free_textures(data, head));
 	t = t->next;
 	t->side = 'e';
 	if (alloc_image(data, t, data->info->east_text) == -1)
-		return (-1);
+		return (free_textures(data, head));
 	t->next = head;
 	data->t = head;
 	data->sprimg = mlx_xpm_file_to_image(data->mlx, data->info->sprite_text, &data->spw, &data->sph);

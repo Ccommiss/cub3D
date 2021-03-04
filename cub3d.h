@@ -246,7 +246,7 @@ void my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void fill_black(t_data *data);
 void fill_ceiling(t_data *data);
 void fill_floor(t_data *data);
-void		display_pos(t_data *data);
+void display_pos(t_data *data);
 
 
 void sprite_drawing(t_data *data);
@@ -256,6 +256,10 @@ int key_hook(int keycode, t_data *data);
 
 void bresenham(int xdep, int ydep, int xfin, int yfin, t_data *data);
 void dda(t_data *data);
+
+
+int free_textures(t_data *data, t_text *head);
+int free_sprites(t_data *data);
 
 
 

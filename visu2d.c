@@ -1,9 +1,73 @@
 #include "cub3d.h"
 
+
+/*
+ *  free_textures & free_sprites
+ *
+ * 	[synopsis] : free textures and sprites
+ * 	[return] : -1, because these functions are also used while parsing if
+ * 		an allocation fails.
+ */
+
+
+int free_textures(t_data *data, t_text *head)
+{
+	int i;
+	t_text *tmp;
+	
+	if (data->t != head)
+		data->t = head;
+	i = 0;
+	while (i < 4) // FREE LES TEXTURES 
+	{
+		tmp = data->t;
+		printf ("FREEING %c \n", data->t->side);
+	 	data->t = data->t->next;
+		free(tmp);
+		i++;
+	}
+	return (-1);
+}
+
+int free_sprites(t_data *data)
+{
+	t_spr *tmp_s;
+
+	while (data->spr != NULL)
+	{
+		tmp_s = data->spr;
+		printf ("deleting spr index %d \n", data->spr->index);
+		data->spr = data->spr->next;
+		free(tmp_s); 
+	}
+	return (-1);
+}
+
+/*
+ *  red_cross
+ *
+ * 	[synopsis] : properly closes the window and free elements previously 
+ * 		allocated, e.g. 
+ * 		> The map (t_data structure)
+ * 		> Textures (pointed by data->t)
+ * 		> data->spr (data->sprite)
+ * 		> The zbuffer
+ * 	[return] : none
+ */
+
 int red_cross(t_data *data)
 {
-	free(data->map);
+	int i;
 
+	i = 0;
+	while (i < data->map_h)
+		free(data->map[i++]);
+	free(data->map);
+	mlx_destroy_image(data->mlx, data->img);
+	mlx_clear_window(data->mlx, data->win);
+	free_textures(data, data->t);
+	free_sprites(data);
+	free(data->zbuffer);
 	exit(0);
 	return (0);
 }

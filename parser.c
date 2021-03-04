@@ -23,6 +23,9 @@ int error_message(t_data *data, int index)
 		if (index == 8)
 			printf("RGB values can't be over 255 or below 0.\n");
 	}
+	if (data->t)
+		free_textures(data, data->t);
+	free_sprites(data);
 	return (-1);
 }
 
@@ -55,10 +58,6 @@ void ft_finddir(t_data *data, char dir) //chamboule tout,marche pas avec autre c
 }
 
 
-
-
-
-
 int		fill_maptab(t_data *data, char *line, int y)
 {
 	int x;
@@ -78,9 +77,9 @@ int		fill_maptab(t_data *data, char *line, int y)
 	}
 	data->map[y][x] = '\0';
 	if (x > data->map_w)
-	{    // on realloue toutes les cases du tableau a la nouvelle taille de reference
+	{
 		while (i < y)
-		{ // lancienne taille c data->mapw
+		{
 			data->map[i] = (char *)ft_realloc(data->map[i], data->map_w, sizeof(char) * x + 1);
 			data->map[i][data->map_w] = '\0';
 			i++;
@@ -172,7 +171,7 @@ int ft_parse_info(t_data *data, char *line)
 	return (1);
 }
 
-void load_sprite(t_data *data, int x, int y)
+int load_sprite(t_data *data, int x, int y)
 {
 	static int i = 0;
 
@@ -180,11 +179,15 @@ void load_sprite(t_data *data, int x, int y)
 	{
 		data->spr = NULL;
 		data->spr = (t_spr *)malloc(sizeof(t_spr));
+		if (!data->spr)
+			return (-1);
 		data->spr->head = data->spr;
 	}
 	else
 	{
 		data->spr->next = (t_spr *)malloc((sizeof(t_spr)));
+		if (!data->spr->next)
+			return (-1);
 		data->spr->next->head = data->spr->head; //on sauvegarde la tete, ainsi chaque maillon contient le ptr vers le debut de la liste
 		data->spr = data->spr->next;
 	}
@@ -193,6 +196,7 @@ void load_sprite(t_data *data, int x, int y)
 	data->spr->y = y;
 	i++;
 	data->spr->next = NULL;
+	return (1);
 }
 
 void check_borders(t_data *data, int x, int y, char ***mapbis)
@@ -210,7 +214,8 @@ void check_borders(t_data *data, int x, int y, char ***mapbis)
 	if (data->map[y][x] == '2' && data->error == 0)
 	{
 		mapbis[0][y][x] = 'v';
-		load_sprite(data, x, y);
+		if (load_sprite(data, x, y) == -1) //si erreur de malloc
+			data->error = 10; //si erreur de malloc 
 	}
 	if (data->error == 0)
 	{
@@ -230,6 +235,17 @@ int iscomplete(t_data *data)
 	return (1);
 }
 
+int free_copymap (int nb_alloc, char ***copymap, int ret)
+{
+	int i;
+
+	i = 0;
+	while (i < nb_alloc)
+		free(copymap[0][i++]);
+	free(*copymap);
+	return (ret);
+}
+
 int flood_fill(t_data *data)
 {
 	char **copymap;
@@ -238,11 +254,14 @@ int flood_fill(t_data *data)
 	while (i < data->map_h)
 	{
 		copymap[i] = (char *)malloc(10 * data->map_w);
+		if (!copymap[i])
+			return(free_copymap(i, &copymap, -1));
 		ft_bzero(copymap[i], data->map_w + 1);
 		ft_memset(copymap[i], '.', data->map_w);
 		i++;
 	}
 	check_borders(data, data->pos_x, data->pos_y, &copymap);
+	free_copymap(data->map_h, &copymap, 0);
 	if (data->error != 0)
 		return (error_message(data, data->error));
 	return (1);
