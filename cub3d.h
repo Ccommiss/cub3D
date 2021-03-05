@@ -4,7 +4,8 @@
 #include <unistd.h>
 //#include <mlx.h>
 #include <fcntl.h>
-#include "keys.h"
+//#include "keys.h"
+#include "key_linux.h"
 #include <math.h>
 #include "getnextline/get_next_line.h"
 #include "libft/libft.h"
