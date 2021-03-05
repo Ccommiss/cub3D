@@ -33,13 +33,16 @@ void *ft_realloc(void *ptr, size_t cursize, size_t newsize)
 {
 	void *newptr;
 
+	printf ("CURSIZE = %zu \n", cursize);
+	printf ("NEWSIZE = %zu \n", newsize);
 	if (!ptr || ptr == NULL)
 		return (malloc(newsize));
 	newptr = malloc(newsize);
+	printf ("hey\n");
 	ft_memset(newptr, '.', newsize);
 	ft_memcpy(newptr, ptr, cursize);
-	if (ptr != NULL)
-		free(ptr);
+	//if (ptr != NULL)
+	//	free(ptr);
 	return (newptr);
 }
 
@@ -94,9 +97,13 @@ int		fill_maptab(t_data *data, char *line, int y)
 int parse_map(t_data *data, char *line)
 {
 	int x = 0;
-	static int y = 0;
+	static int y;
+	if (data->map_h == 0)
+		y = 0;
 
 	data->map_h = y + 1;
+	printf ("MAP H = %d \n", data->map_h);
+	printf("Current size = %lu \n", (data->map_h - 1) * sizeof(char *));
 	data->map = (char **)ft_realloc(data->map, (data->map_h - 1) * sizeof(char *), (data->map_h + 1) * sizeof(char *));
 	data->map[data->map_h] = 0;
 	if ((y == 0) && ft_strlen(ft_strtrim(line, " 	")) == 0)
@@ -215,7 +222,7 @@ void check_borders(t_data *data, int x, int y, char ***mapbis)
 	{
 		mapbis[0][y][x] = 'v';
 		if (load_sprite(data, x, y) == -1) //si erreur de malloc
-			data->error = 10; //si erreur de malloc 
+			data->error = 10; //si erreur de malloc
 	}
 	if (data->error == 0)
 	{
