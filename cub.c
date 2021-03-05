@@ -129,6 +129,17 @@ void	dda(t_data *data)
 	int x;
 
 	x = -1;
+	printf("DATA = \n");
+	printf("%d\n", data->width);
+		printf("%d\n", data->height);
+	printf("%f\n", data->pos_x);
+	printf("%f\n", data->pos_y);
+	printf("%f\n", data->raydir_x);
+	printf("%f\n", data->raydir_y);
+	printf("%d\n", data->map_x);
+	printf("%d\n", data->map_y);
+
+
 	while (x++ < data->width)
 	{
 		data->camera_x = 2 * x / (double)data->width - 1;
@@ -140,6 +151,7 @@ void	dda(t_data *data)
 		data->delta_y = (data->raydir_y == 0) ? 0 : ((data->raydir_y == 0) ? 1 : fabs(1 / data->raydir_y));
 		calculate_step(data);
 		hit_check(data);
+		//printf("x = %d \n", x);
 		if (data->side == WEST || data->side == EAST)
 			data->perpwalldist = (data->map_x - data->pos_x + (1 - data->stepX) / 2) / data->raydir_x;
 		else

@@ -23,10 +23,20 @@ void display_pos(t_data *data)
 
 void display(t_data *data)
 {
+	printf (" DISPLAY \n");
+
 	fill_black(data);
+		printf (" DISPLAY2 \n");
+
 	fill_ceiling(data);
+		printf (" DISPLAY 3\n");
+
 	fill_floor(data);
+			printf (" DISPLAY 4\n");
+
 	dda(data);
+			printf (" DISPLAY 5\n");
+
 	if (data->displaymap == 1)
 	{
 		set_compass(data);

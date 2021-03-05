@@ -1,7 +1,6 @@
 
 NAME = test
 
-
 TST = test_minilibx.c
 
 OBJ := ${TST:c=o}
@@ -23,9 +22,9 @@ SRCS = cub.c \
 
 OBJS := ${SRCS:c=o}
 
-CC = clang -g $(FLAGS)
+CC = gcc $(FLAGS)
 
-FLAGS =  -Wall -Werror -Wextra -fsanitize=address
+FLAGS =  -Wall -Werror -Wextra 
 LIBS = ./libft/
 
 all: $(NAME)

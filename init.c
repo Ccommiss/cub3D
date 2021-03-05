@@ -41,7 +41,7 @@ void init_plane(t_data *data)
 
 int init_struct(t_data *data)
 {
-	
+
 	data->mlx = mlx_init();
 	if (loadimage(data) == -1)
 		return (-1);
@@ -76,6 +76,10 @@ void init_base(t_data *data)
 	data->pos_y = -1;
 	data->info->ceiling_rgb = -1;
 	data->info->floor_rgb = -1;
+	data->map_h = 0;
+	data->map_w = 0;
+	data->spr = NULL;
+	data->t = NULL;
 }
 
 /*

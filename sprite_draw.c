@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 11:01:14 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/02/25 12:50:29 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/05 13:58:12 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	sprite_drawing(t_data *data)
 	t_spr_geo	sp;
 	t_draw		draw;
 
+	printf("SPRITE DRAWIN \n");
 	head = data->spr->head;
 	while (data->spr != NULL)
 	{

@@ -23,8 +23,10 @@ int error_message(t_data *data, int index)
 		if (index == 8)
 			printf("RGB values can't be over 255 or below 0.\n");
 	}
-	if (data->t)
+	if (data->t != NULL)
+	{
 		free_textures(data, data->t);
+	}
 	free_sprites(data);
 	return (-1);
 }
@@ -101,6 +103,7 @@ int parse_map(t_data *data, char *line)
 	if (data->map_h == 0)
 		y = 0;
 
+	printf ("y = %d \n", y);
 	data->map_h = y + 1;
 	printf ("MAP H = %d \n", data->map_h);
 	printf("Current size = %lu \n", (data->map_h - 1) * sizeof(char *));
@@ -108,22 +111,34 @@ int parse_map(t_data *data, char *line)
 	data->map[data->map_h] = 0;
 	if ((y == 0) && ft_strlen(ft_strtrim(line, " 	")) == 0)
 		return 0;
+
+		printf("before le IF \n");
+
 	if (data->map_w == 0 || ft_strlen(line) > (size_t)data->map_w)
 	{
+			printf("hey 123c \n");
+			printf (" setting map w  %d \n", data->map_w);
+
 		data->map[y] = (char *)malloc(sizeof(char) * (ft_strlen(line) + 1));
 		ft_memset(data->map[y], '.', ft_strlen(line) + 1);
 	}
 	else
 	{
+		printf("hey 456 \n");
+					printf (" setting map w  %d \n", data->map_w);
+
 		data->map[y] = (char *)malloc(sizeof(char) * (data->map_w + 1));
 		ft_memset(data->map[y], '.', data->map_w + 1);
 	}
+	printf("hey before false malloc \n");
 	if (!(data->map[y]))
 		return (-1);
 	fill_maptab(data, line, y);
 	//si jamais la ligne est  plus longue que les autres, sa longueur devient la nouvelle reference pour les autres
-
 	y++;
+	printf ("end y = %d \n", y);
+	printf ("maph = %d \n", data->map_h);
+
 	data->map[y] = 0;
 	x = 0;
 	return 1;
