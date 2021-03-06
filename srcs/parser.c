@@ -172,8 +172,10 @@ int ft_getrgb(t_data *data, char *rgb)
 int ft_parse_info(t_data *data, char *line)
 {
 	char **block;
+	char *newline;
+	newline = ft_strtrim(line, " ");
 	printf("l: %s\n", line);
-	block = ft_split(ft_strtrim(line, " "), ' ');
+	block = ft_split(newline, ' ');
 	if (block[0][0] == 'R')
 	{
 		data->width = ft_atoi(block[1]);
@@ -197,6 +199,7 @@ int ft_parse_info(t_data *data, char *line)
 	int i = 0;
 	while(block[i] != NULL)
 		free(block[i++]);
+	free(newline);
 	return (1);
 }
 
