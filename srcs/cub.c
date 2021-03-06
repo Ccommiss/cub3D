@@ -171,9 +171,7 @@ int	main(int argc, char **argv)
 	t_data		data;
 	t_display	info;
 	int			fd;
-	char		*file;
 
-	file = NULL;
 	(void)argc;
 	fd = open(argv[1], O_RDONLY);
 	int test = read(fd, 0, 0);
