@@ -199,5 +199,7 @@ int	main(int argc, char **argv)
 	display_pos(&data);
 	mlx_hook(data.win, 2, 1L << 0, key_hook, &data);
 	mlx_hook(data.win, 17, (1L << 17), red_cross, &data);
+	//mlx_hook(data.win, 33, 0, red_cross, &data); // linux
+
 	mlx_loop(data.mlx);
 }

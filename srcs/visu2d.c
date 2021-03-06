@@ -68,6 +68,7 @@ int red_cross(t_data *data)
 	free_textures(data, data->t);
 	free_sprites(data);
 	free(data->zbuffer);
+	free(data->mlx);
 	exit(0);
 	return (0);
 }

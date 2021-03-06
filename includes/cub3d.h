@@ -4,8 +4,8 @@
 #include <unistd.h>
 //#include <mlx.h>
 #include <fcntl.h>
-//#include "keys.h"
-#include "key_linux.h"
+#include "keys.h"
+//#include "key_linux.h"
 #include <math.h>
 #include "../libft/libft.h"
 #include "../mlx/mlx.h"

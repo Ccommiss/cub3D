@@ -43,8 +43,8 @@ void *ft_realloc(void *ptr, size_t cursize, size_t newsize)
 	printf("hey\n");
 	ft_memset(newptr, '.', newsize);
 	ft_memcpy(newptr, ptr, cursize);
-	//if (ptr != NULL)
-	//	free(ptr);
+	if (cursize != 0)
+		free(ptr);
 	return (newptr);
 }
 
@@ -185,6 +185,10 @@ int ft_parse_info(t_data *data, char *line)
 		data->info->floor_rgb = ft_getrgb(data, ft_strtrim(line, " F "));
 	else if (ft_strncmp(block[0], "C", 1) == 0)
 		data->info->ceiling_rgb = ft_getrgb(data, ft_strtrim(line, " C "));
+	
+	int i = 0;
+	while(block[i] != NULL)
+		free(block[i++]);
 	return (1);
 }
 
