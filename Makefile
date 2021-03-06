@@ -22,18 +22,19 @@ CC = gcc $(FLAGS)
 
 FLAGS =  -Wall -Werror -Wextra 
 LIBS = ./libft
-UNAME := $(shell uname) 
+UNAME := $(shell uname)
+APPLE = Darwin
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
 	make -C $(LIBS)
-	ifeq ($(UNAME), Darwin)
+ifeq ($(UNAME),$(APPLE))
 	$(CC) $(OBJS) -Lmlx -lmlx -framework OpenGL -framework AppKit -L$(LIBS) -lft  -o $(NAME)
-	endif
-	ifeq ($(UNAME), Linux)
+endif
+ifeq ($(UNAME),"Linux")
 	$(CC) $(OBJS) -L$(LIBS) -lft -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -o $(NAME)
-	endif
+endif
 
 clean:
 	rm $(OBJS)
