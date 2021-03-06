@@ -106,29 +106,24 @@ int parse_map(t_data *data, char *line)
 	printf("Current size = %lu \n", (data->map_h - 1) * sizeof(char *));
 	data->map = (char **)ft_realloc(data->map, (data->map_h - 1) * sizeof(char *), (data->map_h + 1) * sizeof(char *));
 	data->map[data->map_h] = 0;
+
 	trimmed = ft_strtrim(line, " 	");
+
 	if ((y == 0) && ft_strlen(trimmed) == 0)
 		return 0;
-
+	free(trimmed);
 	printf("before le IF \n");
 
 	if (data->map_w == 0 || ft_strlen(line) > (size_t)data->map_w)
 	{
-		printf("hey 123c \n");
-		printf(" setting map w  %d \n", data->map_w);
-
 		data->map[y] = (char *)malloc(sizeof(char) * (ft_strlen(line) + 1));
 		ft_memset(data->map[y], '.', ft_strlen(line) + 1);
 	}
 	else
 	{
-		printf("hey 456 \n");
-		printf(" setting map w  %d \n", data->map_w);
-
 		data->map[y] = (char *)malloc(sizeof(char) * (data->map_w + 1));
 		ft_memset(data->map[y], '.', data->map_w + 1);
 	}
-	printf("hey before false malloc \n");
 	if (!(data->map[y]))
 		return (-1);
 	fill_maptab(data, line, y);
