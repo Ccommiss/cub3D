@@ -13,14 +13,20 @@ void display_pos(t_data *data)
 {
 	char *stringX;
 	char *stringY;
+	char *posx;
+	char *posy;
 
-    stringX = ft_strjoin("X = ", ft_ftoa(data->pos_x, 4));
-    stringY = ft_strjoin("Y = ", ft_ftoa(data->pos_y, 4));
+	posx = ft_ftoa(data->pos_x, 4);
+	posy= ft_ftoa(data->pos_y, 4);
+    stringX = ft_strjoin("X = ", posx);
+    stringY = ft_strjoin("Y = ", posy);
 	mlx_string_put(data->mlx, data->win, 30, data->height - 50, BLUE, stringX);
 	mlx_string_put(data->mlx, data->win, 30, data->height - 25, BLUE, stringY);
 	mlx_string_put(data->mlx, data->win, 0, 0, WHITE, "COUCOU");
 	free(stringX);
 	free(stringY);
+	free(posx);
+	free(posy);
 }
 
 void display(t_data *data)
