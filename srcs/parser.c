@@ -154,6 +154,13 @@ int ft_getrgb(t_data *data, char *rgb)
 	r = ft_atoi(block[0]);
 	g = ft_atoi(block[1]);
 	b = ft_atoi(block[2]);
+
+	int i = 0;
+	while (block[i] != NULL){
+		printf ("freeing blocks in RGB \n");
+		free(block[i++]);
+	}
+
 	if (r == 0 && g == 0 && b == 0)
 		return (0x000000);
 	else if (r > 255 || g > 255 || b > 255 || r < 0 || g < 0 || b < 0)
