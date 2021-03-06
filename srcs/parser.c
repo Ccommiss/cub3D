@@ -160,6 +160,7 @@ int ft_getrgb(t_data *data, char *rgb)
 		printf ("freeing blocks in RGB \n");
 		free(block[i++]);
 	}
+	free(rgb);
 
 	if (r == 0 && g == 0 && b == 0)
 		return (0x000000);
