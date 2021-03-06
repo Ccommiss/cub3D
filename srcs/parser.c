@@ -299,8 +299,7 @@ int ft_parse(int fd, t_data *data)
 			ft_parse_info(data, line);
 		else if (ft_mapcheck(line) == 1 && iscomplete(data) == 1)
 			parse_map(data, line);
-		else if (ft_strlen(ft_strtrim(line, "	 ")) == 0 && iscomplete(data) == 1)
-			printf("BLANK LINE ?\n");
+		free(line);
 	}
 	if (data->error != 0)
 		return (error_message(data, data->error));
