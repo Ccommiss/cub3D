@@ -96,6 +96,7 @@ int fill_maptab(t_data *data, char *line, int y)
 int parse_map(t_data *data, char *line)
 {
 	static int y;
+	char *trimmed;
 	if (data->map_h == 0)
 		y = 0;
 
@@ -105,7 +106,8 @@ int parse_map(t_data *data, char *line)
 	printf("Current size = %lu \n", (data->map_h - 1) * sizeof(char *));
 	data->map = (char **)ft_realloc(data->map, (data->map_h - 1) * sizeof(char *), (data->map_h + 1) * sizeof(char *));
 	data->map[data->map_h] = 0;
-	if ((y == 0) && ft_strlen(ft_strtrim(line, " 	")) == 0)
+	trimmed = ft_strtrim(line, " 	");
+	if ((y == 0) && ft_strlen(trimmed) == 0)
 		return 0;
 
 	printf("before le IF \n");
