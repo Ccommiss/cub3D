@@ -18,7 +18,7 @@ SRCS = $(SOURCEDIR)cub.c \
 
 OBJS := ${SRCS:c=o}
 
-CC = gcc $(FLAGS)
+CC = clang $(FLAGS)
 
 FLAGS =  -Wall -Werror -Wextra 
 LIBS = ./libft
