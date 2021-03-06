@@ -199,6 +199,7 @@ int ft_parse_info(t_data *data, char *line)
 	int i = 0;
 	while(block[i] != NULL)
 		free(block[i++]);
+	free(block);
 	free(newline);
 	return (1);
 }
