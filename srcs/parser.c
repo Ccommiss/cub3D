@@ -93,6 +93,8 @@ int fill_maptab(t_data *data, char *line, int y)
 	return (1);
 }
 
+
+/// A FAIRE : REMPLACER TOUS LESTRIMS PAR DES ISEMPTY
 int parse_map(t_data *data, char *line)
 {
 	static int y;
