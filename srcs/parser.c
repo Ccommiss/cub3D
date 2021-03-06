@@ -304,19 +304,23 @@ int flood_fill(t_data *data)
 int ft_parse(int fd, t_data *data)
 {
 	char *line = NULL;
+	char *trimmed = NULL;
 
 	printf("**PARSING**\n");
 	while (get_next_line(fd, &line) && data->error == 0)
 	{
-		if (ft_mapcheck(line) == 0 && ft_strlen(ft_strtrim(line, " ")) != 0 && !iscomplete(data))
+		trimmed = ft_strtrim(line, " ");
+		if (ft_mapcheck(line) == 0 && ft_strlen(trimmed) != 0 && !iscomplete(data))
 			ft_parse_info(data, line);
 		else if (ft_mapcheck(line) == 1 && iscomplete(data) == 1)
 			parse_map(data, line);
 		free(line);
+		free(trimmed);
 	}
 	if (data->error != 0)
 		return (error_message(data, data->error));
-	if (ft_strlen(ft_strtrim(line, " ")) != 0 && iscomplete(data) == 1)
+	trimmed = ft_strtrim(line, " ");
+	if (ft_strlen(trimmed) != 0 && iscomplete(data) == 1)
 		parse_map(data, line);
 	if (!iscomplete(data))
 		return (error_message(data, 4));
@@ -324,5 +328,7 @@ int ft_parse(int fd, t_data *data)
 		return (error_message(data, 2));
 	checkmap(data);
 	flood_fill(data);
+	free(line);
+	free(trimmed);
 	return (1);
 }
