@@ -35,12 +35,12 @@ void *ft_realloc(void *ptr, size_t cursize, size_t newsize)
 {
 	void *newptr;
 
-	printf ("CURSIZE = %zu \n", cursize);
-	printf ("NEWSIZE = %zu \n", newsize);
+	printf("CURSIZE = %zu \n", cursize);
+	printf("NEWSIZE = %zu \n", newsize);
 	if (!ptr || ptr == NULL)
 		return (malloc(newsize));
 	newptr = malloc(newsize);
-	printf ("hey\n");
+	printf("hey\n");
 	ft_memset(newptr, '.', newsize);
 	ft_memcpy(newptr, ptr, cursize);
 	//if (ptr != NULL)
@@ -62,8 +62,7 @@ void ft_finddir(t_data *data, char dir) //chamboule tout,marche pas avec autre c
 		data->dirx = -1;
 }
 
-
-int		fill_maptab(t_data *data, char *line, int y)
+int fill_maptab(t_data *data, char *line, int y)
 {
 	int x;
 	int i;
@@ -94,30 +93,27 @@ int		fill_maptab(t_data *data, char *line, int y)
 	return (1);
 }
 
-
-
 int parse_map(t_data *data, char *line)
 {
-	int x = 0;
 	static int y;
 	if (data->map_h == 0)
 		y = 0;
 
-	printf ("y = %d \n", y);
+	printf("y = %d \n", y);
 	data->map_h = y + 1;
-	printf ("MAP H = %d \n", data->map_h);
+	printf("MAP H = %d \n", data->map_h);
 	printf("Current size = %lu \n", (data->map_h - 1) * sizeof(char *));
 	data->map = (char **)ft_realloc(data->map, (data->map_h - 1) * sizeof(char *), (data->map_h + 1) * sizeof(char *));
 	data->map[data->map_h] = 0;
 	if ((y == 0) && ft_strlen(ft_strtrim(line, " 	")) == 0)
 		return 0;
 
-		printf("before le IF \n");
+	printf("before le IF \n");
 
 	if (data->map_w == 0 || ft_strlen(line) > (size_t)data->map_w)
 	{
-			printf("hey 123c \n");
-			printf (" setting map w  %d \n", data->map_w);
+		printf("hey 123c \n");
+		printf(" setting map w  %d \n", data->map_w);
 
 		data->map[y] = (char *)malloc(sizeof(char) * (ft_strlen(line) + 1));
 		ft_memset(data->map[y], '.', ft_strlen(line) + 1);
@@ -125,7 +121,7 @@ int parse_map(t_data *data, char *line)
 	else
 	{
 		printf("hey 456 \n");
-					printf (" setting map w  %d \n", data->map_w);
+		printf(" setting map w  %d \n", data->map_w);
 
 		data->map[y] = (char *)malloc(sizeof(char) * (data->map_w + 1));
 		ft_memset(data->map[y], '.', data->map_w + 1);
@@ -136,11 +132,10 @@ int parse_map(t_data *data, char *line)
 	fill_maptab(data, line, y);
 	//si jamais la ligne est  plus longue que les autres, sa longueur devient la nouvelle reference pour les autres
 	y++;
-	printf ("end y = %d \n", y);
-	printf ("maph = %d \n", data->map_h);
+	printf("end y = %d \n", y);
+	printf("maph = %d \n", data->map_h);
 
 	data->map[y] = 0;
-	x = 0;
 	return 1;
 }
 
@@ -237,7 +232,7 @@ void check_borders(t_data *data, int x, int y, char ***mapbis)
 	{
 		mapbis[0][y][x] = 'v';
 		if (load_sprite(data, x, y) == -1) //si erreur de malloc
-			data->error = 10; //si erreur de malloc
+			data->error = 10;			   //si erreur de malloc
 	}
 	if (data->error == 0)
 	{
@@ -257,7 +252,7 @@ int iscomplete(t_data *data)
 	return (1);
 }
 
-int free_copymap (int nb_alloc, char ***copymap, int ret)
+int free_copymap(int nb_alloc, char ***copymap, int ret)
 {
 	int i;
 
@@ -277,7 +272,7 @@ int flood_fill(t_data *data)
 	{
 		copymap[i] = (char *)malloc(10 * data->map_w);
 		if (!copymap[i])
-			return(free_copymap(i, &copymap, -1));
+			return (free_copymap(i, &copymap, -1));
 		ft_bzero(copymap[i], data->map_w + 1);
 		ft_memset(copymap[i], '.', data->map_w);
 		i++;
@@ -301,7 +296,7 @@ int ft_parse(int fd, t_data *data)
 		else if (ft_mapcheck(line) == 1 && iscomplete(data) == 1)
 			parse_map(data, line);
 		else if (ft_strlen(ft_strtrim(line, "	 ")) == 0 && iscomplete(data) == 1)
-			printf ("BLANK LINE ?\n");
+			printf("BLANK LINE ?\n");
 	}
 	if (data->error != 0)
 		return (error_message(data, data->error));
