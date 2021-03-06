@@ -19,6 +19,8 @@ void display_pos(t_data *data)
 	mlx_string_put(data->mlx, data->win, 30, data->height - 50, BLUE, stringX);
 	mlx_string_put(data->mlx, data->win, 30, data->height - 25, BLUE, stringY);
 	mlx_string_put(data->mlx, data->win, 0, 0, WHITE, "COUCOU");
+	free(stringX);
+	free(stringY);
 }
 
 void display(t_data *data)

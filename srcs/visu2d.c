@@ -18,6 +18,12 @@ int free_textures(t_data *data, t_text *head)
 	if (data->t != head)
 		data->t = head;
 	i = 0;
+	// FREE LES STR* STRDUPEES dans PARSE INFOS
+	free(data->info->north_text);
+	free(data->info->south_text);
+	free(data->info->east_text);
+	free(data->info->west_text);
+
 	while (i < 4) // FREE LES TEXTURES 
 	{
 		tmp = data->t;
