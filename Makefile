@@ -1,23 +1,19 @@
 
 NAME = test
 
-TST = test_minilibx.c
+SOURCEDIR = ./srcs/
 
-OBJ := ${TST:c=o}
-
-SRCS = cub.c \
-	parser.c \
-	visu2d.c \
-	bresenham.c\
-	init.c \
-	parser_utils.c \
-	display.c \
-	events.c \
-	save_bmp.c \
-	sprite_cast.c \
-	sprite_draw.c \
-	./getnextline/get_next_line.c \
-	./getnextline/get_next_line_utils.c \
+SRCS = $(SOURCEDIR)cub.c \
+	$(SOURCEDIR)parser.c \
+	$(SOURCEDIR)visu2d.c \
+	$(SOURCEDIR)bresenham.c\
+	$(SOURCEDIR)init.c \
+	$(SOURCEDIR)parser_utils.c \
+	$(SOURCEDIR)display.c \
+	$(SOURCEDIR)events.c \
+	$(SOURCEDIR)save_bmp.c \
+	$(SOURCEDIR)sprite_cast.c \
+	$(SOURCEDIR)sprite_draw.c 
 
 
 OBJS := ${SRCS:c=o}
@@ -25,15 +21,17 @@ OBJS := ${SRCS:c=o}
 CC = gcc $(FLAGS)
 
 FLAGS =  -Wall -Werror -Wextra 
-LIBS = ./libft/
+LIBS = ./libft
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
+	make -C $(LIBS)
 	$(CC) $(OBJS) -Lmlx -lmlx -framework OpenGL -framework AppKit -L$(LIBS) -lft  -o $(NAME)
 
 clean:
-	rm *.o
+	rm $(OBJS)
+	make clean -C ./libft
 
 fclean: clean
 	rm $(NAME)
