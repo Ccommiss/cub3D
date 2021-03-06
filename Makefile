@@ -32,7 +32,7 @@ $(NAME): $(OBJS)
 ifeq ($(UNAME),$(APPLE))
 	$(CC) $(OBJS) -Lmlx -lmlx -framework OpenGL -framework AppKit -L$(LIBS) -lft  -o $(NAME)
 endif
-ifeq ($(UNAME),"Linux")
+ifeq ($(UNAME),Linux)
 	$(CC) $(OBJS) -L$(LIBS) -lft -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -o $(NAME)
 endif
 
