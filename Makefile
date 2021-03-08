@@ -20,7 +20,7 @@ OBJS := ${SRCS:c=o}
 
 CC = clang $(FLAGS)
 
-FLAGS =  -Wall -Werror -Wextra 
+FLAGS =  -Wall -Werror -Wextra -fsanitize=address -fno-omit-frame-pointer
 LIBS = ./libft
 UNAME := $(shell uname)
 APPLE = Darwin

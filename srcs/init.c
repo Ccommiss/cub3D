@@ -110,6 +110,7 @@ int loadimage(t_data *data)
 	t_text *t;
 	t_text *head;
 
+	// les textures
 	t = (t_text *)malloc(sizeof(t_text));
 	if (!t)
 		return (-1);
@@ -131,6 +132,7 @@ int loadimage(t_data *data)
 		return (free_textures(data, head));
 	t->next = head;
 	data->t = head;
+	// ensuite on fait les sprites
 	data->sprimg = mlx_xpm_file_to_image(data->mlx, data->info->sprite_text, &data->spw, &data->sph);
 	data->sprimgaddr = mlx_get_data_addr(data->sprimg, &data->sprbpx, &data->spline, &data->end);
 	return (1);

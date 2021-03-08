@@ -27,8 +27,8 @@ int free_textures(t_data *data, t_text *head)
 	while (i < 4) // FREE LES TEXTURES 
 	{
 		tmp = data->t;
-		printf ("FREEING %c \n", data->t->side);
 	 	data->t = data->t->next;
+		printf ("FREEING %c \n", tmp->side);
 		free(tmp);
 		i++;
 	}
@@ -42,8 +42,9 @@ int free_sprites(t_data *data)
 	while (data->spr != NULL)
 	{
 		tmp_s = data->spr;
-		printf ("deleting spr index %d \n", data->spr->index);
 		data->spr = data->spr->next;
+		printf ("deleting spr index %d \n", tmp_s->index);
+
 		free(tmp_s); 
 	}
 	return (-1);

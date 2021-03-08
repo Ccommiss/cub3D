@@ -54,6 +54,11 @@ void display(t_data *data)
 		bresenham(data->pos_x * data->minimap_size + data->width / 4, data->pos_y * data->minimap_size + data->height * 0.7, (data->pos_x + data->dirx) * data->minimap_size + data->width / 4, (data->pos_y + data->diry) * data->minimap_size + data->height * 0.7, data);
 	}
 	mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
+	mlx_destroy_image(data->mlx, data->img);
+	data->img = mlx_new_image(data->mlx, data->width, data->height);
+	data->imgaddr = mlx_get_data_addr(data->img, &data->bits_per_pixel, &data->line_length, &data->endian);
+
+
 	display_pos(data);
 
 
