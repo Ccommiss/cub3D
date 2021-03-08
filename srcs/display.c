@@ -53,7 +53,6 @@ void display(t_data *data)
 		data->color = 0xffffff;
 		bresenham(data->pos_x * data->minimap_size + data->width / 4, data->pos_y * data->minimap_size + data->height * 0.7, (data->pos_x + data->dirx) * data->minimap_size + data->width / 4, (data->pos_y + data->diry) * data->minimap_size + data->height * 0.7, data);
 	}
-	mlx_new_image(data->mlx, data->width, data->height);
 	mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
 	display_pos(data);
 
