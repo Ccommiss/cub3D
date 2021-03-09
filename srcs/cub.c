@@ -129,16 +129,6 @@ void	dda(t_data *data)
 	int x;
 
 	x = -1;
-	printf("DATA = \n");
-	printf("%d\n", data->width);
-		printf("%d\n", data->height);
-	printf("%f\n", data->pos_x);
-	printf("%f\n", data->pos_y);
-	printf("%f\n", data->raydir_x);
-	printf("%f\n", data->raydir_y);
-	printf("%d\n", data->map_x);
-	printf("%d\n", data->map_y);
-
 
 	while (x++ < data->width)
 	{
@@ -198,7 +188,9 @@ int	main(int argc, char **argv)
 	mlx_hook(data.win, 2, 1L << 0, key_hook, &data);
 	mlx_hook(data.win, 17, (1L << 17), close_win, &data);
 	mlx_loop(data.mlx);
+//	mlx_destroy_display(data.mlx);
 	free(data.mlx);
+	printf("coucou la main\n");
 //	red_cross(&data);
 	//mlx_hook(data.win, 33, 0, red_cross, &data); // linux
 

@@ -13,14 +13,16 @@ SRCS = $(SOURCEDIR)cub.c \
 	$(SOURCEDIR)events.c \
 	$(SOURCEDIR)save_bmp.c \
 	$(SOURCEDIR)sprite_cast.c \
-	$(SOURCEDIR)sprite_draw.c 
+	$(SOURCEDIR)sprite_draw.c \
+	$(SOURCEDIR)exit_game.c
+
 
 
 OBJS := ${SRCS:c=o}
 
-CC = clang $(FLAGS)
+CC = clang -g $(FLAGS)
 
-FLAGS =  -Wall -Werror -Wextra -fsanitize=address -fno-omit-frame-pointer
+FLAGS =  -Wall -Werror -Wextra 
 LIBS = ./libft
 UNAME := $(shell uname)
 APPLE = Darwin

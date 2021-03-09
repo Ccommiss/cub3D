@@ -34,16 +34,10 @@ void display(t_data *data)
 
 
 	fill_black(data);
-
-
 	fill_ceiling(data);
-
 	fill_floor(data);
-
-
 	dda(data);
-
-
+	
 	if (data->displaymap == 1)
 	{
 		set_compass(data);
