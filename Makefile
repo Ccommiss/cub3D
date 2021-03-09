@@ -22,7 +22,7 @@ OBJS := ${SRCS:c=o}
 
 CC = clang -g $(FLAGS)
 
-FLAGS =  -Wall -Werror -Wextra -fsanitize=address
+FLAGS =  -Wall -Werror -Wextra 
 LIBS = ./libft
 UNAME := $(shell uname)
 APPLE = Darwin
