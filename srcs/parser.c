@@ -98,7 +98,7 @@ int fill_maptab(t_data *data, char *line, int y)
 int parse_map(t_data *data, char *line)
 {
 	static int y;
-	char *trimmed;
+
 	if (data->map_h == 0)
 		y = 0;
 
@@ -109,11 +109,10 @@ int parse_map(t_data *data, char *line)
 	data->map = (char **)ft_realloc(data->map, (data->map_h - 1) * sizeof(char *), (data->map_h + 1) * sizeof(char *));
 	data->map[data->map_h] = 0;
 
-	trimmed = ft_strtrim(line, " 	");
 
-	if ((y == 0) && ft_strlen(trimmed) == 0)
+
+	if ((y == 0) && ft_isempty(line))
 		return 0;
-	free(trimmed);
 	printf("before le IF \n");
 
 	if (data->map_w == 0 || ft_strlen(line) > (size_t)data->map_w)
@@ -195,7 +194,7 @@ int ft_parse_info(t_data *data, char *line)
 		data->info->floor_rgb = ft_getrgb(data, ft_strtrim(line, " F "));
 	else if (ft_strncmp(block[0], "C", 1) == 0)
 		data->info->ceiling_rgb = ft_getrgb(data, ft_strtrim(line, " C "));
-	
+
 	int i = 0;
 	while(block[i] != NULL)
 		free(block[i++]);
@@ -303,23 +302,19 @@ int flood_fill(t_data *data)
 int ft_parse(int fd, t_data *data)
 {
 	char *line = NULL;
-	char *trimmed = NULL;
 
 	printf("**PARSING**\n");
 	while (get_next_line(fd, &line) && data->error == 0)
 	{
-		trimmed = ft_strtrim(line, " ");
-		if (ft_mapcheck(line) == 0 && ft_strlen(trimmed) != 0 && !iscomplete(data))
+		if (ft_mapcheck(line) == 0 && !ft_isempty(line) && !iscomplete(data))
 			ft_parse_info(data, line);
 		else if (ft_mapcheck(line) == 1 && iscomplete(data) == 1)
 			parse_map(data, line);
 		free(line);
-		free(trimmed);
 	}
 	if (data->error != 0)
 		return (error_message(data, data->error));
-	trimmed = ft_strtrim(line, " ");
-	if (ft_strlen(trimmed) != 0 && iscomplete(data) == 1)
+	if (!ft_isempty(line) && iscomplete(data) == 1)
 		parse_map(data, line);
 	if (!iscomplete(data))
 		return (error_message(data, 4));
@@ -328,6 +323,5 @@ int ft_parse(int fd, t_data *data)
 	checkmap(data);
 	flood_fill(data);
 	free(line);
-	free(trimmed);
 	return (1);
 }
