@@ -189,7 +189,6 @@ int	main(int argc, char **argv)
 	mlx_hook(data.win, 17, (1L << 17), close_win, &data);
 	mlx_loop(data.mlx);
 //	mlx_destroy_display(data.mlx);
-	free(data.mlx);
 	printf("coucou la main\n");
 //	red_cross(&data);
 	//mlx_hook(data.win, 33, 0, red_cross, &data); // linux

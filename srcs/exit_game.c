@@ -83,10 +83,17 @@ int free_game(t_data *data)
 
 int close_win(t_data *data)
 {
-	free_game(data);
-	mlx_destroy_image(data->mlx, data->img);
+	printf("CLEAR WINDOW\n");
+
 	mlx_clear_window(data->mlx, data->win);
+	printf("DESTROY WINDOW\n");
 	mlx_destroy_window(data->mlx, data->win);
+
+	printf("DESTROY IMG\n");
+	mlx_destroy_image(data->mlx, data->img);
+
+	printf("coucou befor putting to NULL\n");
+	free_game(data);
 	//mlx_destroy_display(data->mlx);//linux
 	data->win = NULL;
 	free(data->mlx);
