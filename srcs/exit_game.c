@@ -30,7 +30,9 @@ int free_textures(t_data *data, t_text *head)
 	 	data->t = data->t->next;
 		printf ("FREEING %c \n", tmp->side);
 		free(tmp->img); //rajoute des leaks MDR
+		tmp->img = NULL;
 		free(tmp);
+		tmp = NULL;
 		i++;
 	}
 	return (-1);

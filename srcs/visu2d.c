@@ -156,5 +156,6 @@ void set_compass(t_data *data)
 	data->color = RED;
 	bresenham(w/2, h/2 - 4, (w/2) + data->dirx * 40, (h/2 - 4) + data->diry * 40, data);
 	bresenham(w/2, h/2 - 3, (w/2) + data->dirx * 40, (h/2 - 3) + data->diry * 40, data);
-
+	free(img);
+	img = NULL;
 }
