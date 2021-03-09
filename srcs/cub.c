@@ -186,8 +186,8 @@ int	main(int argc, char **argv)
 	}
 	display(&data);
 	mlx_hook(data.win, 2, 1L << 0, key_hook, &data);
-	mlx_hook(data.win, 17, (1L << 17), close_win, &data);
-	//mlx_hook(data.win, 33, 0, close_win, &data); // linux
+	//mlx_hook(data.win, 17, (1L << 17), close_win, &data);
+	mlx_hook(data.win, 33, 0, close_win, &data); // linux
 	mlx_loop(data.mlx);
 
 

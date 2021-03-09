@@ -23,6 +23,7 @@ int free_textures(t_data *data, t_text *head)
 	free(data->info->south_text);
 	free(data->info->east_text);
 	free(data->info->west_text);
+	free(data->info->sprite_text);
 
 	while (i < 4) // FREE LES TEXTURES
 	{
@@ -70,7 +71,7 @@ int free_game(t_data *data)
 	int i;
 
 	i = 0;
-	while (i < data->map_h)
+	while (i <= data->map_h)
 		free(data->map[i++]);
 	free(data->map);
 	free_textures(data, data->t);
@@ -93,7 +94,7 @@ int close_win(t_data *data)
 
 	printf("coucou befor putting to NULL\n");
 	free_game(data);
-	//mlx_destroy_display(data->mlx);//linux
+	mlx_destroy_display(data->mlx);//linux
 	data->win = NULL;
 	free(data->mlx);
 	exit(1);
