@@ -37,8 +37,8 @@ void *ft_realloc(void *ptr, size_t cursize, size_t newsize)
 
 	printf("CURSIZE = %zu \n", cursize);
 	printf("NEWSIZE = %zu \n", newsize);
-	if (!ptr)
-		return (malloc(newsize));
+	// if (!ptr)
+	// 	return (malloc(newsize));
 	newptr = malloc(newsize);
 	printf("hey\n");
 	ft_memset(newptr, '.', newsize);

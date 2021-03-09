@@ -76,7 +76,7 @@ int free_game(t_data *data)
 		printf(":: %s \n", data->map[i]);
 		free(data->map[i++]);
 	}
-	//free(data->map);
+	free(data->map);
 	free_textures(data, data->t);
 	free_sprites(data);
 	free(data->zbuffer);
