@@ -29,8 +29,7 @@ int free_textures(t_data *data, t_text *head)
 		tmp = data->t;
 	 	data->t = data->t->next;
 		printf ("FREEING %c \n", tmp->side);
-		free(tmp->img); //rajoute des leaks MDR
-		tmp->img = NULL;
+		mlx_destroy_image(data->mlx, tmp->img);
 		free(tmp);
 		tmp = NULL;
 		i++;
@@ -50,7 +49,7 @@ int free_sprites(t_data *data)
 
 		free(tmp_s);
 	}
-	free(data->sprimg); //on free limage
+	mlx_destroy_image(data->mlx, data->sprimg); //on free limage
 	return (-1);
 }
 

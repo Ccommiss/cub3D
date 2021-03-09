@@ -134,6 +134,7 @@ void set_compass(t_data *data)
 	void *img = mlx_xpm_file_to_image(data->mlx, "pics/compass_S.xpm", &w, &h);
 	void *imginfo = mlx_get_data_addr(img, &bpp, &sl, &endian);
 
+
 	int x = 0;
 	int y = 0;
 	int color;
@@ -156,6 +157,6 @@ void set_compass(t_data *data)
 	data->color = RED;
 	bresenham(w/2, h/2 - 4, (w/2) + data->dirx * 40, (h/2 - 4) + data->diry * 40, data);
 	bresenham(w/2, h/2 - 3, (w/2) + data->dirx * 40, (h/2 - 3) + data->diry * 40, data);
-	free(img);
+	mlx_destroy_image(data->mlx, img);
 	img = NULL;
 }
