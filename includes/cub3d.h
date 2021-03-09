@@ -4,11 +4,15 @@
 #include <unistd.h>
 //#include <mlx.h>
 #include <fcntl.h>
-#include "keys.h"
-//#include "key_linux.h"
+
+//#include "../mlx/mlx.h"
+//#include "keys.h"
+#include "key_linux.h"
+#include "../mlx_linux/mlx.h"
+
+
 #include <math.h>
 #include "../libft/libft.h"
-#include "../mlx/mlx.h"
 
 #define RED 0xFF0000
 #define WHITE 0xFFFAFA
