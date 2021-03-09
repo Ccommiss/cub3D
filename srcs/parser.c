@@ -130,9 +130,6 @@ int parse_map(t_data *data, char *line)
 	fill_maptab(data, line, y);
 	//si jamais la ligne est  plus longue que les autres, sa longueur devient la nouvelle reference pour les autres
 	y++;
-	printf("end y = %d \n", y);
-	printf("maph = %d \n", data->map_h);
-
 	data->map[y] = 0;
 	return 1;
 }

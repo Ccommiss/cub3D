@@ -76,10 +76,20 @@ void init_base(t_data *data)
 	data->pos_y = -1;
 	data->info->ceiling_rgb = -1;
 	data->info->floor_rgb = -1;
+	data->map = NULL;
 	data->map_h = 0;
 	data->map_w = 0;
 	data->spr = NULL;
 	data->t = NULL;
+	data->info->north_text = NULL;
+	data->info->south_text = NULL;
+		data->info->east_text = NULL;
+				data->info->west_text = NULL;
+				data->info->sprite_text = NULL;
+
+
+
+
 }
 
 /*
