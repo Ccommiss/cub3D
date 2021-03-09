@@ -72,7 +72,10 @@ int free_game(t_data *data)
 
 	i = 0;
 	while (i <= data->map_h)
+	{
+		printf(":: %s \n", data->map[i]);
 		free(data->map[i++]);
+	}
 	free(data->map);
 	free_textures(data, data->t);
 	free_sprites(data);
