@@ -37,7 +37,7 @@ void *ft_realloc(void *ptr, size_t cursize, size_t newsize)
 
 	printf("CURSIZE = %zu \n", cursize);
 	printf("NEWSIZE = %zu \n", newsize);
-	if (!ptr || ptr == NULL)
+	if (!ptr)
 		return (malloc(newsize));
 	newptr = malloc(newsize);
 	printf("hey\n");
@@ -112,7 +112,7 @@ int parse_map(t_data *data, char *line)
 
 
 	if ((y == 0) && ft_isempty(line))
-		return 0;
+		return (0);
 	printf("before le IF \n");
 
 	if (data->map_w == 0 || ft_strlen(line) > (size_t)data->map_w)
