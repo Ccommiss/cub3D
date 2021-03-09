@@ -266,5 +266,6 @@ int free_sprites(t_data *data);
 void 	save_bmp(t_data *data);
 
 
-int red_cross(t_data *data);
+int red_cross(t_data *data); //free
+int close_win(t_data *data); //close
 int error_message(t_data *data, int index);

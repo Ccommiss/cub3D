@@ -14,7 +14,7 @@ int free_textures(t_data *data, t_text *head)
 {
 	int i;
 	t_text *tmp;
-	
+
 	if (data->t != head)
 		data->t = head;
 	i = 0;
@@ -24,7 +24,7 @@ int free_textures(t_data *data, t_text *head)
 	free(data->info->east_text);
 	free(data->info->west_text);
 
-	while (i < 4) // FREE LES TEXTURES 
+	while (i < 4) // FREE LES TEXTURES
 	{
 		tmp = data->t;
 	 	data->t = data->t->next;
@@ -45,7 +45,7 @@ int free_sprites(t_data *data)
 		data->spr = data->spr->next;
 		printf ("deleting spr index %d \n", tmp_s->index);
 
-		free(tmp_s); 
+		free(tmp_s);
 	}
 	return (-1);
 }
@@ -53,8 +53,8 @@ int free_sprites(t_data *data)
 /*
  *  red_cross
  *
- * 	[synopsis] : properly closes the window and free elements previously 
- * 		allocated, e.g. 
+ * 	[synopsis] : properly closes the window and free elements previously
+ * 		allocated, e.g.
  * 		> The map (t_data structure)
  * 		> Textures (pointed by data->t)
  * 		> data->spr (data->sprite)
@@ -70,14 +70,21 @@ int red_cross(t_data *data)
 	while (i < data->map_h)
 		free(data->map[i++]);
 	free(data->map);
-	mlx_destroy_image(data->mlx, data->img);
-	mlx_clear_window(data->mlx, data->win);
+
 	free_textures(data, data->t);
 	free_sprites(data);
 	free(data->zbuffer);
 	free(data->mlx);
-	exit(0);
+	printf ("coucou ici\n" );
 	return (0);
+}
+
+int close_win(t_data *data)
+{
+	mlx_destroy_image(data->mlx, data->img);
+	mlx_clear_window(data->mlx, data->win);
+	red_cross(data);
+	exit(1);
 }
 
 void checkmap(t_data *data)
