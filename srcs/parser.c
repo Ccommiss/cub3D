@@ -103,7 +103,7 @@ int parse_map(t_data *data, char *line)
 		y = 0;
 
 	printf("y = %d \n", y);
-	data->map_h = y;
+	data->map_h = y + 1;
 	printf("MAP H = %d \n", data->map_h);
 	printf("Current size = %lu \n", (data->map_h - 1) * sizeof(char *));
 	data->map = (char **)ft_realloc(data->map, (data->map_h) * sizeof(char *), (data->map_h + 1) * sizeof(char *));
