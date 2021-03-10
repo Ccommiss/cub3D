@@ -37,8 +37,8 @@ void *ft_realloc(void *ptr, size_t cursize, size_t newsize)
 
 	printf("CURSIZE = %zu \n", cursize);
 	printf("NEWSIZE = %zu \n", newsize);
-	// if (!ptr)
-	// 	return (malloc(newsize));
+	if (!ptr)
+		return (malloc(newsize));
 	newptr = malloc(newsize);
 	printf("hey\n");
 	ft_memset(newptr, '.', newsize);
@@ -103,13 +103,11 @@ int parse_map(t_data *data, char *line)
 		y = 0;
 
 	printf("y = %d \n", y);
-	data->map_h = y + 1;
+	data->map_h = y;
 	printf("MAP H = %d \n", data->map_h);
 	printf("Current size = %lu \n", (data->map_h - 1) * sizeof(char *));
-	data->map = (char **)ft_realloc(data->map, (data->map_h - 1) * sizeof(char *), (data->map_h + 1) * sizeof(char *));
+	data->map = (char **)ft_realloc(data->map, (data->map_h) * sizeof(char *), (data->map_h + 1) * sizeof(char *));
 	data->map[data->map_h] = 0;
-
-
 
 	if ((y == 0) && ft_isempty(line))
 		return (0);
