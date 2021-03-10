@@ -5,13 +5,12 @@ R 1900 1080
                                   WE                                       pics/purplestone.xpm
 
 
-EA        pics/wood.xpm
+EA        pics/        wood.xpm
               S             pics/miles-davis.xpm
 
-F 80,0,0
+F ,,,,,,,,,,,,,,89,,,,,,0,0
 
-
-C 0,2      55,255
+C 43, 43,43
 
 1111111111111
 1N0000000000111001

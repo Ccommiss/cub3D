@@ -5,10 +5,10 @@
 //#include <mlx.h>
 #include <fcntl.h>
 
-//#include "../mlx/mlx.h"
-//#include "keys.h"
-#include "key_linux.h"
-#include "../mlx_linux/mlx.h"
+#include "../mlx/mlx.h"
+#include "keys.h"
+//#include "key_linux.h"
+//#include "../mlx_linux/mlx.h"
 
 
 #include <math.h>
@@ -268,8 +268,11 @@ int free_sprites(t_data *data);
 
 
 void 	save_bmp(t_data *data);
+void *ft_realloc(void *ptr, size_t cursize, size_t newsize);
+int ft_parse_info(t_data *data, char *line);
 
 
 int red_cross(t_data *data); //free
+int free_game(t_data *data);
 int close_win(t_data *data); //close
 int error_message(t_data *data, int index);

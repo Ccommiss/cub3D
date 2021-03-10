@@ -25,12 +25,13 @@ int free_textures(t_data *data, t_text *head)
 	free(data->info->west_text);
 	free(data->info->sprite_text);
 
-	while (i < 4) // FREE LES TEXTURES
+	while (i < 4 && data->t != NULL) // FREE LES TEXTURES
 	{
 		tmp = data->t;
 	 	data->t = data->t->next;
 		printf ("FREEING %c \n", tmp->side);
-		mlx_destroy_image(data->mlx, tmp->img);
+		if (tmp->img) //si on a pas eu d'erreurs de chargement
+			mlx_destroy_image(data->mlx, tmp->img);
 		free(tmp);
 		tmp = NULL;
 		i++;
@@ -47,10 +48,10 @@ int free_sprites(t_data *data)
 		tmp_s = data->spr;
 		data->spr = data->spr->next;
 		printf ("deleting spr index %d \n", tmp_s->index);
-
 		free(tmp_s);
 	}
-	mlx_destroy_image(data->mlx, data->sprimg); //on free limage
+	if (data->sprimg)
+		mlx_destroy_image(data->mlx, data->sprimg); //on free limage
 	return (-1);
 }
 
@@ -78,7 +79,8 @@ int free_game(t_data *data)
 	}
 	free(data->map);
 	free_textures(data, data->t);
-	free_sprites(data);
+	if (data->sprimg != NULL)
+		free_sprites(data);
 	free(data->zbuffer);
 	printf ("coucou ici\n" );
 	return (0);
@@ -90,7 +92,7 @@ int close_win(t_data *data)
 	mlx_destroy_window(data->mlx, data->win);
 	mlx_destroy_image(data->mlx, data->img);
 	free_game(data);
-	mlx_destroy_display(data->mlx);//linux
+//	mlx_destroy_display(data->mlx);//linux
 	free(data->mlx);
 	exit(1);
 }

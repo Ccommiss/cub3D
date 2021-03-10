@@ -1,5 +1,50 @@
 #include "../includes/cub3d.h"
 
+
+int error_message(t_data *data, int index)
+{
+	if (data->error == 0)
+	{
+		printf("Error :\n");
+		data->error = index;
+		if (index == 1)
+			printf("Map is not closed, blank was found in land or player is not inside the bounds. \n");
+		if (index == 2)
+			printf("No player found. \n");
+		if (index == 3)
+			printf("Unexpected character found in map.\n");
+		if (index == 4)
+			printf("Missing infos.");
+		if (index == 5)
+			printf("Two players found in map.\n");
+		if (index == 6)
+			printf("Texture reference could not be found.\n");
+		if (index == 7)
+			printf("Bad RGB color formatting.\n");
+		if (index == 8)
+			printf("RGB values can't be over 255 or below 0.\n");
+	}
+	free_game(data);
+	return (-1);
+}
+
+void *ft_realloc(void *ptr, size_t cursize, size_t newsize)
+{
+	void *newptr;
+
+	printf("CURSIZE = %zu \n", cursize);
+	printf("NEWSIZE = %zu \n", newsize);
+	if (!ptr)
+		return (malloc(newsize));
+	newptr = malloc(newsize);
+	printf("hey\n");
+	ft_memset(newptr, '.', newsize);
+	ft_memcpy(newptr, ptr, cursize);
+	if (cursize != 0)
+		free(ptr);
+	return (newptr);
+}
+
 int ft_check_chars(char sign, t_data *data, int x, int y)
 {
 	//printf ("CHECKED SIGN %c \n", sign);

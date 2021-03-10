@@ -80,6 +80,7 @@ void init_base(t_data *data)
 	data->map_h = 0;
 	data->map_w = 0;
 	data->spr = NULL;
+	data->sprimg = NULL;
 	data->t = NULL;
 	data->info->north_text = NULL;
 	data->info->south_text = NULL;
@@ -123,19 +124,19 @@ int loadimage(t_data *data)
 	head = t;
 	t->side = 'n';
 	if (alloc_image(data, t, data->info->north_text) == -1)
-		return (free_textures(data, head));
+		return (-1);
 	t = t->next;
 	t->side = 's';
 	if (alloc_image(data, t, data->info->south_text) == -1)
-		return (free_textures(data, head));
+		return (-1);
 	t = t->next;
 	t->side = 'w';
 	if (alloc_image(data, t, data->info->west_text) == -1)
-		return (free_textures(data, head));
+		return (-1);
 	t = t->next;
 	t->side = 'e';
 	if (alloc_image(data, t, data->info->east_text) == -1)
-		return (free_textures(data, head));
+		return (-1);
 	t->next = head;
 	data->t = head;
 	// ensuite on fait les sprites

@@ -4,7 +4,8 @@ NAME = test
 SOURCEDIR = ./srcs/
 
 SRCS = $(SOURCEDIR)cub.c \
-	$(SOURCEDIR)parser.c \
+	$(SOURCEDIR)info_parser.c \
+	$(SOURCEDIR)map_parser.c \
 	$(SOURCEDIR)visu2d.c \
 	$(SOURCEDIR)bresenham.c\
 	$(SOURCEDIR)init.c \
@@ -22,7 +23,7 @@ OBJS := ${SRCS:c=o}
 
 CC = clang -g $(FLAGS)
 
-FLAGS =  -Wall -Werror -Wextra 
+FLAGS =  -Wall -Werror -Wextra -fsanitize=address
 LIBS = ./libft
 UNAME := $(shell uname)
 APPLE = Darwin

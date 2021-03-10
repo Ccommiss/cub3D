@@ -1,52 +1,5 @@
 #include "../includes/cub3d.h"
 
-int error_message(t_data *data, int index)
-{
-	if (data->error == 0)
-	{
-		printf("Error :\n");
-		data->error = index;
-		if (index == 1)
-			printf("Map is not closed, blank was found in land or player is not inside the bounds. \n");
-		if (index == 2)
-			printf("No player found. \n");
-		if (index == 3)
-			printf("Unexpected character found in map.\n");
-		if (index == 4)
-			printf("Missing infos.");
-		if (index == 5)
-			printf("Two players found in map.\n");
-		if (index == 6)
-			printf("Texture reference could not be found.\n");
-		if (index == 7)
-			printf("Bad RGB color formatting.\n");
-		if (index == 8)
-			printf("RGB values can't be over 255 or below 0.\n");
-	}
-	if (data->t != NULL)
-	{
-		free_textures(data, data->t);
-	}
-	free_sprites(data);
-	return (-1);
-}
-
-void *ft_realloc(void *ptr, size_t cursize, size_t newsize)
-{
-	void *newptr;
-
-	printf("CURSIZE = %zu \n", cursize);
-	printf("NEWSIZE = %zu \n", newsize);
-	if (!ptr)
-		return (malloc(newsize));
-	newptr = malloc(newsize);
-	printf("hey\n");
-	ft_memset(newptr, '.', newsize);
-	ft_memcpy(newptr, ptr, cursize);
-	if (cursize != 0)
-		free(ptr);
-	return (newptr);
-}
 
 void ft_finddir(t_data *data, char dir) //chamboule tout,marche pas avec autre config que W qui est le truc de base
 {
@@ -131,71 +84,7 @@ int parse_map(t_data *data, char *line)
 	return 1;
 }
 
-int ft_getrgb(t_data *data, char *rgb)
-{
-	char **block;
-	int r;
-	int g;
-	int b;
-	block = ft_split(rgb, ',');
-	printf("%s \n", block[0]);
-	printf("%s \n", block[1]);
-	printf("%s \n", block[2]);
-	if (!block[0] || !block[1] || !block[2])
-		return (error_message(data, 7));
-	r = ft_atoi(block[0]);
-	g = ft_atoi(block[1]);
-	b = ft_atoi(block[2]);
 
-	int i = 0;
-	while (block[i] != NULL){
-		printf ("freeing blocks in RGB \n");
-		free(block[i++]);
-	}
-	free(block);
-	free(rgb);
-
-	if (r == 0 && g == 0 && b == 0)
-		return (0x000000);
-	else if (r > 255 || g > 255 || b > 255 || r < 0 || g < 0 || b < 0)
-		return (error_message(data, 8));
-	return (((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff));
-}
-
-int ft_parse_info(t_data *data, char *line)
-{
-	char **block;
-	char *newline;
-	newline = ft_strtrim(line, " ");
-	printf("l: %s\n", line);
-	block = ft_split(newline, ' ');
-	if (block[0][0] == 'R')
-	{
-		data->width = ft_atoi(block[1]);
-		data->height = ft_atoi(block[2]);
-	}
-	else if (ft_strncmp(block[0], "NO", 2) == 0)
-		data->info->north_text = ft_strdup(block[1]);
-	else if (ft_strncmp(block[0], "SO", 2) == 0)
-		data->info->south_text = ft_strdup(block[1]);
-	else if (ft_strncmp(block[0], "WE", 2) == 0)
-		data->info->west_text = ft_strdup(block[1]);
-	else if (ft_strncmp(block[0], "EA", 2) == 0)
-		data->info->east_text = ft_strdup(block[1]);
-	else if (ft_strncmp(block[0], "S", 1) == 0)
-		data->info->sprite_text = ft_strdup(block[1]);
-	else if (ft_strncmp(block[0], "F", 1) == 0)
-		data->info->floor_rgb = ft_getrgb(data, ft_strtrim(line, " F "));
-	else if (ft_strncmp(block[0], "C", 1) == 0)
-		data->info->ceiling_rgb = ft_getrgb(data, ft_strtrim(line, " C "));
-
-	int i = 0;
-	while(block[i] != NULL)
-		free(block[i++]);
-	free(block);
-	free(newline);
-	return (1);
-}
 
 int load_sprite(t_data *data, int x, int y)
 {
