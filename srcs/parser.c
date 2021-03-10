@@ -94,7 +94,6 @@ int fill_maptab(t_data *data, char *line, int y)
 }
 
 
-/// A FAIRE : REMPLACER TOUS LESTRIMS PAR DES ISEMPTY
 int parse_map(t_data *data, char *line)
 {
 	static int y;
@@ -200,15 +199,17 @@ int ft_parse_info(t_data *data, char *line)
 
 int load_sprite(t_data *data, int x, int y)
 {
-	static int i = 0;
+	static int i;
 
 	if (!data->spr)
 	{
+		i = 0;
 		data->spr = NULL;
 		data->spr = (t_spr *)malloc(sizeof(t_spr));
 		if (!data->spr)
 			return (-1);
 		data->spr->head = data->spr;
+		data->spr->next = NULL; // ? test
 	}
 	else
 	{
