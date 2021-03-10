@@ -92,7 +92,7 @@ int close_win(t_data *data)
 	mlx_destroy_window(data->mlx, data->win);
 	mlx_destroy_image(data->mlx, data->img);
 	free_game(data);
-//	mlx_destroy_display(data->mlx);//linux
+	mlx_destroy_display(data->mlx);//linux
 	free(data->mlx);
 	exit(1);
 }

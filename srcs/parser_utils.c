@@ -24,7 +24,7 @@ int error_message(t_data *data, int index)
 		if (index == 8)
 			printf("RGB values can't be over 255 or below 0.\n");
 	}
-	free_game(data);
+	close_win(data);
 	return (-1);
 }
 
