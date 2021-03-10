@@ -221,7 +221,7 @@ int load_sprite(t_data *data, int x, int y)
 	data->spr->index = i;
 	data->spr->x = x;
 	data->spr->y = y;
-	data->spr->distance = NULL;
+	data->spr->distance = 0;
 	i++;
 	data->spr->next = NULL;
 	return (1);
