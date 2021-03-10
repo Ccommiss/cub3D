@@ -88,7 +88,8 @@ int free_game(t_data *data)
 
 int close_win(t_data *data)
 {
-	mlx_clear_window(data->mlx, data->win);
+	if (data->win)
+		mlx_clear_window(data->mlx, data->win);
 	mlx_destroy_window(data->mlx, data->win);
 	mlx_destroy_image(data->mlx, data->img);
 	free_game(data);
