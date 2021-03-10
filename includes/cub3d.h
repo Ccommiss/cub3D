@@ -5,10 +5,10 @@
 //#include <mlx.h>
 #include <fcntl.h>
 
-#include "../mlx/mlx.h"
-#include "keys.h"
-//#include "key_linux.h"
-//#include "../mlx_linux/mlx.h"
+//#include "../mlx/mlx.h"
+//#include "keys.h"
+#include "key_linux.h"
+#include "../mlx_linux/mlx.h"
 
 
 #include <math.h>
