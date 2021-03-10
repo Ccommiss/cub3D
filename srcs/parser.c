@@ -213,6 +213,7 @@ int load_sprite(t_data *data, int x, int y)
 	}
 	else
 	{
+		data->spr->next = NULL;
 		data->spr->next = (t_spr *)malloc((sizeof(t_spr)));
 		if (!data->spr->next)
 			return (-1);

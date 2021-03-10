@@ -83,13 +83,9 @@ void init_base(t_data *data)
 	data->t = NULL;
 	data->info->north_text = NULL;
 	data->info->south_text = NULL;
-		data->info->east_text = NULL;
-				data->info->west_text = NULL;
-				data->info->sprite_text = NULL;
-
-
-
-
+	data->info->east_text = NULL;
+	data->info->west_text = NULL;
+	data->info->sprite_text = NULL;
 }
 
 /*
