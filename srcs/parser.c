@@ -214,7 +214,7 @@ int load_sprite(t_data *data, int x, int y)
 	else
 	{
 		data->spr->next = (t_spr *)malloc((sizeof(t_spr)));
-		ft_bzero(data->spr->next, sizeof(data->spr));
+		ft_memset(data->spr->next, '.', sizeof(t_spr));
 		if (!data->spr->next)
 			return (-1);
 		data->spr->next->head = data->spr->head; //on sauvegarde la tete, ainsi chaque maillon contient le ptr vers le debut de la liste
