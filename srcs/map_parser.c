@@ -21,6 +21,40 @@ void ft_finddir(t_data *data, char dir) //chamboule tout,marche pas avec autre c
 		data->dirx = -1;
 }
 
+/*
+ *  load_sprite
+ *
+ * 	[synopsis] : set the dirx & diry positions according to letter found in game
+ * 	[return] : none
+ */
+
+int load_sprite(t_data *data, int x, int y)
+{
+	static int i;
+
+	if (!data->spr)
+	{
+		i = 0;
+		data->spr = (t_spr *)malloc(sizeof(t_spr));
+		if (!data->spr)
+			return (error_message(data, 10));
+		data->spr->head = data->spr;
+	}
+	else
+	{
+		data->spr->next = (t_spr *)malloc((sizeof(t_spr)));
+		if (!data->spr->next)
+			return (error_message(data, 10));
+		data->spr->next->head = data->spr->head; //on sauvegarde la tete, ainsi chaque maillon contient le ptr vers le debut de la liste
+		data->spr = data->spr->next;
+	}
+	data->spr->index = i++;
+	data->spr->x = x;
+	data->spr->y = y;
+	data->spr->distance = 0;
+	data->spr->next = NULL;
+	return (1);
+}
 
 /*
  *  ft_realloc_tab
@@ -100,99 +134,14 @@ int parse_map(t_data *data, char *line)
 	return 1;
 }
 
-int load_sprite(t_data *data, int x, int y)
-{
-	static int i;
 
-	if (!data->spr)
-	{
-		i = 0;
-		data->spr = (t_spr *)malloc(sizeof(t_spr));
-		if (!data->spr)
-			return (-1);
-		data->spr->head = data->spr;
-	}
-	else
-	{
-		data->spr->next = (t_spr *)malloc((sizeof(t_spr)));
-		if (!data->spr->next)
-			return (-1);
-		data->spr->next->head = data->spr->head; //on sauvegarde la tete, ainsi chaque maillon contient le ptr vers le debut de la liste
-		data->spr = data->spr->next;
-	}
-	data->spr->index = i++;
-	data->spr->x = x;
-	data->spr->y = y;
-	data->spr->distance = 0;
-	data->spr->next = NULL;
-	return (1);
-}
 
-void check_borders(t_data *data, int x, int y, char ***mapbis)
-{
-	if (y < 0 || y >= data->map_h || x < 0 || x >= data->map_w || data->map[y][x] == ' ' || data->map[y][x] == '.')
-	{
-		if (data->error == 0)
-			error_message(data, 1);
-		return;
-	}
-	if (data->map[y][x] == '1' || mapbis[0][y][x] == 'v')
-		return;
-	if (data->map[y][x] == '0' || data->map[y][x] == 'S' || data->map[y][x] == 'N' || data->map[y][x] == 'E' || data->map[y][x] == 'W') //rajouter autres pos
-		mapbis[0][y][x] = 'v';
-	if (data->map[y][x] == '2' && data->error == 0)
-	{
-		mapbis[0][y][x] = 'v';
-		if (load_sprite(data, x, y) == -1) //si erreur de malloc
-			data->error = 10;			   //si erreur de malloc
-	}
-	if (data->error == 0)
-	{
-		check_borders(data, x + 1, y, mapbis);
-		check_borders(data, x - 1, y, mapbis);
-		check_borders(data, x, y + 1, mapbis);
-		check_borders(data, x, y - 1, mapbis);
-	}
-	return;
-}
 
 int iscomplete(t_data *data)
 {
 	if (!data->info->west_text || !data->info->east_text ||
 		!data->info->sprite_text || !data->info->north_text || !data->info->south_text || data->info->floor_rgb == -1 || data->info->ceiling_rgb == -1)
 		return (0);
-	return (1);
-}
-
-int free_copymap(int nb_alloc, char ***copymap, int ret)
-{
-	int i;
-
-	i = 0;
-	while (i < nb_alloc)
-		free(copymap[0][i++]);
-	free(*copymap);
-	return (ret);
-}
-
-int flood_fill(t_data *data)
-{
-	char **copymap;
-	int i = 0;
-	copymap = (char **)malloc((sizeof(char *)) * (data->map_h + 1));
-	while (i < data->map_h)
-	{
-		copymap[i] = (char *)malloc(10 * data->map_w);
-		if (!copymap[i])
-			return (free_copymap(i, &copymap, -1));
-		ft_bzero(copymap[i], data->map_w + 1);
-		ft_memset(copymap[i], '.', data->map_w);
-		i++;
-	}
-	check_borders(data, data->pos_x, data->pos_y, &copymap);
-	free_copymap(data->map_h, &copymap, 0);
-	if (data->error != 0)
-		return (error_message(data, data->error));
 	return (1);
 }
 

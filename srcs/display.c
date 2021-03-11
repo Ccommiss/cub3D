@@ -9,42 +9,78 @@ void my_mlx_pixel_put(t_data *data, int x, int y, int color)
 		*(unsigned int *)dst = color;
 }
 
-void display_pos(t_data *data)
+void fill_black(t_data *data)
 {
-	char *stringX;
-	char *stringY;
-	char *posx;
-	char *posy;
+	int i = 0;
+	int j = 0;
 
-	posx = ft_ftoa(data->pos_x, 4);
-	posy= ft_ftoa(data->pos_y, 4);
-    stringX = ft_strjoin("X = ", posx);
-    stringY = ft_strjoin("Y = ", posy);
-	mlx_string_put(data->mlx, data->win, 30, data->height - 50, BLUE, stringX);
-	mlx_string_put(data->mlx, data->win, 30, data->height - 25, BLUE, stringY);
-	mlx_string_put(data->mlx, data->win, 0, 0, WHITE, "COUCOU");
-	free(stringX);
-	free(stringY);
-	free(posx);
-	free(posy);
+	while (i < data->height - 1)
+	{
+		while (j < data->width - 1)
+		{
+			my_mlx_pixel_put(data, j, i, 0x000000);
+			j++;
+		}
+		j = 0;
+		i++;
+	}
 }
+
+void fill_ceiling(t_data *data)
+{
+	int i = 0;
+	int j = 0;
+
+	while (i < data->height / 2)
+	{
+		while (j < data->width)
+		{
+			my_mlx_pixel_put(data, j, i, data->info->ceiling_rgb);
+			j++;
+		}
+		j = 0;
+		i++;
+	}
+}
+
+void fill_floor(t_data *data)
+{
+	int i = data->height / 2;
+	int j = 0;
+
+	while (i < data->height)
+	{
+		while (j < data->width)
+		{
+			my_mlx_pixel_put(data, j, i, data->info->floor_rgb);
+			j++;
+		}
+		j = 0;
+		i++;
+	}
+}
+
+
 
 void display(t_data *data)
 {
-
+	t_bresenham b;
 
 	fill_black(data);
 	fill_ceiling(data);
 	fill_floor(data);
 	dda(data);
-	
+	b.pt1[X] = data->pos_x * data->minimap_size + data->width / 4;
+	b.pt1[Y] = data->pos_y * data->minimap_size + data->height * 0.7;
+	b.pt2[X] = (data->pos_x + data->dirx) * data->minimap_size + data->width / 4;
+	b.pt2[Y] = (data->pos_y + data->diry) * data->minimap_size + data->height * 0.7;
 	if (data->displaymap == 1)
 	{
 		set_compass(data);
 		set_map(data);
 		set_player(data);
 		data->color = 0xffffff;
-		bresenham(data->pos_x * data->minimap_size + data->width / 4, data->pos_y * data->minimap_size + data->height * 0.7, (data->pos_x + data->dirx) * data->minimap_size + data->width / 4, (data->pos_y + data->diry) * data->minimap_size + data->height * 0.7, data);
+		bresenham(&b, data);
 	}
 	mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
 	display_pos(data);

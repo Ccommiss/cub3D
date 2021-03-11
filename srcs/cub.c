@@ -1,6 +1,6 @@
 #include "../includes/cub3d.h"
 
-int		checkzero_letter(char c)
+int		is_zero(char c)
 {
 	if (c == '0') // || c == '2') et 2 sil faut traverser
 		return (1);
@@ -32,8 +32,9 @@ void	hit_check(t_data *data)
 			else
 				data->side = SOUTH;
 		}
-		if (data->map[data->map_y][data->map_x] != '0'
-			&& data->map[data->map_y][data->map_x] != '2')
+		if ((data->map_y < 0 || data->map_x < 0) // fix le SF mais nv bug daffichage
+			|| (data->map[data->map_y][data->map_x] != '0'
+			&& data->map[data->map_y][data->map_x] != '2'))
 			hit = 1;
 	}
 }
@@ -109,6 +110,11 @@ void	draw(t_data *data, int x)
 	int		y;
 
 	line_h = (int)(data->height / data->perpwalldist);
+	if (line_h == 0)
+	{
+		printf(" DATA EPRP = %f \n", data->perpwalldist);
+		printf(" LINE H = %d \n", line_h);
+	}
 	calculate_wall(data, &d, line_h);
 	step = (1.0 * data->t->h) / line_h;
 	t_pos = (d.start_y - (data->height / 2) + (line_h / 2)) * step;
@@ -130,22 +136,27 @@ void	dda(t_data *data)
 
 	x = -1;
 
-	while (x++ < data->width)
+	while (++x < data->width)
 	{
 		data->camera_x = 2 * x / (double)data->width - 1;
 		data->raydir_x = data->dirx + (data->planeX * data->camera_x);
 		data->raydir_y = data->diry + (data->planeY * data->camera_x);
+		printf ("verif pos %d  \n"data->pos_y)
 		data->map_x = (int)data->pos_x;
 		data->map_y = (int)data->pos_y;
 		data->delta_x = (data->raydir_y == 0) ? 0 : ((data->raydir_x == 0) ? 1 : fabs(1 / data->raydir_x));
 		data->delta_y = (data->raydir_y == 0) ? 0 : ((data->raydir_y == 0) ? 1 : fabs(1 / data->raydir_y));
 		calculate_step(data);
 		hit_check(data);
-		//printf("x = %d \n", x);
+	
 		if (data->side == WEST || data->side == EAST)
 			data->perpwalldist = (data->map_x - data->pos_x + (1 - data->stepX) / 2) / data->raydir_x;
 		else
 			data->perpwalldist = (data->map_y - data->pos_y + (1 - data->stepY) / 2) / data->raydir_y;
+		if (x == 950)
+		{
+			printf("PERP = %f // x = %d // map Y %d // map X %d // POS X %f  POS Y %f // STEP X %d// STEP Y %d //raydirX %f Y %f \n", data->perpwalldist, x, data->map_y, data->map_x, data->pos_x, data->pos_y, data->stepX,  data->stepY, data->raydir_x, data->raydir_y);
+		}
 		draw(data, x);
 		data->zbuffer[x] = data->perpwalldist;
 	}
@@ -156,40 +167,4 @@ void	dda(t_data *data)
 	}
 }
 
-int	main(int argc, char **argv)
-{
-	t_data		data;
-	t_display	info;
-	int			fd;
 
-	(void)argc;
-	fd = open(argv[1], O_RDONLY);
-	int test = read(fd, 0, 0);
-	if (test < 0)
-	{
-		printf("Bad argument.\n");
-		return (-1);
-	}
-	data.info = &info;
-	init_base(&data);
-	ft_parse(fd, &data);
-	if (data.error != 0)
-		return (-1);
-	if (init_struct(&data) == -1)
-		return (-1);
-
-	if (argc == 3 && ft_strncmp(argv[2], "--save", 7) == 0)
-	{
-		printf ("SAVE TO BMP \n");
-		save_bmp(&data);
-		return (1);
-	}
-	display(&data);
-	mlx_hook(data.win, 2, 1L << 0, key_hook, &data);
-	mlx_hook(data.win, 17, (1L << 17), close_win, &data);
-	//mlx_hook(data.win, 33, 0, close_win, &data); // linux
-	mlx_loop(data.mlx);
-
-
-
-}

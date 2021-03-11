@@ -46,11 +46,37 @@
 # define KEY_M 46
 # define KEY_TAB 48
 # define KEY_SPACE 49 //mine
+# define KEY_ESC 53 //mine
 # define KEY_PLUS 69
 # define KEY_MINUS 78
 # define KEY_LEFT 123
 # define KEY_RIGHT 124
 # define KEY_DOWN 125
 # define KEY_UP 126
+# define KEY_SHIFT 257
 
+/*
+** EVENTS
+*/
+# define KEY_PRESS				2
+# define KEY_RELEASE			3
+# define BUTTON_PRESS			4
+# define BUTTON_RELEASE			5
+# define MOTION_NOTIFY			6
+# define DESTROY_NOTIFY			17
+/*
+** EVENT MASKS
+*/
+
+# define KEY_PRESS_MASK			(1L << 0)
+# define KEY_RELEASE_MASK		(1L << 1)
+# define BUTTON_PRESS_MASK		(1L << 2)
+# define BUTTON_RELEASE_MASK	(1L << 3)
+# define POINTER_MOTION_MASK	(1L << 6)
+# define BUTTON1_MOTION_MASK	(1L << 8)
+# define BUTTON2_MOTION_MASK	(1L << 9)
+# define BUTTON3_MOTION_MASK	(1L << 10)
+# define BUTTON4_MOTION_MASK	(1L << 11)
+# define BUTTON5_MOTION_MASK	(1L << 12)
+# define STRUCTURE_NOTIFY_MASK	(1L << 17)
 #endif

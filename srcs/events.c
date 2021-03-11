@@ -1,26 +1,65 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   events.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/11 15:18:12 by ccommiss          #+#    #+#             */
+/*   Updated: 2021/03/11 16:42:41 by ccommiss         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/cub3d.h"
 
+
+
+int speed_hook(int keycode, t_data *data)
+{
+	if (keycode == KEY_SHIFT)
+		data->speed = 0.10;
+	return 1;
+}
 
 int key_hook(int keycode, t_data *data)
 {
 	double olddirx;
 	double oldplanex;
-
+	
+	if (keycode == KEY_SHIFT)
+		data->speed = 0.17;
+	
 	if (keycode == KEY_W)
 	{
-		if (checkzero_letter(data->map[(int)(data->pos_y)][(int)(data->pos_x + data->dirx * 0.11)]))
-			data->pos_x += data->dirx * 0.10;
-		if (checkzero_letter(data->map[(int)(data->pos_y + data->diry * 0.11)][(int)(data->pos_x)]))
-			data->pos_y += data->diry * 0.10;
+		if (is_zero(data->map[(int)(data->pos_y)][(int)(data->pos_x + data->dirx * data->speed + 0.01)]))
+			data->pos_x += data->dirx * data->speed;
+		if (is_zero(data->map[(int)(data->pos_y + data->diry * data->speed + 0.01)][(int)(data->pos_x)]))
+			data->pos_y += data->diry * data->speed;
 	}
 	if (keycode == KEY_S)
 	{
-		if (checkzero_letter(data->map[(int)(data->pos_y)][(int)(data->pos_x - data->dirx * 0.11)]))
-			data->pos_x -= data->dirx * 0.10;
-		if (checkzero_letter(data->map[(int)(data->pos_y - data->diry * 0.11)][(int)(data->pos_x)]))
-			data->pos_y -= data->diry * 0.10;
+		if (is_zero(data->map[(int)(data->pos_y)][(int)(data->pos_x - data->dirx * data->speed + 0.01)]))
+			data->pos_x -= data->dirx * data->speed;
+		if (is_zero(data->map[(int)(data->pos_y - data->diry * 0.11)][(int)(data->pos_x)]))
+			data->pos_y -= data->diry * data->speed;
 	}
-	if (keycode == KEY_D) 
+	if (keycode == KEY_A)
+	{
+		if (is_zero(data->map[(int)(data->pos_y)][(int)(data->pos_x + data->diry * data->speed + 0.01)]))
+			data->pos_x += data->diry * data->speed;
+		if (is_zero(data->map[(int)(data->pos_y - data->dirx * data->speed + 0.01)][(int)(data->pos_x)]))
+		 	data->pos_y -= data->dirx * data->speed;
+	}
+	if (keycode == KEY_D)
+	{
+		if (is_zero(data->map[(int)(data->pos_y)][(int)(data->pos_x - data->diry * data->speed + 0.01)]))
+			data->pos_x -= data->diry * data->speed;
+		if (is_zero(data->map[(int)(data->pos_y + data->dirx * data->speed + 0.01)][(int)(data->pos_x)]))
+		 	data->pos_y += data->dirx * data->speed;
+	}
+	
+
+	if (keycode == KEY_RIGHT) 
 	{
 		olddirx = data->dirx;
 		data->dirx = data->dirx * cos(0.2) - data->diry * sin(0.2);
@@ -29,7 +68,7 @@ int key_hook(int keycode, t_data *data)
 		data->planeX = data->planeX * cos(0.2) - data->planeY * sin(0.2);
 		data->planeY = oldplanex * sin(0.2) + data->planeY * cos(0.2);
 	}
-	if (keycode == KEY_A)
+	if (keycode == KEY_LEFT)
 	{
 		olddirx = data->dirx;
 		data->dirx = data->dirx * cos(-0.2) - data->diry * sin(-0.2);
@@ -45,10 +84,14 @@ int key_hook(int keycode, t_data *data)
 		else
 			data->displaymap = 0;
 	}
-	if (keycode == KEY_S)
-		data->camera_y -= 0.10;
-	if (keycode == KEY_W)
-		data->camera_y += 0.10;
+	if (keycode == KEY_ESC)
+		close_win(data);
+
+
+	// if (keycode == KEY_S)
+	// 	data->camera_y -= 0.10;
+	// if (keycode == KEY_W)
+	// 	data->camera_y += 0.10;
 	display(data);
 	return (1);
 }

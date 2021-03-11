@@ -9,7 +9,9 @@ SRCS = $(SOURCEDIR)cub.c \
 	$(SOURCEDIR)visu2d.c \
 	$(SOURCEDIR)bresenham.c\
 	$(SOURCEDIR)init.c \
+	$(SOURCEDIR)main.c \
 	$(SOURCEDIR)parser_utils.c \
+	$(SOURCEDIR)flood_fill.c \
 	$(SOURCEDIR)display.c \
 	$(SOURCEDIR)events.c \
 	$(SOURCEDIR)save_bmp.c \
@@ -29,7 +31,7 @@ UNAME := $(shell uname)
 APPLE = Darwin
 
 all: $(NAME)
-
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 $(NAME): $(OBJS)
 	make -C $(LIBS)
 ifeq ($(UNAME),$(APPLE))

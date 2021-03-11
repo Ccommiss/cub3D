@@ -175,6 +175,8 @@ typedef struct s_data
 	double dirx;
 	double diry;
 
+	double speed; //vitesse de deplacement, normal ou courir si shift
+
 	//vue
 	double camera_x;
 	double camera_y;
@@ -212,7 +214,6 @@ typedef struct s_data
 	int height;
 	int color;
 	int minimap_size;
-	int speed;
 	int displaymap;
 
 	double *zbuffer; // a malloc
@@ -247,7 +248,7 @@ int loadimage(t_data *data);
 
 int ft_parse(int fd, t_data *data);
 void checkmap(t_data *data);
-int checkzero_letter(char c);
+int is_zero(char c);
 
 int ft_check_chars(char sign, t_data *data, int x, int y);
 int ft_mapcheck(char *str);
@@ -299,3 +300,4 @@ int red_cross(t_data *data); //free
 int free_game(t_data *data);
 int close_win(t_data *data); //close
 int error_message(t_data *data, int index);
+int speed_hook(int keycode, t_data *data);
