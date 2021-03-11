@@ -1,76 +1,101 @@
 #include "../includes/cub3d.h"
 
-void bresenham(int xdep, int ydep, int xfin, int yfin, t_data *data)
+void	bsnhm_1(t_bresenham *b, t_data *data)
 {
-	float a = 0;
-	int temp = 0;
-	int cste = 0;
+	float			a;
+	int				temp;
+	unsigned int	x;
 
-	unsigned int dy;
-	unsigned int dx;
-
-	dx = abs(xfin - xdep);
-	dy = abs(yfin - ydep);
-	if (dx >= dy && dx != 0 && dy != 0)
+	x = 0;
+	a = 0;
+	temp = 0;
+	if (b->pt1[X] > b->pt2[X])
 	{
-		if (xdep > xfin)
-		{
-			temp = xdep;
-			xdep = xfin;
-			xfin = temp;
-
-			temp = ydep;
-			ydep = yfin;
-			yfin = temp;
-		}
-		a = ((float)(yfin - ydep) / (xfin - xdep));
-
-		for (unsigned int x = 0; x < dx + 1; x++)
-		{
-			my_mlx_pixel_put(data, x + xdep, ydep + (x * a) + cste, data->color);
-		}
+		temp = b->pt1[X];
+		b->pt1[X] = b->pt2[X];
+		b->pt2[X] = temp;
+		temp = b->pt1[Y];
+		b->pt1[Y] = b->pt2[Y];
+		b->pt2[Y] = temp;
 	}
+	a = ((float)(b->pt2[Y] - b->pt1[Y]) / (b->pt2[X] - b->pt1[X]));
+	while (x++ < b->dx + 1)
+		my_mlx_pixel_put(data, x + b->pt1[X], b->pt1[Y] + (x * a), data->color);
+}
 
-	if (dx < dy && dx != 0 && dy != 0)
+void	bsnhm_2(t_bresenham *b, t_data *data)
+{
+	float			a;
+	int				temp;
+	unsigned int	y;
+
+	y = 0;
+	a = 0;
+	temp = 0;
+	if (b->pt1[Y] > b->pt2[Y])
 	{
-		if (ydep > yfin)
-		{
-			temp = ydep;
-			ydep = yfin;
-			yfin = temp;
-
-			temp = xdep;
-			xdep = xfin;
-			xfin = temp;
-		}
-		a = ((float)(xfin - xdep) / (yfin - ydep));
-
-		for (unsigned int y = 0; y < dy + 1; y++)
-		{
-			my_mlx_pixel_put(data, xdep + (y * a) + cste, y + ydep, data->color);
-		}
+		temp = b->pt1[Y];
+		b->pt1[Y] = b->pt2[Y];
+		b->pt2[Y] = temp;
+		temp = b->pt1[X];
+		b->pt1[X] = b->pt2[X];
+		b->pt2[X] = temp;
 	}
+	a = ((float)(b->pt2[X] - b->pt1[X]) / (b->pt2[Y] - b->pt1[Y]));
+	while (y++ < b->dy + 1)
+		my_mlx_pixel_put(data, b->pt1[X] + (y * a), y + b->pt1[Y], data->color);
+}
 
-	if (dx == 0)
+void	bsnhm_3(t_bresenham *b, t_data *data)
+{
+	float	a;
+	int		temp;
+	int		y;
+
+	y = 0;
+	a = 0;
+	temp = 0;
+	if (b->pt1[Y] > b->pt2[Y])
 	{
-		if (ydep > yfin)
-		{
-			temp = ydep;
-			ydep = yfin;
-			yfin = temp;
-		}
-		for (int y = ydep; y < yfin + 1; y++)
-			my_mlx_pixel_put(data, xdep, y, data->color);
+		temp = b->pt1[Y];
+		b->pt1[Y] = b->pt2[Y];
+		b->pt2[Y] = temp;
 	}
-	if (dy == 0)
+	y = b->pt1[Y];
+	while (y++ < b->pt2[Y] + 1)
+		my_mlx_pixel_put(data, b->pt1[X], y, data->color);
+}
+
+void	bsnhm_4(t_bresenham *b, t_data *data)
+{
+	float	a;
+	int		temp;
+	int		x;
+
+	x = 0;
+	a = 0;
+	temp = 0;
+	if (b->pt1[X] > b->pt2[X])
 	{
-		if (xdep > xfin)
-		{
-			temp = xdep;
-			xdep = xfin;
-			xfin = temp;
-		}
-		for (int x = xdep; x < xfin + 1; x++)
-			my_mlx_pixel_put(data, x, ydep, data->color);
+		temp = b->pt1[X];
+		b->pt1[X] = b->pt2[X];
+		b->pt2[X] = temp;
 	}
+	x = b->pt1[X];
+	while (x++ < b->pt2[X] + 1)
+		my_mlx_pixel_put(data, x, b->pt1[Y], data->color);
+}
+
+void	bresenham(t_bresenham *b, t_data *data)
+{
+	b->dx = abs(b->pt2[X] - b->pt1[X]);
+	b->dy = abs(b->pt2[Y] - b->pt1[Y]);
+	if (b->dx >= b->dy && b->dx != 0 && b->dy != 0)
+		bsnhm_1(b, data);
+	if (b->dx < b->dy && b->dx != 0 && b->dy != 0)
+		bsnhm_2(b, data);
+	if (b->dx == 0)
+		bsnhm_3(b, data);
+	if (b->dy == 0)
+		bsnhm_4(b, data);
 }

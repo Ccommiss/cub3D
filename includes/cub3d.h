@@ -29,6 +29,12 @@ enum e_sides
 	WEST
 };
 
+enum e_pt
+{
+	X = 0,
+	Y = 1
+};
+
 typedef struct s_spr t_spr;
 
 typedef struct s_spr // list chainee
@@ -102,6 +108,21 @@ typedef struct s_text
 	t_text *next;
 
 } t_text;
+
+
+typedef struct s_bresenham
+{
+	int pt1[2]; // pourmettre le x et le y 
+	int pt2[2]; //idem 0 = x 1 = y;
+
+	unsigned int dx;
+	unsigned int dy;
+
+} t_bresenham;
+
+
+
+
 
 typedef struct s_bmp
 {
@@ -258,12 +279,14 @@ void sprite_casting(t_data *data);
 
 int key_hook(int keycode, t_data *data);
 
-void bresenham(int xdep, int ydep, int xfin, int yfin, t_data *data);
+void bresenham(t_bresenham *b, t_data *data);
 void dda(t_data *data);
 
 
 int free_textures(t_data *data, t_text *head);
 int free_sprites(t_data *data);
+int flood_fill(t_data *data);
+int load_sprite(t_data *data, int x, int y);
 
 
 
