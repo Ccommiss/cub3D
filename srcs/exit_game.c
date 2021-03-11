@@ -1,6 +1,5 @@
 #include "../includes/cub3d.h"
 
-
 /*
  *  free_textures & free_sprites
  *
@@ -8,7 +7,6 @@
  * 	[return] : -1, because these functions are also used while parsing if
  * 		an allocation fails.
  */
-
 
 int free_textures(t_data *data, t_text *head)
 {
@@ -28,8 +26,8 @@ int free_textures(t_data *data, t_text *head)
 	while (i < 4 && data->t != NULL) // FREE LES TEXTURES
 	{
 		tmp = data->t;
-	 	data->t = data->t->next;
-		printf ("FREEING %c \n", tmp->side);
+		data->t = data->t->next;
+		printf("FREEING %c \n", tmp->side);
 		if (tmp->img) //si on a pas eu d'erreurs de chargement
 			mlx_destroy_image(data->mlx, tmp->img);
 		free(tmp);
@@ -47,7 +45,7 @@ int free_sprites(t_data *data)
 	{
 		tmp_s = data->spr;
 		data->spr = data->spr->next;
-		printf ("deleting spr index %d \n", tmp_s->index);
+		printf("deleting spr index %d \n", tmp_s->index);
 		free(tmp_s);
 	}
 	if (data->sprimg)
@@ -72,28 +70,35 @@ int free_game(t_data *data)
 	int i;
 
 	i = 0;
-	while (i <= data->map_h)
+	if (data->map)
 	{
-		printf(":: %s \n", data->map[i]);
-		free(data->map[i++]);
+		while (i <= data->map_h)
+		{
+			printf(":: %s \n", data->map[i]);
+			free(data->map[i++]);
+		}
+		free(data->map);
 	}
-	free(data->map);
-	free_textures(data, data->t);
+	if (data->t)
+		free_textures(data, data->t);
 	if (data->sprimg != NULL)
 		free_sprites(data);
 	free(data->zbuffer);
-	printf ("coucou ici\n" );
+	printf("coucou ici\n");
 	return (0);
 }
 
 int close_win(t_data *data)
 {
 	if (data->win)
+	{
 		mlx_clear_window(data->mlx, data->win);
-	mlx_destroy_window(data->mlx, data->win);
-	mlx_destroy_image(data->mlx, data->img);
+		mlx_destroy_window(data->mlx, data->win);
+	}
+	if (data->img)
+		mlx_destroy_image(data->mlx, data->img);
 	free_game(data);
-	mlx_destroy_display(data->mlx);//linux
+	//mlx_destroy_display(data->mlx);//linux
 	free(data->mlx);
 	exit(1);
 }

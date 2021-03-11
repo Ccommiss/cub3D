@@ -1,5 +1,11 @@
 #include "../includes/cub3d.h"
 
+/*
+ *  ft_finddir
+ *
+ * 	[synopsis] : set the dirx & diry positions according to letter found in game
+ * 	[return] : none
+ */
 
 void ft_finddir(t_data *data, char dir) //chamboule tout,marche pas avec autre config que W qui est le truc de base
 {
@@ -14,6 +20,38 @@ void ft_finddir(t_data *data, char dir) //chamboule tout,marche pas avec autre c
 	else if (dir == 'W')
 		data->dirx = -1;
 }
+
+
+/*
+ *  ft_realloc_tab
+ *
+ * 	[synopsis] : realloc all data->map[y] lines, in case a line is longer than the previous 
+ * 				ones
+ * 	[return] : 1 if success, -1 if malloc fails 
+ */
+
+int ft_realloc_tab(t_data *data, int x, int y)
+{
+	int i;
+	i = 0;
+	while (i < y)
+	{
+		data->map[i] = (char *)ft_realloc(data->map[i], data->map_w, sizeof(char) * x + 1);
+		if (!data->map[i])
+			return (close_win(data));
+		data->map[i][data->map_w] = '\0';
+		i++;
+	}
+	data->map_w = x;
+	return (1);
+}
+
+/*
+ *  fill_maptab
+ *
+ * 	[synopsis] : fill the data->map tab (char **map) with the line  
+ * 	[return] : 1 if success, 
+ */
 
 int fill_maptab(t_data *data, char *line, int y)
 {
@@ -34,57 +72,33 @@ int fill_maptab(t_data *data, char *line, int y)
 	}
 	data->map[y][x] = '\0';
 	if (x > data->map_w)
-	{
-		while (i < y)
-		{
-			data->map[i] = (char *)ft_realloc(data->map[i], data->map_w, sizeof(char) * x + 1);
-			data->map[i][data->map_w] = '\0';
-			i++;
-		}
-		data->map_w = x;
-	}
+		ft_realloc_tab(data, x, y);
 	return (1);
 }
-
 
 int parse_map(t_data *data, char *line)
 {
 	static int y;
 
-	if (data->map_h == 0)
-		y = 0;
-
-	printf("y = %d \n", y);
-	data->map_h = y + 1;
-	printf("MAP H = %d \n", data->map_h);
-	printf("Current size = %lu \n", (data->map_h - 1) * sizeof(char *));
-	data->map = (char **)ft_realloc(data->map, (data->map_h) * sizeof(char *), (data->map_h + 1) * sizeof(char *));
-	data->map[data->map_h] = 0;
-
 	if ((y == 0) && ft_isempty(line))
 		return (0);
-	printf("before le IF \n");
-
+	if (data->map_h == 0)
+		y = 0;
+	data->map_h = y + 1;
+	data->map = (char **)ft_realloc(data->map, (data->map_h) * sizeof(char *), (data->map_h + 1) * sizeof(char *));
+	if (!data->map)
+		return (close_win(data));
+	data->map[data->map_h] = 0;
 	if (data->map_w == 0 || ft_strlen(line) > (size_t)data->map_w)
-	{
 		data->map[y] = (char *)malloc(sizeof(char) * (ft_strlen(line) + 1));
-		ft_memset(data->map[y], '.', ft_strlen(line) + 1);
-	}
 	else
-	{
 		data->map[y] = (char *)malloc(sizeof(char) * (data->map_w + 1));
-		ft_memset(data->map[y], '.', data->map_w + 1);
-	}
-	if (!(data->map[y]))
-		return (-1);
+	if (!data->map[y])
+		return (close_win(data));
 	fill_maptab(data, line, y);
-	//si jamais la ligne est  plus longue que les autres, sa longueur devient la nouvelle reference pour les autres
-	y++;
-	data->map[y] = 0;
+	data->map[++y] = 0;
 	return 1;
 }
-
-
 
 int load_sprite(t_data *data, int x, int y)
 {
@@ -93,7 +107,6 @@ int load_sprite(t_data *data, int x, int y)
 	if (!data->spr)
 	{
 		i = 0;
-		data->spr = NULL;
 		data->spr = (t_spr *)malloc(sizeof(t_spr));
 		if (!data->spr)
 			return (-1);
@@ -107,11 +120,10 @@ int load_sprite(t_data *data, int x, int y)
 		data->spr->next->head = data->spr->head; //on sauvegarde la tete, ainsi chaque maillon contient le ptr vers le debut de la liste
 		data->spr = data->spr->next;
 	}
-	data->spr->index = i;
+	data->spr->index = i++;
 	data->spr->x = x;
 	data->spr->y = y;
 	data->spr->distance = 0;
-	i++;
 	data->spr->next = NULL;
 	return (1);
 }
@@ -188,13 +200,14 @@ int ft_parse(int fd, t_data *data)
 {
 	char *line = NULL;
 
-	printf("**PARSING**\n");
 	while (get_next_line(fd, &line) && data->error == 0)
 	{
 		if (ft_mapcheck(line) == 0 && !ft_isempty(line) && !iscomplete(data))
 			ft_parse_info(data, line);
 		else if (ft_mapcheck(line) == 1 && iscomplete(data) == 1)
 			parse_map(data, line);
+		else if (!ft_isempty(line) && ft_mapcheck(line) == 1 && !iscomplete(data))
+			return (error_message(data, 4));
 		free(line);
 	}
 	if (data->error != 0)
@@ -203,6 +216,7 @@ int ft_parse(int fd, t_data *data)
 		parse_map(data, line);
 	if (!iscomplete(data))
 		return (error_message(data, 4));
+
 	if (data->error == 0 && (data->pos_x < 0 || data->pos_y < 0))
 		return (error_message(data, 2));
 	checkmap(data);

@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 11:02:02 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/06 10:47:45 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/11 11:59:31 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,24 +52,14 @@ void	sprite_casting(t_data *data)
 {
 	t_spr *head;
 
-	printf ("SPRITE CASTING l\n");
-	printf ("SPRITE CASTING 1 %p \n", data->spr->head);
-
 	head = data->spr->head;
-
 	while (data->spr != NULL)
 	{
 		data->spr->distance = (pow((data->pos_x - data->spr->x), 2)
 		+ pow((data->pos_y - data->spr->y), 2));
 		data->spr = data->spr->next;
-			printf ("END 0 \n");
-
 	}
 	data->spr = head;
-	printf ("END 1 \n");
-
 	data->spr = sort_sprites(data, head);
 	data->spr = head;
-		printf ("END \n");
-
 }
