@@ -6,18 +6,18 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 15:18:12 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/11 22:35:02 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/12 12:16:54 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "cub3d.h"
 
 
 
 int speed_hook(int keycode, t_data *data)
 {
 	if (keycode == KEY_SHIFT)
-		data->speed = 0.10;
+		data->speed = 0.11;
 	return 1;
 }
 
@@ -27,34 +27,34 @@ int key_hook(int keycode, t_data *data)
 	double oldplanex;
 
 	if (keycode == KEY_SHIFT)
-		data->speed = 0.17;
+		data->speed = 0.20;
 
 	if (keycode == KEY_W)
 	{
-		if (is_zero(data->map[(int)(data->pos_y)][(int)(data->pos_x + data->dirx * data->speed)]))
+		if (is_zero(data->map[(int)(data->pos_y)][(int)(data->pos_x + data->dirx * (data->speed + 0.01))]))
 			data->pos_x += data->dirx * data->speed;
-		if (is_zero(data->map[(int)(data->pos_y + data->diry * data->speed)][(int)(data->pos_x)]))
+		if (is_zero(data->map[(int)(data->pos_y + data->diry * (data->speed + 0.01))][(int)(data->pos_x)]))
 			data->pos_y += data->diry * data->speed;
 	}
 	if (keycode == KEY_S)
 	{
-		if (is_zero(data->map[(int)(data->pos_y)][(int)(data->pos_x - data->dirx * data->speed)]))
+		if (is_zero(data->map[(int)(data->pos_y)][(int)(data->pos_x - data->dirx * (data->speed + 0.01))]))
 			data->pos_x -= data->dirx * data->speed;
-		if (is_zero(data->map[(int)(data->pos_y - data->diry * data->speed)][(int)(data->pos_x)]))
+		if (is_zero(data->map[(int)(data->pos_y - data->diry * (data->speed + 0.01))][(int)(data->pos_x)]))
 			data->pos_y -= data->diry * data->speed;
 	}
 	if (keycode == KEY_A)
 	{
-		if (is_zero(data->map[(int)(data->pos_y)][(int)(data->pos_x + data->diry * data->speed)]))
+		if (is_zero(data->map[(int)(data->pos_y)][(int)(data->pos_x + data->diry * (data->speed + 0.01))]))
 			data->pos_x += data->diry * data->speed;
-		if (is_zero(data->map[(int)(data->pos_y - data->dirx * data->speed)][(int)(data->pos_x)]))
+		if (is_zero(data->map[(int)(data->pos_y - data->dirx * (data->speed + 0.01))][(int)(data->pos_x)]))
 		 	data->pos_y -= data->dirx * data->speed;
 	}
 	if (keycode == KEY_D)
 	{
-		if (is_zero(data->map[(int)(data->pos_y)][(int)(data->pos_x - data->diry * data->speed + 0.01)]))
+		if (is_zero(data->map[(int)(data->pos_y)][(int)(data->pos_x - data->diry * (data->speed + 0.01))]))
 			data->pos_x -= data->diry * data->speed;
-		if (is_zero(data->map[(int)(data->pos_y + data->dirx * data->speed + 0.01)][(int)(data->pos_x)]))
+		if (is_zero(data->map[(int)(data->pos_y + data->dirx * (data->speed + 0.01))][(int)(data->pos_x)]))
 		 	data->pos_y += data->dirx * data->speed;
 	}
 
@@ -62,11 +62,11 @@ int key_hook(int keycode, t_data *data)
 	if (keycode == KEY_RIGHT)
 	{
 		olddirx = data->dirx;
-		data->dirx = data->dirx * cos(0.2) - data->diry * sin(0.2);
-		data->diry = olddirx * sin(0.2) + data->diry * cos(0.2);
+		data->dirx = data->dirx * cos(0.2 + data->speed) - data->diry * sin(0.2 + data->speed);
+		data->diry = olddirx * sin(0.2 + data->speed) + data->diry * cos(0.2 + data->speed);
 		oldplanex = data->planeX;
-		data->planeX = data->planeX * cos(0.2) - data->planeY * sin(0.2);
-		data->planeY = oldplanex * sin(0.2) + data->planeY * cos(0.2);
+		data->planeX = data->planeX * cos(0.2 + data->speed) - data->planeY * sin(0.2 + data->speed);
+		data->planeY = oldplanex * sin(0.2 + data->speed) + data->planeY * cos(0.2 + data->speed);
 	}
 	if (keycode == KEY_LEFT)
 	{
@@ -86,12 +86,6 @@ int key_hook(int keycode, t_data *data)
 	}
 	if (keycode == KEY_ESC)
 		close_win(data);
-
-
-	// if (keycode == KEY_S)
-	// 	data->camera_y -= 0.10;
-	// if (keycode == KEY_W)
-	// 	data->camera_y += 0.10;
 	display(data);
 	return (1);
 }

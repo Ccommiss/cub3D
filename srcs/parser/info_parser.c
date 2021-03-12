@@ -1,4 +1,4 @@
-#include "../includes/cub3d.h"
+#include "cub3d.h"
 
 char * ft_trim_inside(char *str)
 {
@@ -37,6 +37,8 @@ int ft_getrgb(t_data *data, char *rgb)
 	j = -1;
 	while (block[++j] != NULL)
 		block[j] = ft_trim_inside(block[j]);
+	if (j > 3)
+		return (error_message(data, 7));
 	printf("%s \n", block[0]);
 	printf("%s \n", block[1]);
 	printf("%s \n", block[2]);

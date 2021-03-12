@@ -1,4 +1,4 @@
-#include "../includes/cub3d.h"
+#include "cub3d.h"
 
 void	bsnhm_1(t_bresenham *b, t_data *data)
 {

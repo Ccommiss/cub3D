@@ -1,4 +1,4 @@
-#include "../includes/cub3d.h"
+#include "cub3d.h"
 
 void check_borders(t_data *data, int x, int y, char ***mapbis)
 {
@@ -53,7 +53,6 @@ int flood_fill(t_data *data)
 		copymap[i] = (char *)malloc(10 * data->map_w);
 		if (!copymap[i])
 			return (free_copymap(i, &copymap, -1));
-		//ft_bzero(copymap[i], data->map_w + 1);
 		ft_memset(copymap[i], '.', data->map_w);
 		i++;
 	}

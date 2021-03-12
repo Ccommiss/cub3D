@@ -1,4 +1,4 @@
-#include "../includes/cub3d.h"
+#include "cub3d.h"
 
 /// FREE TO DO IN CASE OF ERROR
 
@@ -62,7 +62,7 @@ int init_struct(t_data *data)
  *  init_base
  *
  * 	[synopsis] :
- * 		> init some variables later modified by parser
+ * 		> init some useful variables later modified by parser
  * 		> Helps to handle errors detection
  * 	[return] : none
  */
@@ -87,6 +87,7 @@ void init_base(t_data *data)
 	data->info->east_text = NULL;
 	data->info->west_text = NULL;
 	data->info->sprite_text = NULL;
+	data->zbuffer = NULL;
 
 }
 

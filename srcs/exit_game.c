@@ -1,4 +1,4 @@
-#include "../includes/cub3d.h"
+#include "cub3d.h"
 
 /*
  *  free_textures & free_sprites
@@ -12,6 +12,8 @@ int free_textures(t_data *data, t_text *head)
 {
 	int i;
 	t_text *tmp;
+
+	printf("Texture la\n");
 
 	if (data->t != head)
 		data->t = head;
@@ -41,6 +43,7 @@ int free_sprites(t_data *data)
 {
 	t_spr *tmp_s;
 
+	printf("sprites la\n");
 	while (data->spr != NULL)
 	{
 		tmp_s = data->spr;
@@ -72,7 +75,7 @@ int free_game(t_data *data)
 	i = 0;
 	if (data->map)
 	{
-		while (i <= data->map_h)
+		while (i < data->map_h)
 		{
 			printf(":: %s \n", data->map[i]);
 			free(data->map[i++]);
@@ -83,8 +86,8 @@ int free_game(t_data *data)
 		free_textures(data, data->t);
 	if (data->sprimg != NULL)
 		free_sprites(data);
-	free(data->zbuffer);
-	printf("coucou ici\n");
+	if (data->zbuffer)
+	 	free(data->zbuffer);
 	return (0);
 }
 
@@ -98,7 +101,9 @@ int close_win(t_data *data)
 	if (data->img)
 		mlx_destroy_image(data->mlx, data->img);
 	free_game(data);
+	printf("exiting\n");
 	//mlx_destroy_display(data->mlx);//linux
-	free(data->mlx);
+	if (data->mlx)
+		free(data->mlx);
 	exit(1);
 }

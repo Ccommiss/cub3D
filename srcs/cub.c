@@ -1,4 +1,4 @@
-#include "../includes/cub3d.h"
+#include "cub3d.h"
 
 int is_zero(char c)
 {
@@ -38,8 +38,8 @@ void hit_check(t_data *data)
 		if (data->map_y < 0)
 			data->map_y = 0;
 
-		if ((data->map_y < 0 || data->map_x < 0) // fix le SF mais nv bug daffichage
-			|| (data->map[data->map_y][data->map_x] != '0' && data->map[data->map_y][data->map_x] != '2'))
+		if ((data->map_y < 0 || data->map_x < 0) 
+			|| (data->map[data->map_y][data->map_x] == '1'))
 			hit = 1;
 	}
 }

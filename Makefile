@@ -3,14 +3,18 @@ NAME = test
 
 SOURCEDIR = ./srcs/
 
+INCLUDES = ./includes/
+
+PARSERDIR = $(SOURCEDIR)parser/
+
 SRCS = $(SOURCEDIR)cub.c \
-	$(SOURCEDIR)info_parser.c \
-	$(SOURCEDIR)map_parser.c \
+	$(PARSERDIR)info_parser.c \
+	$(PARSERDIR)map_parser.c \
 	$(SOURCEDIR)visu2d.c \
 	$(SOURCEDIR)bresenham.c\
 	$(SOURCEDIR)init.c \
 	$(SOURCEDIR)main.c \
-	$(SOURCEDIR)parser_utils.c \
+	$(PARSERDIR)parser_utils.c \
 	$(SOURCEDIR)flood_fill.c \
 	$(SOURCEDIR)display.c \
 	$(SOURCEDIR)events.c \
@@ -23,16 +27,16 @@ SRCS = $(SOURCEDIR)cub.c \
 
 OBJS := ${SRCS:c=o}
 
-CC = clang -g $(FLAGS)
+CC = gcc -g $(FLAGS)
 
-FLAGS =  -Wall -Werror -Wextra -fsanitize=address
+FLAGS = -I. -I$(INCLUDES) -Wall -Werror -Wextra 
 LIBS = ./libft
 UNAME := $(shell uname)
 APPLE = Darwin
 
 all: $(NAME)
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) $(INCLUDES)
 	make -C $(LIBS)
 ifeq ($(UNAME),$(APPLE))
 	$(CC) $(OBJS) -Lmlx -lmlx -framework OpenGL -framework AppKit -L$(LIBS) -lft  -o $(NAME)

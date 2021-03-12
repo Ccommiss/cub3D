@@ -294,6 +294,7 @@ int load_sprite(t_data *data, int x, int y);
 void 	save_bmp(t_data *data);
 void *ft_realloc(void *ptr, size_t cursize, size_t newsize);
 int ft_parse_info(t_data *data, char *line);
+int ft_parse_map(t_data *data, char *line);
 
 
 int red_cross(t_data *data); //free

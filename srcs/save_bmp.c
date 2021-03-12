@@ -6,11 +6,11 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 12:05:44 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/06 10:47:45 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/12 11:27:40 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "cub3d.h"
 
 void	fill_header(t_data *data, int fd)
 {

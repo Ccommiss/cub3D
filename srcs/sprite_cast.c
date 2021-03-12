@@ -6,11 +6,11 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 11:02:02 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/11 11:59:31 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/12 11:27:40 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "cub3d.h"
 
 void	swap(t_spr *tmp, t_spr *tmp_next)
 {

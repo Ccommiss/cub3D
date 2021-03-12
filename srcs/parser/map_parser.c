@@ -1,4 +1,4 @@
-#include "../includes/cub3d.h"
+#include "cub3d.h"
 
 /*
  *  ft_finddir
@@ -110,9 +110,10 @@ int fill_maptab(t_data *data, char *line, int y)
 	return (1);
 }
 
-int parse_map(t_data *data, char *line)
+int ft_parse_map(t_data *data, char *line)
 {
 	static int y;
+	int len;
 
 	if ((y == 0) && ft_isempty(line))
 		return (0);
@@ -123,53 +124,78 @@ int parse_map(t_data *data, char *line)
 	if (!data->map)
 		return (close_win(data));
 	data->map[data->map_h] = 0;
+	// if (data->map_w == 0 || ft_strlen(line) > (size_t)data->map_w)
+	// 	data->map[y] = (char *)malloc(sizeof(char) * (ft_strlen(line) + 1));
+	// else
+	// 	data->map[y] = (char *)malloc(sizeof(char) * (data->map_w + 1));
+
 	if (data->map_w == 0 || ft_strlen(line) > (size_t)data->map_w)
-		data->map[y] = (char *)malloc(sizeof(char) * (ft_strlen(line) + 1));
+		len = ft_strlen(line) + 1; 
 	else
-		data->map[y] = (char *)malloc(sizeof(char) * (data->map_w + 1));
+		len = data->map_w + 1;
+	data->map[y] = (char *)malloc(sizeof(char) * (len));
 	if (!data->map[y])
 		return (close_win(data));
+	ft_bzero(data->map[y], len);
 	fill_maptab(data, line, y);
 	data->map[++y] = 0;
 	return 1;
 }
 
-
-
+/*
+ *  iscomplete
+ *
+ * 	[synopsis] : checks whether or not all infos have been read and set
+ * 	[call] : ft_parse
+ * 	[return] : 0 if is not complete, 1 if it is
+ */
 
 int iscomplete(t_data *data)
 {
 	if (!data->info->west_text || !data->info->east_text ||
-		!data->info->sprite_text || !data->info->north_text || !data->info->south_text || data->info->floor_rgb == -1 || data->info->ceiling_rgb == -1)
+		!data->info->sprite_text || !data->info->north_text || !data->info->south_text 
+		|| data->info->floor_rgb == -1 || data->info->ceiling_rgb == -1)
 		return (0);
 	return (1);
 }
 
+
+/*
+ *  ft_parse
+ *
+ * 	[synopsis] : reads line by line the file and parse it
+ * 		> ft_parse_info : parses the infos (colors, textures, etc)
+ * 		> ft_parse_map : parses the map and then fill data->map tab
+ * 		> 
+ * 	[call] : in main
+ * 	[return] : 1 if success, exits if error occurs while parse_info/parse_map
+ * 			> error 4 if map is found before all infos have been found
+ * 			> 
+ */
+
 int ft_parse(int fd, t_data *data)
 {
-	char *line = NULL;
-
+	char *line;
+	
+	line = NULL;
 	while (get_next_line(fd, &line) && data->error == 0)
 	{
 		if (ft_mapcheck(line) == 0 && !ft_isempty(line) && !iscomplete(data))
 			ft_parse_info(data, line);
 		else if (ft_mapcheck(line) == 1 && iscomplete(data) == 1)
-			parse_map(data, line);
+			ft_parse_map(data, line);
 		else if (!ft_isempty(line) && ft_mapcheck(line) == 1 && !iscomplete(data))
 			return (error_message(data, 4));
 		free(line);
 	}
-	if (data->error != 0)
-		return (error_message(data, data->error));
-	if (!ft_isempty(line) && iscomplete(data) == 1)
-		parse_map(data, line);
+	if (ft_mapcheck(line) == 1  && iscomplete(data) == 1) 
+		ft_parse_map(data, line);
+	free(line);
 	if (!iscomplete(data))
 		return (error_message(data, 4));
-
 	if (data->error == 0 && (data->pos_x < 0 || data->pos_y < 0))
 		return (error_message(data, 2));
 	checkmap(data);
 	flood_fill(data);
-	free(line);
 	return (1);
 }

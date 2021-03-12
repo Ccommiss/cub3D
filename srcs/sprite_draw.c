@@ -6,11 +6,11 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 11:01:14 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/11 11:58:35 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/12 11:27:40 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "cub3d.h"
 
 void	compute_data(t_data *data, t_spr_geo *sp, t_draw *draw)
 {
