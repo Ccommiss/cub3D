@@ -47,10 +47,8 @@ int ft_getrgb(t_data *data, char *rgb)
 	b = ft_atoi(block[2]);
 
 	int i = 0;
-	while (block[i] != NULL){
-		printf ("freeing blocks in RGB %s \n", block[i]);
+	while (block[i] != NULL)
 		free(block[i++]);
-	}
 	free(block);
 	free(rgb);
 	if (r == 0 && g == 0 && b == 0)

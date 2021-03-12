@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 15:18:12 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/11 16:42:41 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/11 22:35:02 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,29 +25,29 @@ int key_hook(int keycode, t_data *data)
 {
 	double olddirx;
 	double oldplanex;
-	
+
 	if (keycode == KEY_SHIFT)
 		data->speed = 0.17;
-	
+
 	if (keycode == KEY_W)
 	{
-		if (is_zero(data->map[(int)(data->pos_y)][(int)(data->pos_x + data->dirx * data->speed + 0.01)]))
+		if (is_zero(data->map[(int)(data->pos_y)][(int)(data->pos_x + data->dirx * data->speed)]))
 			data->pos_x += data->dirx * data->speed;
-		if (is_zero(data->map[(int)(data->pos_y + data->diry * data->speed + 0.01)][(int)(data->pos_x)]))
+		if (is_zero(data->map[(int)(data->pos_y + data->diry * data->speed)][(int)(data->pos_x)]))
 			data->pos_y += data->diry * data->speed;
 	}
 	if (keycode == KEY_S)
 	{
-		if (is_zero(data->map[(int)(data->pos_y)][(int)(data->pos_x - data->dirx * data->speed + 0.01)]))
+		if (is_zero(data->map[(int)(data->pos_y)][(int)(data->pos_x - data->dirx * data->speed)]))
 			data->pos_x -= data->dirx * data->speed;
-		if (is_zero(data->map[(int)(data->pos_y - data->diry * 0.11)][(int)(data->pos_x)]))
+		if (is_zero(data->map[(int)(data->pos_y - data->diry * data->speed)][(int)(data->pos_x)]))
 			data->pos_y -= data->diry * data->speed;
 	}
 	if (keycode == KEY_A)
 	{
-		if (is_zero(data->map[(int)(data->pos_y)][(int)(data->pos_x + data->diry * data->speed + 0.01)]))
+		if (is_zero(data->map[(int)(data->pos_y)][(int)(data->pos_x + data->diry * data->speed)]))
 			data->pos_x += data->diry * data->speed;
-		if (is_zero(data->map[(int)(data->pos_y - data->dirx * data->speed + 0.01)][(int)(data->pos_x)]))
+		if (is_zero(data->map[(int)(data->pos_y - data->dirx * data->speed)][(int)(data->pos_x)]))
 		 	data->pos_y -= data->dirx * data->speed;
 	}
 	if (keycode == KEY_D)
@@ -57,9 +57,9 @@ int key_hook(int keycode, t_data *data)
 		if (is_zero(data->map[(int)(data->pos_y + data->dirx * data->speed + 0.01)][(int)(data->pos_x)]))
 		 	data->pos_y += data->dirx * data->speed;
 	}
-	
 
-	if (keycode == KEY_RIGHT) 
+
+	if (keycode == KEY_RIGHT)
 	{
 		olddirx = data->dirx;
 		data->dirx = data->dirx * cos(0.2) - data->diry * sin(0.2);

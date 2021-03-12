@@ -1,19 +1,20 @@
 #include "../includes/cub3d.h"
 
-int		is_zero(char c)
+int is_zero(char c)
 {
 	if (c == '0') // || c == '2') et 2 sil faut traverser
 		return (1);
 	return (0);
 }
 
-void	hit_check(t_data *data)
+void hit_check(t_data *data)
 {
 	int hit;
 
 	hit = 0;
 	while (hit == 0)
 	{
+
 		if (data->dx < data->dy)
 		{
 			data->dx += data->delta_x;
@@ -32,14 +33,18 @@ void	hit_check(t_data *data)
 			else
 				data->side = SOUTH;
 		}
+		if (data->map_x < 0)
+			data->map_x = 0;
+		if (data->map_y < 0)
+			data->map_y = 0;
+
 		if ((data->map_y < 0 || data->map_x < 0) // fix le SF mais nv bug daffichage
-			|| (data->map[data->map_y][data->map_x] != '0'
-			&& data->map[data->map_y][data->map_x] != '2'))
+			|| (data->map[data->map_y][data->map_x] != '0' && data->map[data->map_y][data->map_x] != '2'))
 			hit = 1;
 	}
 }
 
-void	calculate_step(t_data *data)
+void calculate_step(t_data *data)
 {
 	if (data->raydir_x < 0)
 	{
@@ -63,7 +68,7 @@ void	calculate_step(t_data *data)
 	}
 }
 
-void	calculate_wall(t_data *data, t_draw *d, int line_h)
+void calculate_wall(t_data *data, t_draw *d, int line_h)
 {
 	double wallx;
 
@@ -85,7 +90,7 @@ void	calculate_wall(t_data *data, t_draw *d, int line_h)
 		d->tex_x = data->t->w - d->tex_x - 1;
 }
 
-void	set_texture(t_data *data)
+void set_texture(t_data *data)
 {
 	if (data->side == SOUTH)
 		while (data->t->side != 's')
@@ -101,20 +106,15 @@ void	set_texture(t_data *data)
 			data->t = data->t->next;
 }
 
-void	draw(t_data *data, int x)
+void draw(t_data *data, int x)
 {
-	t_draw	d;
-	int		line_h;
-	double	step;
-	double	t_pos;
-	int		y;
+	t_draw d;
+	int line_h;
+	double step;
+	double t_pos;
+	int y;
 
 	line_h = (int)(data->height / data->perpwalldist);
-	if (line_h == 0)
-	{
-		printf(" DATA EPRP = %f \n", data->perpwalldist);
-		printf(" LINE H = %d \n", line_h);
-	}
 	calculate_wall(data, &d, line_h);
 	step = (1.0 * data->t->h) / line_h;
 	t_pos = (d.start_y - (data->height / 2) + (line_h / 2)) * step;
@@ -130,33 +130,26 @@ void	draw(t_data *data, int x)
 	}
 }
 
-void	dda(t_data *data)
+void dda(t_data *data)
 {
 	int x;
 
 	x = -1;
-
 	while (++x < data->width)
 	{
 		data->camera_x = 2 * x / (double)data->width - 1;
 		data->raydir_x = data->dirx + (data->planeX * data->camera_x);
 		data->raydir_y = data->diry + (data->planeY * data->camera_x);
-		printf ("verif pos %d  \n"data->pos_y)
 		data->map_x = (int)data->pos_x;
 		data->map_y = (int)data->pos_y;
-		data->delta_x = (data->raydir_y == 0) ? 0 : ((data->raydir_x == 0) ? 1 : fabs(1 / data->raydir_x));
-		data->delta_y = (data->raydir_y == 0) ? 0 : ((data->raydir_y == 0) ? 1 : fabs(1 / data->raydir_y));
+		data->delta_x = fabs(1 / data->raydir_x);
+		data->delta_y = fabs(1 / data->raydir_y);
 		calculate_step(data);
 		hit_check(data);
-	
 		if (data->side == WEST || data->side == EAST)
 			data->perpwalldist = (data->map_x - data->pos_x + (1 - data->stepX) / 2) / data->raydir_x;
 		else
 			data->perpwalldist = (data->map_y - data->pos_y + (1 - data->stepY) / 2) / data->raydir_y;
-		if (x == 950)
-		{
-			printf("PERP = %f // x = %d // map Y %d // map X %d // POS X %f  POS Y %f // STEP X %d// STEP Y %d //raydirX %f Y %f \n", data->perpwalldist, x, data->map_y, data->map_x, data->pos_x, data->pos_y, data->stepX,  data->stepY, data->raydir_x, data->raydir_y);
-		}
 		draw(data, x);
 		data->zbuffer[x] = data->perpwalldist;
 	}
@@ -166,5 +159,3 @@ void	dda(t_data *data)
 		sprite_drawing(data);
 	}
 }
-
-
