@@ -1,31 +1,32 @@
 #include "cub3d.h"
 
-
 int error_message(t_data *data, int index)
 {
+	printf("Error :\n");
 	if (data->error == 0)
-	{
-		printf("Error :\n");
 		data->error = index;
-		if (index == 1)
-			printf("Map is not closed, blank was found in land or player is not inside the bounds. \n");
-		if (index == 2)
-			printf("No player found. \n");
-		if (index == 3)
-			printf("Unexpected character found in map.\n");
-		if (index == 4)
-			printf("Missing infos.\n");
-		if (index == 5)
-			printf("Two players found in map.\n");
-		if (index == 6)
-			printf("Texture reference could not be found.\n");
-		if (index == 7)
-			printf("Bad RGB color formatting.\n");
-		if (index == 8)
-			printf("RGB values can't be over 255 or below 0.\n");
-		if (index == 9)
-			printf("Too many arguments.\n");
-	}
+	if (data->error == MAP_NOT_CLOSED)
+		printf("Map is not closed, blank was found in land or player is not inside the bounds. \n");
+	if (data->error == NO_PLAYER_FOUND)
+		printf("No player found. \n");
+	if (data->error == UNEXPECTED_CHAR)
+		printf("Unexpected character found in map.\n");
+	if (data->error == MISSING_INFOS)
+		printf("Missing infos.\n");
+	if (data->error == TWO_PLAYERS)
+		printf("Two players found in map.\n");
+	if (data->error == TEXTURE_NOT_FOUND)
+		printf("Texture reference could not be found.\n");
+	if (data->error == BAD_RGB_FORMAT)
+		printf("Bad RGB color formatting.\n");
+	if (data->error == BAD_RGB_VALUES)
+		printf("RGB values can't be over 255 or below 0.\n");
+	if (data->error == REASSIGNATION)
+		printf("Values can't be set up twice.\n");
+	if (data->error == HEIGHT_WIDTH_NEG)
+		printf("Height and width must be positive values.\n");
+	if (data->error == 123)
+		printf("Too many arguments.\n");
 	close_win(data);
 	return (-1);
 }
@@ -49,7 +50,7 @@ int ft_check_chars(char sign, t_data *data, int x, int y)
 	//printf ("CHECKING SIGN = %c \n", sign);
 	if (sign == 'N' || sign == 'S' || sign == 'E' || sign == 'W')
 	{
-		if ((data->pos_x != -1 && data->pos_y != -1) && (data->pos_x != x + 0.5 || data->pos_y != y + 0.5 ))
+		if ((data->pos_x != -1 && data->pos_y != -1) && (data->pos_x != x + 0.5 || data->pos_y != y + 0.5))
 			return (error_message(data, 5));
 		data->pos_x = x + 0.5;
 		data->pos_y = y + 0.5;
@@ -75,4 +76,63 @@ int ft_mapcheck(char *str)
 		i++;
 	}
 	return (1);
+}
+
+/*
+ *  ft_trim_inside
+ *
+ * 	[synopsis] : trims a str inside 
+ * 	[call] : ft_get_rgb
+ * 	[return] : new str without blanks inside
+ */
+
+char *ft_trim_inside(char *str)
+{
+	char *strnew;
+	int i;
+	int j;
+
+	i = 0;
+	j = 0;
+
+	strnew = (char *)malloc((ft_strlen(str) + 1) * sizeof(char));
+	if (!strnew)
+	{
+		free(str);
+		return (NULL); //gerer erreur
+	}
+	ft_bzero(strnew, ft_strlen(str));
+	while (str[j])
+	{
+		if (str[j] != ' ')
+		{
+			strnew[i] = str[j];
+			i++;
+		}
+		j++;
+	}
+	strnew[i] = '\0';
+	free(str);
+	return (strnew);
+}
+
+/*
+ *  ft_replace_tabs
+ *
+ * 	[synopsis] : replaces tabs (int 9) by spaces (int 32) in order to 
+ * 				be able to format separators split later. 
+ * 	[call] : ft_parse_infos
+ * 	[return] : none
+ */
+
+void ft_replace_tabs(char **line)
+{
+	int i;
+
+	i = -1;
+	while (line[0][++i])
+	{
+		if (line[0][i] == 9)
+			line[0][i] = 32;
+	}
 }

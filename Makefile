@@ -15,7 +15,8 @@ SRCS = $(SOURCEDIR)cub.c \
 	$(SOURCEDIR)init.c \
 	$(SOURCEDIR)main.c \
 	$(PARSERDIR)parser_utils.c \
-	$(SOURCEDIR)flood_fill.c \
+	$(PARSERDIR)main_parser.c \
+	$(PARSERDIR)flood_fill.c \
 	$(SOURCEDIR)display.c \
 	$(SOURCEDIR)events.c \
 	$(SOURCEDIR)save_bmp.c \
@@ -29,7 +30,7 @@ OBJS := ${SRCS:c=o}
 
 CC = clang -g $(FLAGS)
 
-FLAGS = -I. -I$(INCLUDES) -Wall -Werror -Wextra 
+FLAGS = -I. -I$(INCLUDES) -Wall -Werror -Wextra -fsanitize=address
 LIBS = ./libft
 UNAME := $(shell uname)
 APPLE = Darwin

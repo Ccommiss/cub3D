@@ -4,8 +4,7 @@ void check_borders(t_data *data, int x, int y, char ***mapbis)
 {
 	if (y < 0 || y >= data->map_h || x < 0 || x >= data->map_w || data->map[y][x] == ' ' || data->map[y][x] == '.')
 	{
-		if (data->error == 0)
-			error_message(data, 1);
+		data->error = MAP_NOT_CLOSED;
 		return;
 	}
 	if (data->map[y][x] == '1' || mapbis[0][y][x] == 'v')
@@ -15,7 +14,8 @@ void check_borders(t_data *data, int x, int y, char ***mapbis)
 	if (data->map[y][x] == '2' && data->error == 0)
 	{
 		mapbis[0][y][x] = 'v';
-		load_sprite(data, x, y);
+		if (load_sprite(data, x, y) == -1)
+			data->error = MALLOC_ERROR;
 	}
 	if (data->error == 0)
 	{
@@ -56,6 +56,7 @@ int flood_fill(t_data *data)
 		ft_memset(copymap[i], '.', data->map_w);
 		i++;
 	}
+	copymap[i] = NULL;
 	check_borders(data, data->pos_x, data->pos_y, &copymap);
 	free_copymap(data->map_h, &copymap, 1);
 	if (data->error != 0)

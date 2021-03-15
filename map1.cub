@@ -1,38 +1,18 @@
-R	640 
+R	620 266
+
+NO     pics/night_city.xpm
+SO       pics/matelas.xpm 
+WE                                       pics/purplestone.xpm
+EA     pics/wood.xpm
+
+S  pics/miles-davis.xpm
 
 
-       NO     pics/night_city.xpm
-
-
-
-     SO       pics/matelas.xpm
-
-
-
-                                  WE                                       pics/purplestone.xpm
-
-
-
-EA        pics/wood.xpm
-
-
-
-              S             pics/miles-davis.xpm
-
-
-
-F ,,,,,,,,,,,,,,89,,,,,,0,0
-C 255, 1, 2,
-
-
-
-
-
-
-
+F 0,,254,0
+C 15, 0, 0,
 
 11111111111111111
-100N000000000011
+100N00000000011
 1000000000000011111111
 1111111111111111111111
 

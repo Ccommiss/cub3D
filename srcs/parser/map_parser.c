@@ -25,6 +25,7 @@ void ft_finddir(t_data *data, char dir) //chamboule tout,marche pas avec autre c
  *  load_sprite
  *
  * 	[synopsis] : set the dirx & diry positions according to letter found in game
+ * 	[call] : in check_borders (part of flood fill algorithm)
  * 	[return] : none
  */
 
@@ -37,14 +38,14 @@ int load_sprite(t_data *data, int x, int y)
 		i = 0;
 		data->spr = (t_spr *)malloc(sizeof(t_spr));
 		if (!data->spr)
-			return (error_message(data, 10));
+			return (-1);
 		data->spr->head = data->spr;
 	}
 	else
 	{
 		data->spr->next = (t_spr *)malloc((sizeof(t_spr)));
 		if (!data->spr->next)
-			return (error_message(data, 10));
+			return (-1);
 		data->spr->next->head = data->spr->head; //on sauvegarde la tete, ainsi chaque maillon contient le ptr vers le debut de la liste
 		data->spr = data->spr->next;
 	}
@@ -155,59 +156,3 @@ int ft_parse_map(t_data *data, char *line)
 	return 1;
 }
 
-/*
- *  iscomplete
- *
- * 	[synopsis] : checks whether or not all infos have been read and set
- * 	[call] : ft_parse
- * 	[return] : 0 if is not complete, 1 if it is
- */
-
-int iscomplete(t_data *data)
-{
-	if (!data->height || !data->width || !data->info->west_text || !data->info->east_text ||
-		!data->info->sprite_text || !data->info->north_text || !data->info->south_text
-		|| data->info->floor_rgb == -1 || data->info->ceiling_rgb == -1)
-		return (0);
-	return (1);
-}
-
-
-/*
- *  ft_parse
- *
- * 	[synopsis] : reads line by line the file and parse it
- * 		> ft_parse_info : parses the infos (colors, textures, etc)
- * 		> ft_parse_map : parses the map and then fill data->map tab
- * 		>
- * 	[call] : in main
- * 	[return] : 1 if success, exits if error occurs while parse_info/parse_map
- */
-
-int ft_parse(int fd, t_data *data)
-{
-	char *line;
-
-	line = NULL;
-	while (get_next_line(fd, &line) && data->error == 0)
-	{
-		printf ("GNL LINE = %s \n", line);
-		if (ft_mapcheck(line) == 0 && !ft_isempty(line) && !iscomplete(data))
-			ft_parse_info(data, line);
-		else if (iscomplete(data) == 1) // on a toutes les infos 
-			ft_parse_map(data, line);
-		free(line);
-	}
-	if (ft_mapcheck(line) == 1  && iscomplete(data) == 1) // pour la derniere ligne 
-		ft_parse_map(data, line);
-	free(line);
-	if (!iscomplete(data))
-		return (error_message(data, 4));
-	if (data->error == 0 && (data->pos_x < 0 || data->pos_y < 0))
-		return (error_message(data, 2));
-	checkmap(data);
-	printf ("END OF FT PARSE \n");
-	flood_fill(data);
-	printf ("AFTER FLOOD FILL\n");
-	return (1);
-}

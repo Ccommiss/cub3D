@@ -35,6 +35,37 @@ enum e_pt
 	Y = 1
 };
 
+enum e_param
+{
+	north,
+	south,
+	west,
+	east, 
+	sprite,
+	floor_rgb, 
+	ceiling_rgb,
+	width, 
+	height
+};
+
+
+enum e_errors
+{
+	MAP_NOT_CLOSED = 1,
+	NO_PLAYER_FOUND,
+	UNEXPECTED_CHAR,
+	MISSING_INFOS,
+	TWO_PLAYERS,
+	TEXTURE_NOT_FOUND,
+	BAD_RGB_FORMAT,
+	BAD_RGB_VALUES,
+	REASSIGNATION, 
+	HEIGHT_WIDTH_NEG,
+	MALLOC_ERROR
+
+
+};
+
 typedef struct s_spr t_spr;
 
 typedef struct s_spr // list chainee
@@ -253,6 +284,18 @@ int is_zero(char c);
 int ft_check_chars(char sign, t_data *data, int x, int y);
 int ft_mapcheck(char *str);
 void ft_finddir(t_data *data, char dir);
+
+/*
+ *  [parser_utils.c] Parsing functions
+ */
+
+
+
+char *ft_trim_inside(char *str);
+
+void 	ft_replace_tabs(char **line);
+
+
 
 /*
  *  [visu2d.c] Minimap fucntions
