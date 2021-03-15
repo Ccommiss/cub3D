@@ -27,15 +27,15 @@ SRCS = $(SOURCEDIR)cub.c \
 
 OBJS := ${SRCS:c=o}
 
-CC = gcc -g $(FLAGS)
+CC = clang -g $(FLAGS)
 
-FLAGS = -I. -I$(INCLUDES) -Wall -Werror -Wextra 
+FLAGS = -I. -I$(INCLUDES) -Wall -Werror -Wextra -fsanitize=address
 LIBS = ./libft
 UNAME := $(shell uname)
 APPLE = Darwin
 
 all: $(NAME)
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+
 $(NAME): $(OBJS) $(INCLUDES)
 	make -C $(LIBS)
 ifeq ($(UNAME),$(APPLE))

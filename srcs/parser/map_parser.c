@@ -59,9 +59,9 @@ int load_sprite(t_data *data, int x, int y)
 /*
  *  ft_realloc_tab
  *
- * 	[synopsis] : realloc all data->map[y] lines, in case a line is longer than the previous 
+ * 	[synopsis] : realloc all data->map[y] lines, in case a line is longer than the previous
  * 				ones
- * 	[return] : 1 if success, -1 if malloc fails 
+ * 	[return] : 1 if success, -1 if malloc fails
  */
 
 int ft_realloc_tab(t_data *data, int x, int y)
@@ -83,8 +83,8 @@ int ft_realloc_tab(t_data *data, int x, int y)
 /*
  *  fill_maptab
  *
- * 	[synopsis] : fill the data->map tab (char **map) with the line  
- * 	[return] : 1 if success, 
+ * 	[synopsis] : fill the data->map tab (char **map) with the line
+ * 	[return] : 1 if success,
  */
 
 int fill_maptab(t_data *data, char *line, int y)
@@ -124,13 +124,8 @@ int ft_parse_map(t_data *data, char *line)
 	if (!data->map)
 		return (close_win(data));
 	data->map[data->map_h] = 0;
-	// if (data->map_w == 0 || ft_strlen(line) > (size_t)data->map_w)
-	// 	data->map[y] = (char *)malloc(sizeof(char) * (ft_strlen(line) + 1));
-	// else
-	// 	data->map[y] = (char *)malloc(sizeof(char) * (data->map_w + 1));
-
 	if (data->map_w == 0 || ft_strlen(line) > (size_t)data->map_w)
-		len = ft_strlen(line) + 1; 
+		len = ft_strlen(line) + 1;
 	else
 		len = data->map_w + 1;
 	data->map[y] = (char *)malloc(sizeof(char) * (len));
@@ -153,7 +148,7 @@ int ft_parse_map(t_data *data, char *line)
 int iscomplete(t_data *data)
 {
 	if (!data->info->west_text || !data->info->east_text ||
-		!data->info->sprite_text || !data->info->north_text || !data->info->south_text 
+		!data->info->sprite_text || !data->info->north_text || !data->info->south_text
 		|| data->info->floor_rgb == -1 || data->info->ceiling_rgb == -1)
 		return (0);
 	return (1);
@@ -166,17 +161,17 @@ int iscomplete(t_data *data)
  * 	[synopsis] : reads line by line the file and parse it
  * 		> ft_parse_info : parses the infos (colors, textures, etc)
  * 		> ft_parse_map : parses the map and then fill data->map tab
- * 		> 
+ * 		>
  * 	[call] : in main
  * 	[return] : 1 if success, exits if error occurs while parse_info/parse_map
  * 			> error 4 if map is found before all infos have been found
- * 			> 
+ * 			>
  */
 
 int ft_parse(int fd, t_data *data)
 {
 	char *line;
-	
+
 	line = NULL;
 	while (get_next_line(fd, &line) && data->error == 0)
 	{
@@ -188,7 +183,7 @@ int ft_parse(int fd, t_data *data)
 			return (error_message(data, 4));
 		free(line);
 	}
-	if (ft_mapcheck(line) == 1  && iscomplete(data) == 1) 
+	if (ft_mapcheck(line) == 1  && iscomplete(data) == 1)
 		ft_parse_map(data, line);
 	free(line);
 	if (!iscomplete(data))

@@ -60,19 +60,39 @@ int ft_getrgb(t_data *data, char *rgb)
 	return (((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff));
 }
 
+
+void 	ft_replace_tabs(char **line)
+{
+	int i;
+
+	i = -1;
+	while(line[0][++i])
+	{
+		if (line[0][i] == 9)
+			line[0][i] = 32;
+	}
+}
+
 int ft_parse_info(t_data *data, char *line)
 {
 	char **block;
 	char *newline;
-	newline = ft_strtrim(line, " ");
-	printf("l: %s\n", line);
+	newline = ft_strtrim(line, " 	");
+	ft_replace_tabs(&newline);
 	block = ft_split(newline, ' ');
-
+	if (!block[0] || !block[1])
+	{
+		while (*block)
+			free(*block++);
+		error_message(data, 4); //missing info
+	}
 	if (block[0][0] == 'R')
 	{
 		data->width = ft_atoi(block[1]);
 		data->height = ft_atoi(block[2]);
 	}
+	else if (block[2])
+		error_message(data, 10);
 	else if (ft_strncmp(block[0], "NO", 2) == 0)
 		data->info->north_text = ft_strdup(block[1]);
 	else if (ft_strncmp(block[0], "SO", 2) == 0)

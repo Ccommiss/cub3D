@@ -14,7 +14,7 @@ int error_message(t_data *data, int index)
 		if (index == 3)
 			printf("Unexpected character found in map.\n");
 		if (index == 4)
-			printf("Missing infos.");
+			printf("Missing infos.\n");
 		if (index == 5)
 			printf("Two players found in map.\n");
 		if (index == 6)
@@ -23,6 +23,8 @@ int error_message(t_data *data, int index)
 			printf("Bad RGB color formatting.\n");
 		if (index == 8)
 			printf("RGB values can't be over 255 or below 0.\n");
+		if (index == 9)
+			printf("Too many arguments.\n");
 	}
 	close_win(data);
 	return (-1);
