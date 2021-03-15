@@ -46,6 +46,7 @@ void *ft_realloc(void *ptr, size_t cursize, size_t newsize)
 
 int ft_check_chars(char sign, t_data *data, int x, int y)
 {
+	//printf ("CHECKING SIGN = %c \n", sign);
 	if (sign == 'N' || sign == 'S' || sign == 'E' || sign == 'W')
 	{
 		if ((data->pos_x != -1 && data->pos_y != -1) && (data->pos_x != x + 0.5 || data->pos_y != y + 0.5 ))

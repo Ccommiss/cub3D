@@ -110,6 +110,18 @@ int fill_maptab(t_data *data, char *line, int y)
 	return (1);
 }
 
+/*
+ *  ft_parse_map
+ *
+ * 	[synopsis] : allocate memory
+ * 			> Verifies if the line is blank at the beginning – simply returns 0
+ * 			> Reallocates the double tab at each call (one more Y each time a line is read)
+ * 			> Allocates the map[y] with : 1/ line length if it's > the saved width, 2/ the saved width if it's <= 
+ * 			> Free everything if a malloc fails 
+ * 	[call] : 
+ * 	[return] : 0 if is not complete, 1 if it is
+ */
+
 int ft_parse_map(t_data *data, char *line)
 {
 	static int y;
@@ -122,7 +134,10 @@ int ft_parse_map(t_data *data, char *line)
 	data->map_h = y + 1;
 	data->map = (char **)ft_realloc(data->map, (data->map_h) * sizeof(char *), (data->map_h + 1) * sizeof(char *));
 	if (!data->map)
+	{
+		free(line);
 		return (close_win(data));
+	}
 	data->map[data->map_h] = 0;
 	if (data->map_w == 0 || ft_strlen(line) > (size_t)data->map_w)
 		len = ft_strlen(line) + 1;
@@ -130,7 +145,10 @@ int ft_parse_map(t_data *data, char *line)
 		len = data->map_w + 1;
 	data->map[y] = (char *)malloc(sizeof(char) * (len));
 	if (!data->map[y])
+	{
+		free(line);
 		return (close_win(data));
+	}
 	ft_bzero(data->map[y], len);
 	fill_maptab(data, line, y);
 	data->map[++y] = 0;
@@ -147,7 +165,7 @@ int ft_parse_map(t_data *data, char *line)
 
 int iscomplete(t_data *data)
 {
-	if (!data->info->west_text || !data->info->east_text ||
+	if (!data->height || !data->width || !data->info->west_text || !data->info->east_text ||
 		!data->info->sprite_text || !data->info->north_text || !data->info->south_text
 		|| data->info->floor_rgb == -1 || data->info->ceiling_rgb == -1)
 		return (0);
@@ -164,8 +182,6 @@ int iscomplete(t_data *data)
  * 		>
  * 	[call] : in main
  * 	[return] : 1 if success, exits if error occurs while parse_info/parse_map
- * 			> error 4 if map is found before all infos have been found
- * 			>
  */
 
 int ft_parse(int fd, t_data *data)
@@ -175,15 +191,14 @@ int ft_parse(int fd, t_data *data)
 	line = NULL;
 	while (get_next_line(fd, &line) && data->error == 0)
 	{
+		printf ("GNL LINE = %s \n", line);
 		if (ft_mapcheck(line) == 0 && !ft_isempty(line) && !iscomplete(data))
 			ft_parse_info(data, line);
-		else if (ft_mapcheck(line) == 1 && iscomplete(data) == 1)
+		else if (iscomplete(data) == 1) // on a toutes les infos 
 			ft_parse_map(data, line);
-		else if (!ft_isempty(line) && ft_mapcheck(line) == 1 && !iscomplete(data))
-			return (error_message(data, 4));
 		free(line);
 	}
-	if (ft_mapcheck(line) == 1  && iscomplete(data) == 1)
+	if (ft_mapcheck(line) == 1  && iscomplete(data) == 1) // pour la derniere ligne 
 		ft_parse_map(data, line);
 	free(line);
 	if (!iscomplete(data))
@@ -191,6 +206,8 @@ int ft_parse(int fd, t_data *data)
 	if (data->error == 0 && (data->pos_x < 0 || data->pos_y < 0))
 		return (error_message(data, 2));
 	checkmap(data);
+	printf ("END OF FT PARSE \n");
 	flood_fill(data);
+	printf ("AFTER FLOOD FILL\n");
 	return (1);
 }

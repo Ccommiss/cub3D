@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 15:18:00 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/12 11:27:40 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/15 12:40:03 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@ int	main(int argc, char **argv)
 	data.info = &info;
 	init_base(&data);
 	ft_parse(fd, &data);
+	printf ("AFTER FT_PARSE\n");
 	init_struct(&data);
+	printf ("AFTER INIT STRUCT\n");
 	if (argc == 3 && ft_strncmp(argv[2], "--save", 7) == 0)
 	{
 		printf ("SAVE TO BMP \n");

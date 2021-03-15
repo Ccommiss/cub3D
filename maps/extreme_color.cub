@@ -1,10 +1,21 @@
-R	640	480
-NO ./textures/mossy.xpm
-SO ./textures/redbrick.xpm
-EA ./textures/stone.xpm
-WE ./textures/wood.xpm
-S ./textures/barrel.xpm
+     R 600 500
+	 NO     pics/night_city.xpm
 
+
+
+     SO       pics/matelas.xpm
+
+
+
+                                  WE                                       pics/purplestone.xpm
+
+
+
+EA        pics/wood.xpm
+
+
+
+              S             pics/miles-davis.xpm
 F 0,0,255
 C 0,128,128
 

@@ -73,6 +73,10 @@ void 	ft_replace_tabs(char **line)
 	}
 }
 
+
+
+// trouver un moyen si y a trop d'arguments genre deux paths par ex 
+
 int ft_parse_info(t_data *data, char *line)
 {
 	char **block;
@@ -90,9 +94,9 @@ int ft_parse_info(t_data *data, char *line)
 	{
 		data->width = ft_atoi(block[1]);
 		data->height = ft_atoi(block[2]);
+		if (data->height <= 0 || data->width <= 0)
+			error_message(data, 11); // message d'erreur a faire
 	}
-	else if (block[2])
-		error_message(data, 10);
 	else if (ft_strncmp(block[0], "NO", 2) == 0)
 		data->info->north_text = ft_strdup(block[1]);
 	else if (ft_strncmp(block[0], "SO", 2) == 0)

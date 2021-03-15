@@ -43,7 +43,9 @@ int init_struct(t_data *data)
 {
 	if (loadimage(data) == -1)
 		return (-1);
+	printf ("1\n");
 	data->win = mlx_new_window(data->mlx, data->width, data->height, "Cub3D");
+	printf ("2\n");
 	data->img = mlx_new_image(data->mlx, data->width, data->height);
 	data->imgaddr = mlx_get_data_addr(data->img, &data->bits_per_pixel, &data->line_length, &data->endian);
 	init_plane(data);
@@ -70,6 +72,8 @@ int init_struct(t_data *data)
 void init_base(t_data *data)
 {
 	data->mlx = mlx_init();
+	data->width = 0;
+	data->height = 0;
 	data->error = 0;
 	data->pos_x = -1;
 	data->pos_y = -1;
