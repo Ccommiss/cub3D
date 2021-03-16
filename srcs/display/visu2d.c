@@ -1,6 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   visu2d.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/16 16:14:55 by ccommiss          #+#    #+#             */
+/*   Updated: 2021/03/16 17:07:32 by ccommiss         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
-
-
 
 void checkmap(t_data *data)
 {
@@ -68,21 +78,20 @@ void set_map(t_data *data)
 	{
 		while (w < data->map_w)
 		{
-			if (is_zero(data->map[h][w]) == 0)
-			{
 				pixh = data->minimap_size * h + data->height * 0.7; // data->height pour centrer
-				while (pixh++ < data->minimap_size * (h + 1) + data->height * 0.7)
+				while (pixh++ < (data->minimap_size * (h + 1) + data->height * 0.7) - 2)
 				{
 					pixw = data->minimap_size * (w) + (data->width / 4);
-					while (pixw++ < data->minimap_size * (w + 1) + (data->width / 4)) //pour mettre au milieu
+					while (pixw++ < (data->minimap_size * (w + 1) + (data->width / 4)) - 1) //pour mettre au milieu
 					{
 						if (data->map[h][w] == '1')
-							my_mlx_pixel_put(data, pixw, pixh, 0xffd700);
-						if (data->map[h][w] == '2')
+							my_mlx_pixel_put(data, pixw, pixh, GREY);
+						else if (data->map[h][w] == '2')
 							my_mlx_pixel_put(data, pixw, pixh, 0xffffff);
+						else if (data->map[h][w] == '0')
+							my_mlx_pixel_put(data, pixw, pixh, GRASS);
 					}
 				}
-			}
 			w++;
 		}
 		h++;

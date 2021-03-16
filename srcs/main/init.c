@@ -41,11 +41,22 @@ void init_plane(t_data *data)
 
 int init_struct(t_data *data)
 {
+	
+
+	// int width;
+	// int height;
+
+	// mlx_get_screen_size(data->mlx, &width, &height); linux
+	// if (data->width > width)
+	// 	data->width = width;
+	// if (data->height > height)
+	// 	data->height = height;
+
+	data->mlx = mlx_init();
 	if (loadimage(data) == -1)
 		return (-1);
-	printf ("1\n");
 	data->win = mlx_new_window(data->mlx, data->width, data->height, "Cub3D");
-	printf ("2\n");
+
 	data->img = mlx_new_image(data->mlx, data->width, data->height);
 	data->imgaddr = mlx_get_data_addr(data->img, &data->bits_per_pixel, &data->line_length, &data->endian);
 	init_plane(data);
@@ -71,7 +82,8 @@ int init_struct(t_data *data)
 
 void init_base(t_data *data)
 {
-	data->mlx = mlx_init();
+
+
 	data->img = NULL;
 	data->win = NULL;
 	data->width = 0;
@@ -80,21 +92,20 @@ void init_base(t_data *data)
 	data->pos_x = -1;
 	data->pos_y = -1;
 	data->speed = 0.10;
-	data->info->ceiling_rgb = -1;
-	data->info->floor_rgb = -1;
 	data->map = NULL;
 	data->map_h = 0;
 	data->map_w = 0;
 	data->spr = NULL;
 	data->sprimg = NULL;
 	data->t = NULL;
+	data->info->ceiling_rgb = -1;
+	data->info->floor_rgb = -1;
 	data->info->north_text = NULL;
 	data->info->south_text = NULL;
 	data->info->east_text = NULL;
 	data->info->west_text = NULL;
 	data->info->sprite_text = NULL;
 	data->zbuffer = NULL;
-
 }
 
 /*

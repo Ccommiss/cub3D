@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 12:05:44 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/12 11:27:40 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/16 17:24:49 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,5 @@ void	save_bmp(t_data *data)
 	fd = open("save.bmp", O_CREAT | O_WRONLY);
 	fill_header(data, fd);
 	fill_core(data, fd);
+	close_win(data);
 }

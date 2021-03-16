@@ -84,8 +84,8 @@ int free_game(t_data *data)
 		}
 		free(data->map);
 	}
-
-	free_textures(data, data->t);
+	if (data->t)
+		free_textures(data, data->t);
 	if (data->spr)
 		free_sprites(data);
 	if (data->zbuffer)
@@ -104,7 +104,7 @@ int close_win(t_data *data)
 		mlx_destroy_image(data->mlx, data->img);
 	free_game(data);
 	printf("exiting\n");
-	mlx_destroy_display(data->mlx);//linux
+//	mlx_destroy_display(data->mlx);//linux
 	if (data->mlx)
 		free(data->mlx);
 	exit(1);

@@ -1,4 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   bresenham.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/16 16:05:37 by ccommiss          #+#    #+#             */
+/*   Updated: 2021/03/16 16:06:51 by ccommiss         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
+
+/*
+**	Bresenham algorithm :
+**
+**	Bresenham's line algorithm is a line drawing algorithm that determines
+**	the points of an n-dimensional raster that should be selected in order
+**	to form a close approximation to a straight line between two points.
+*/
 
 void	bsnhm_1(t_bresenham *b, t_data *data)
 {

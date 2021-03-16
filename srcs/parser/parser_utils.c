@@ -25,6 +25,15 @@ int error_message(t_data *data, int index)
 		printf("Values can't be set up twice.\n");
 	if (data->error == HEIGHT_WIDTH_NEG)
 		printf("Height and width must be positive values.\n");
+	if (data->error == TOO_MANY_ARGUMENTS)
+		printf("Too many arguments.\n");
+
+	if (data->error == NO_FILE)
+		printf("Map must be provided. Usage : ./cub3d [mapname].cub \n");
+	if (data->error == BAD_FILENAME)
+		printf("Your file must end with '.cub'\n");
+	if (data->error == CANNOT_READ_FILE)
+		printf("Impossible to read the file. Does it even exist, bro ?\n");
 	if (data->error == 123)
 		printf("Too many arguments.\n");
 	close_win(data);
@@ -47,11 +56,13 @@ void *ft_realloc(void *ptr, size_t cursize, size_t newsize)
 
 int ft_check_chars(char sign, t_data *data, int x, int y)
 {
-	//printf ("CHECKING SIGN = %c \n", sign);
+
 	if (sign == 'N' || sign == 'S' || sign == 'E' || sign == 'W')
 	{
+		printf ("CHECKING SIGN = %c \n", sign);
+		printf (" DATA POS = %f \n", data->pos_x );
 		if ((data->pos_x != -1 && data->pos_y != -1) && (data->pos_x != x + 0.5 || data->pos_y != y + 0.5))
-			return (error_message(data, 5));
+			return (error_message(data, TWO_PLAYERS));
 		data->pos_x = x + 0.5;
 		data->pos_y = y + 0.5;
 		ft_finddir(data, sign);

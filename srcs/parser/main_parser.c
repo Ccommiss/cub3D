@@ -35,6 +35,7 @@ int ft_parse(int fd, t_data *data)
 	line = NULL;
 	while (get_next_line(fd, &line) && data->error == 0 )
 	{
+		printf ("l : %s \n", line);
 		if (!ft_isempty(line) && !iscomplete(data))
 			ft_parse_info(data, line);
 		else if (iscomplete(data) == 1) // on a toutes les infos 

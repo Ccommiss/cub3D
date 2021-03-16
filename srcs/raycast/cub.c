@@ -120,7 +120,7 @@ void draw(t_data *data, int x)
 	t_pos = (d.start_y - (data->height / 2) + (line_h / 2)) * step;
 	set_texture(data);
 	y = d.start_y - 1;
-	while (++y < d.end_y)
+	while (++y <= d.end_y)
 	{
 		d.tex_y = (int)t_pos & (data->t->h - 1);
 		t_pos += step;

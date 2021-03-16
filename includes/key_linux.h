@@ -16,5 +16,7 @@
 
 # define KEY_PRESS_MASK			(1L << 0)
 # define KEY_RELEASE_MASK		(1L << 1)
+# define DESTROY_NOTIFY			33
+# define STRUCTURE_NOTIFY_MASK	0
 
 #endif

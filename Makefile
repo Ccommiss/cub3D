@@ -5,24 +5,32 @@ SOURCEDIR = ./srcs/
 
 INCLUDES = ./includes/
 
-PARSERDIR = $(SOURCEDIR)parser/
+PARSER = $(SOURCEDIR)parser/
+BMP = $(SOURCEDIR)bmp/
+DISPLAY = $(SOURCEDIR)display/
+EVENTS = $(SOURCEDIR)events/
+MAIN = $(SOURCEDIR)main/
+RAYCAST = $(SOURCEDIR)raycast/
 
-SRCS = $(SOURCEDIR)cub.c \
-	$(PARSERDIR)info_parser.c \
-	$(PARSERDIR)map_parser.c \
-	$(SOURCEDIR)visu2d.c \
-	$(SOURCEDIR)bresenham.c\
-	$(SOURCEDIR)init.c \
-	$(SOURCEDIR)main.c \
-	$(PARSERDIR)parser_utils.c \
-	$(PARSERDIR)main_parser.c \
-	$(PARSERDIR)flood_fill.c \
-	$(SOURCEDIR)display.c \
-	$(SOURCEDIR)events.c \
-	$(SOURCEDIR)save_bmp.c \
-	$(SOURCEDIR)sprite_cast.c \
-	$(SOURCEDIR)sprite_draw.c \
-	$(SOURCEDIR)exit_game.c
+SRCS = $(MAIN)main.c \
+	$(MAIN)init.c \
+	$(MAIN)exit_game.c \
+	$(RAYCAST)cub.c \
+	$(RAYCAST)sprite_cast.c \
+	$(PARSER)info_parser.c \
+	$(PARSER)map_parser.c \
+	$(PARSER)parser_utils.c \
+	$(PARSER)main_parser.c \
+	$(PARSER)flood_fill.c \
+	$(DISPLAY)visu2d.c \
+	$(DISPLAY)bresenham.c\
+	$(DISPLAY)display.c \
+	$(DISPLAY)sprite_draw.c \
+	$(EVENTS)events.c \
+	$(BMP)save_bmp.c \
+	
+
+
 
 
 
@@ -30,7 +38,7 @@ OBJS := ${SRCS:c=o}
 
 CC = clang -g $(FLAGS)
 
-FLAGS = -I. -I$(INCLUDES) -Wall -Werror -Wextra
+FLAGS = -I. -I$(INCLUDES) -Wall -Werror -Wextra 
 LIBS = ./libft
 UNAME := $(shell uname)
 APPLE = Darwin

@@ -6,11 +6,20 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 11:01:14 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/12 11:27:40 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/16 16:05:07 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+/*
+**	compute_data
+**
+**	[synopsis] : compute sprite height, width, transformation on both axis,
+** 				 and pixels to be drawn
+**	[call] : sprite_drawing, for each sprite to be drawn
+**	[return] : none
+*/
 
 void	compute_data(t_data *data, t_spr_geo *sp, t_draw *draw)
 {
@@ -23,18 +32,27 @@ void	compute_data(t_data *data, t_spr_geo *sp, t_draw *draw)
 	sp->height = abs((int)(data->height / (sp->trans_y)));
 	sp->width = abs((int)(data->height / (sp->trans_y)));
 	draw->start_y = -sp->height / 2 + data->height / 2;
-	if (draw->start_y < 0)
-		draw->start_y = 0;
+	if (draw->start_y <= 0)
+		draw->start_y = -1;
 	draw->end_y = sp->height / 2 + data->height / 2;
 	if (draw->end_y >= data->height)
-		draw->end_y = data->height - 1;
+		draw->end_y = data->height;
 	draw->start_x = -sp->width / 2 + sp->screen_x - 1;
-	if (draw->start_x < 0)
-		draw->start_x = 0;
+	if (draw->start_x <= 0)
+		draw->start_x = -1;
 	draw->end_x = sp->width / 2 + sp->screen_x;
 	if (draw->end_x >= data->width)
-		draw->end_x = data->width - 1;
+		draw->end_x = data->width;
 }
+
+/*
+**	draw_text
+**
+** 	[synopsis] : draws texture column by column
+** 				 and pixels to be drawn
+**  [call] : sprite_drawing, for each sprite column to be drawn
+**	[return] : none
+*/
 
 void	draw_text(t_data *data, t_draw *draw, t_spr_geo *sp)
 {
@@ -47,6 +65,14 @@ void	draw_text(t_data *data, t_draw *draw, t_spr_geo *sp)
 	if ((draw->color & 0x00FFFFFF) != 0)
 		my_mlx_pixel_put(data, draw->start_x, draw->y, draw->color);
 }
+
+/*
+**	sprite_drawing
+**
+** 	[synopsis] : draws sprites
+**  [call] : in dda (raycasting)
+**	[return] : none
+*/
 
 void	sprite_drawing(t_data *data)
 {
@@ -62,7 +88,7 @@ void	sprite_drawing(t_data *data)
 		{
 			draw.tex_x = (int)(256 * (draw.start_x -
 			(-sp.width / 2 + sp.screen_x)) * data->spw / sp.width) / 256;
-			if (sp.trans_y > 0 && draw.start_x > 0
+			if (sp.trans_y > 0 && draw.start_x >= 0
 				&& draw.start_x < data->width
 					&& sp.trans_y <= data->zbuffer[draw.start_x])
 			{

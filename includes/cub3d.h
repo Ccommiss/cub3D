@@ -5,10 +5,10 @@
 //#include <mlx.h>
 #include <fcntl.h>
 
-// #include "../mlx/mlx.h"
-// #include "keys.h"
-#include "key_linux.h"
-#include "../mlx_linux/mlx.h"
+#include "../mlx/mlx.h"
+#include "keys.h"
+// #include "key_linux.h"
+// #include "../mlx_linux/mlx.h"
 
 
 #include <math.h>
@@ -19,6 +19,8 @@
 #define YELLOW 0xFFDEAD
 #define BLUE 0x00CCCC
 #define GREEN 0Xbef574
+# define GRASS 0x99e599
+# define GREY 0X696969
 
 enum e_sides
 {
@@ -61,6 +63,10 @@ enum e_errors
 	BAD_RGB_VALUES,
 	REASSIGNATION, 
 	HEIGHT_WIDTH_NEG,
+	CANNOT_READ_FILE,
+	BAD_FILENAME,
+	TOO_MANY_ARGUMENTS,
+	NO_FILE,
 	MALLOC_ERROR
 
 
