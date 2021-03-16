@@ -44,12 +44,14 @@ int free_sprites(t_data *data)
 	t_spr *tmp_s;
 
 	printf("sprites la\n");
+	
+	tmp_s = data->spr->head;
 	while (data->spr != NULL)
 	{
-		tmp_s = data->spr;
-		data->spr = data->spr->next;
+		data->spr = tmp_s->next;
 		printf("deleting spr index %d \n", tmp_s->index);
 		free(tmp_s);
+		tmp_s = data->spr;
 	}
 	if (data->sprimg)
 		mlx_destroy_image(data->mlx, data->sprimg); //on free limage
@@ -82,9 +84,9 @@ int free_game(t_data *data)
 		}
 		free(data->map);
 	}
-	if (data->t)
-		free_textures(data, data->t);
-	if (data->sprimg != NULL)
+
+	free_textures(data, data->t);
+	if (data->spr)
 		free_sprites(data);
 	if (data->zbuffer)
 	 	free(data->zbuffer);
@@ -102,7 +104,7 @@ int close_win(t_data *data)
 		mlx_destroy_image(data->mlx, data->img);
 	free_game(data);
 	printf("exiting\n");
-	//mlx_destroy_display(data->mlx);//linux
+	mlx_destroy_display(data->mlx);//linux
 	if (data->mlx)
 		free(data->mlx);
 	exit(1);

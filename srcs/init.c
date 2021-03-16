@@ -72,6 +72,8 @@ int init_struct(t_data *data)
 void init_base(t_data *data)
 {
 	data->mlx = mlx_init();
+	data->img = NULL;
+	data->win = NULL;
 	data->width = 0;
 	data->height = 0;
 	data->error = 0;
@@ -114,6 +116,7 @@ int	alloc_image(t_data *data, t_text *t, void *text)
 		t->next = (t_text *)malloc(sizeof(t_text));
 		if (!t->next)
 			return (-1);
+		t->next->next = NULL;
 	}
 	return (1);
 }
@@ -128,6 +131,7 @@ int loadimage(t_data *data)
 	if (!t)
 		return (-1);
 	head = t;
+	data->t = head;
 	t->side = 'n';
 	if (alloc_image(data, t, data->info->north_text) == -1)
 		return (-1);
@@ -144,7 +148,7 @@ int loadimage(t_data *data)
 	if (alloc_image(data, t, data->info->east_text) == -1)
 		return (-1);
 	t->next = head;
-	data->t = head;
+	//data->t = head;
 	// ensuite on fait les sprites
 	data->sprimg = mlx_xpm_file_to_image(data->mlx, data->info->sprite_text, &data->spw, &data->sph);
 	data->sprimgaddr = mlx_get_data_addr(data->sprimg, &data->sprbpx, &data->spline, &data->end);

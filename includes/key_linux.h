@@ -7,5 +7,14 @@
 # define KEY_A					97
 # define KEY_D					100
 # define KEY_SPACE				32
+# define KEY_PRESS				2
+# define KEY_RELEASE			3
+# define KEY_SHIFT              65505
+# define KEY_RIGHT              65363
+# define KEY_LEFT               65361
+# define KEY_ESC                65307
+
+# define KEY_PRESS_MASK			(1L << 0)
+# define KEY_RELEASE_MASK		(1L << 1)
 
 #endif
