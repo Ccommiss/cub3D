@@ -89,6 +89,7 @@ int		main(int argc, char **argv)
 	display(&data);
 	mlx_hook(data.win, KEY_PRESS, 1L << 0, key_hook, &data);
 	mlx_hook(data.win, KEY_RELEASE, 1L << 0, speed_hook, &data); //retour normal
+	mlx_hook(data.win, 9, 1L << 21, display, &data);
 	mlx_hook(data.win, DESTROY_NOTIFY, STRUCTURE_NOTIFY_MASK, close_win, &data);
 	mlx_loop(data.mlx);
 }

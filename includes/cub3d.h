@@ -5,10 +5,10 @@
 //#include <mlx.h>
 #include <fcntl.h>
 
-#include "../mlx/mlx.h"
-#include "keys.h"
-// #include "key_linux.h"
-// #include "../mlx_linux/mlx.h"
+//#include "../mlx/mlx.h"
+//#include "keys.h"
+ #include "key_linux.h"
+ #include "../mlx_linux/mlx.h"
 
 
 #include <math.h>
@@ -316,7 +316,7 @@ void set_compass(t_data *data);
  *  [display.c] Displaying fucntions
  */
 
-void display(t_data *data);
+int display(t_data *data);
 void my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void fill_black(t_data *data);
 void fill_ceiling(t_data *data);

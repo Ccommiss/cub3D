@@ -64,6 +64,8 @@
 # define BUTTON_RELEASE			5
 # define MOTION_NOTIFY			6
 # define DESTROY_NOTIFY			17
+# define ENTER_NOTIFY           7
+
 /*
 ** EVENT MASKS
 */
@@ -79,4 +81,5 @@
 # define BUTTON4_MOTION_MASK	(1L << 11)
 # define BUTTON5_MOTION_MASK	(1L << 12)
 # define STRUCTURE_NOTIFY_MASK	(1L << 17)
+# define ENTER_WINDOW_MASK      (1L << 4)
 #endif

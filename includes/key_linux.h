@@ -18,5 +18,6 @@
 # define KEY_RELEASE_MASK		(1L << 1)
 # define DESTROY_NOTIFY			33
 # define STRUCTURE_NOTIFY_MASK	0
-
+# define ENTER_NOTIFY           7
+# define ENTER_WINDOW_MASK      (1L << 4)
 #endif

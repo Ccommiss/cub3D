@@ -43,16 +43,17 @@ int init_struct(t_data *data)
 {
 	
 
-	// int width;
-	// int height;
-
-	// mlx_get_screen_size(data->mlx, &width, &height); linux
-	// if (data->width > width)
-	// 	data->width = width;
-	// if (data->height > height)
-	// 	data->height = height;
+	int width;
+	int height;
 
 	data->mlx = mlx_init();
+	mlx_get_screen_size(data->mlx, &width, &height);
+	if (data->width > width)
+		data->width = width;
+	if (data->height > height)
+		data->height = height;
+
+
 	if (loadimage(data) == -1)
 		return (-1);
 	data->win = mlx_new_window(data->mlx, data->width, data->height, "Cub3D");

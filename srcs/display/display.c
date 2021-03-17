@@ -120,7 +120,7 @@ void	fill_floor(t_data *data)
 **	[return] : none
 */
 
-void	display(t_data *data)
+int	display(t_data *data)
 {
 	t_bresenham b;
 
@@ -144,4 +144,5 @@ void	display(t_data *data)
 	}
 	mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
 	display_pos(data);
+	return(1);
 }
