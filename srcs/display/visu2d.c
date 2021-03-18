@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 16:14:55 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/16 17:07:32 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/18 12:29:34 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,10 @@ void set_map(t_data *data)
 	h = 0;
 	pixw = 0;
 	pixh = 0;
+	
+	data->granit = 0;
+
+	srand(42);
 	while (h < data->map_h)
 	{
 		while (w < data->map_w)
@@ -84,8 +88,11 @@ void set_map(t_data *data)
 					pixw = data->minimap_size * (w) + (data->width / 4);
 					while (pixw++ < (data->minimap_size * (w + 1) + (data->width / 4)) - 1) //pour mettre au milieu
 					{
-						if (data->map[h][w] == '1')
+						data->granit = rand();
+						if (data->map[h][w] == '1' && (pixw) % (data->granit % 3 + pixw) == 0)
 							my_mlx_pixel_put(data, pixw, pixh, GREY);
+						else if (data->map[h][w] == '1')
+							my_mlx_pixel_put(data, pixw, pixh, LIGHTGREY);
 						else if (data->map[h][w] == '2')
 							my_mlx_pixel_put(data, pixw, pixh, 0xffffff);
 						else if (data->map[h][w] == '0')

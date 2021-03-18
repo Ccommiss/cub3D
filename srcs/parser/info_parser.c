@@ -6,17 +6,27 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 17:48:14 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/17 18:36:55 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/18 11:26:22 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	rgb_convert(char **block, int *r, int *g, int *b)
+int		rgb_convert(char **block, int *r, int *g, int *b)
 {
+	int		j;
+
+	j = -1;
+	while (block[++j] != NULL)
+	{
+		block[j] = ft_trim_inside(block[j]);
+		if (!block[j])
+			return (-1);
+	}
 	*r = ft_atoi(block[0]);
 	*g = ft_atoi(block[1]);
 	*b = ft_atoi(block[2]);
+	return (1);
 }
 
 int		ft_getrgb(t_data *data, char *rgb)
@@ -25,19 +35,16 @@ int		ft_getrgb(t_data *data, char *rgb)
 	int		r;
 	int		g;
 	int		b;
-	int		j;
 
 	block = ft_split(rgb, ',');
 	r = 0;
 	g = 0;
 	b = 0;
-	j = -1;
-	while (block[++j] != NULL)
-		block[j] = ft_trim_inside(block[j]);
-	if (!block[j])
-		data->error = MALLOC_ERROR;
 	if (block[0] && block[1] && block[2] && !block[3])
-		rgb_convert(block, &r, &g, &b);
+	{
+		if (rgb_convert(block, &r, &g, &b) == -1)
+			data->error = MALLOC_ERROR;
+	}
 	else if (data->error == 0)
 		data->error = BAD_RGB_FORMAT;
 	if (r > 255 || g > 255 || b > 255 || r < 0 || g < 0 || b < 0)

@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 15:18:00 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/16 17:26:02 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/18 12:28:46 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,7 @@ int		check_format(char *name, t_data *data)
 	if (!name)
 		error_message(data, NO_FILE);
 	if (!check_extension(name))
-	{
-		printf ("bye bitches \n");
 		error_message(data, BAD_FILENAME);
-	}
 	fd = open(name, O_RDONLY);
 	test = read(fd, 0, 0);
 	if (test < 0)
@@ -64,7 +61,6 @@ int		check_format(char *name, t_data *data)
 
 int check_bmp(t_data *data, int argc, char **argv)
 {
-	printf ("%d \n", argc);
 	if (argc > 3)
 		error_message(data, TOO_MANY_ARGUMENTS);
 	else if (argc == 3 && ft_strncmp(argv[2], "--save", 7) != 0)

@@ -41,14 +41,7 @@ void init_plane(t_data *data)
 
 int init_struct(t_data *data)
 {
-
-
-
-
 	data->mlx = mlx_init();
-
-
-
 	if (loadimage(data) == -1)
 		return (-1);
 	data->win = mlx_new_window(data->mlx, data->width, data->height, "Cub3D");
@@ -78,8 +71,6 @@ int init_struct(t_data *data)
 
 void init_base(t_data *data)
 {
-
-
 	data->img = NULL;
 	data->win = NULL;
 	data->width = 0;

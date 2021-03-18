@@ -21,6 +21,7 @@
 #define GREEN 0Xbef574
 # define GRASS 0x99e599
 # define GREY 0X696969
+# define LIGHTGREY 0X9A9A9A
 
 enum e_sides
 {
@@ -252,6 +253,7 @@ typedef struct s_data
 	int color;
 	int minimap_size;
 	int displaymap;
+	int granit;
 
 	double *zbuffer; // a malloc
 

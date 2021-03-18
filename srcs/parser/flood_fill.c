@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 18:18:45 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/17 18:18:47 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/18 10:31:30 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	check_borders(t_data *data, int x, int y, char ***mapbis)
 {
 	if (y < 0 || y >= data->map_h || x < 0 || x >= data->map_w
-	|| data->map[y][x] == ' ' || data->map[y][x] == '.')
+	|| data->map[y][x] == ' ' || data->map[y][x] == '	')
 	{
 		data->error = MAP_NOT_CLOSED;
 		return ;

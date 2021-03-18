@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 17:53:32 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/17 17:53:34 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/18 11:11:20 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ int		ft_parse(int fd, t_data *data)
 		if (!ft_isempty(line) && !iscomplete(data))
 			ft_parse_info(data, line);
 		else if (iscomplete(data) == 1)
-			ft_parse_map(data, line);
+			if (ft_parse_map(data, line) == -1)
+				data->error = MALLOC_ERROR;
 		free(line);
 	}
 	if (data->error == 0 && !ft_isempty(line) && iscomplete(data) == 1)

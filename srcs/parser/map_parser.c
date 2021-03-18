@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map_parser.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/18 11:17:09 by ccommiss          #+#    #+#             */
+/*   Updated: 2021/03/18 11:17:10 by ccommiss         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 /*
@@ -114,18 +126,21 @@ int		fill_maptab(t_data *data, char *line, int y)
 }
 
 /*
- *  ft_parse_map
- *
- * 	[synopsis] : allocate memory
- * 			> Verifies if the line is blank at the beginning – simply returns 0
- * 			> Reallocates the double tab at each call (one more Y each time a line is read)
- * 			> Allocates the map[y] with : 1/ line length if it's > the saved width, 2/ the saved width if it's <=
- * 			> Free everything if a malloc fails
- * 	[call] :
- * 	[return] : 0 if is not complete, 1 if it is
- */
+**  ft_parse_map
+**
+** 	[synopsis] : allocate memory
+** 			> Verifies if the line is blank at the beginning – simply returns 0
+** 			> Reallocates the double tab at each call (one more Y each time a
+**				line is read)
+** 			> Allocates the map[y] with :
+**				1/ line length if it's > the saved width,
+**				2/ the saved width if it's <=
+** 	[call] : ft_parse (in main_parser.c)
+** 	[return] : - 1 if a malloc fails (and sets Malloc Error in
+**			main parser before properly exiting), or 1 if success
+*/
 
-int ft_parse_map(t_data *data, char *line)
+int		ft_parse_map(t_data *data, char *line)
 {
 	static int	y;
 	int			len;
@@ -135,12 +150,10 @@ int ft_parse_map(t_data *data, char *line)
 	if (data->map_h == 0)
 		y = 0;
 	data->map_h = y + 1;
-	data->map = (char **)ft_realloc(data->map, (data->map_h) * sizeof(char *), (data->map_h + 1) * sizeof(char *));
+	data->map = (char **)ft_realloc(data->map, (data->map_h) * sizeof(char *),
+		(data->map_h + 1) * sizeof(char *));
 	if (!data->map)
-	{
-		free(line);
-		return (close_win(data));
-	}
+		return (-1);
 	data->map[data->map_h] = 0;
 	if (data->map_w == 0 || ft_strlen(line) > (size_t)data->map_w)
 		len = ft_strlen(line) + 1;
@@ -148,13 +161,9 @@ int ft_parse_map(t_data *data, char *line)
 		len = data->map_w + 1;
 	data->map[y] = (char *)malloc(sizeof(char) * (len));
 	if (!data->map[y])
-	{
-		free(line);
-		return (close_win(data));
-	}
+		return (-1);
 	ft_bzero(data->map[y], len);
 	fill_maptab(data, line, y);
 	data->map[++y] = 0;
 	return (1);
 }
-
