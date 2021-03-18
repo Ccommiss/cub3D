@@ -5,10 +5,10 @@
 //#include <mlx.h>
 #include <fcntl.h>
 
-//#include "../mlx/mlx.h"
-//#include "keys.h"
- #include "key_linux.h"
- #include "../mlx_linux/mlx.h"
+#include "../mlx/mlx.h"
+#include "keys.h"
+//  #include "key_linux.h"
+//  #include "../mlx_linux/mlx.h"
 
 
 #include <math.h>
@@ -42,11 +42,11 @@ enum e_param
 	north,
 	south,
 	west,
-	east, 
+	east,
 	sprite,
-	floor_rgb, 
-	ceiling_rgb,
-	width, 
+	ground,
+	ceiling,
+	width,
 	height
 };
 
@@ -61,7 +61,7 @@ enum e_errors
 	TEXTURE_NOT_FOUND,
 	BAD_RGB_FORMAT,
 	BAD_RGB_VALUES,
-	REASSIGNATION, 
+	REASSIGNATION,
 	HEIGHT_WIDTH_NEG,
 	CANNOT_READ_FILE,
 	BAD_FILENAME,
@@ -149,7 +149,7 @@ typedef struct s_text
 
 typedef struct s_bresenham
 {
-	int pt1[2]; // pourmettre le x et le y 
+	int pt1[2]; // pourmettre le x et le y
 	int pt2[2]; //idem 0 = x 1 = y;
 
 	unsigned int dx;

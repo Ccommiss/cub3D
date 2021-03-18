@@ -41,17 +41,12 @@ void init_plane(t_data *data)
 
 int init_struct(t_data *data)
 {
-	
 
-	int width;
-	int height;
+
+
 
 	data->mlx = mlx_init();
-	mlx_get_screen_size(data->mlx, &width, &height);
-	if (data->width > width)
-		data->width = width;
-	if (data->height > height)
-		data->height = height;
+
 
 
 	if (loadimage(data) == -1)

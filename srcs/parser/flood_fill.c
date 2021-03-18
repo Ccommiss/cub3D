@@ -1,15 +1,28 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   flood_fill.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/17 18:18:45 by ccommiss          #+#    #+#             */
+/*   Updated: 2021/03/17 18:18:47 by ccommiss         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
-void check_borders(t_data *data, int x, int y, char ***mapbis)
+void	check_borders(t_data *data, int x, int y, char ***mapbis)
 {
-	if (y < 0 || y >= data->map_h || x < 0 || x >= data->map_w || data->map[y][x] == ' ' || data->map[y][x] == '.')
+	if (y < 0 || y >= data->map_h || x < 0 || x >= data->map_w
+	|| data->map[y][x] == ' ' || data->map[y][x] == '.')
 	{
 		data->error = MAP_NOT_CLOSED;
-		return;
+		return ;
 	}
 	if (data->map[y][x] == '1' || mapbis[0][y][x] == 'v')
-		return;
-	if (data->map[y][x] == '0' || data->map[y][x] == 'S' || data->map[y][x] == 'N' || data->map[y][x] == 'E' || data->map[y][x] == 'W') //rajouter autres pos
+		return ;
+	if (ft_is_in_str("0SNEW", data->map[y][x]))
 		mapbis[0][y][x] = 'v';
 	if (data->map[y][x] == '2' && data->error == 0)
 	{
@@ -24,11 +37,10 @@ void check_borders(t_data *data, int x, int y, char ***mapbis)
 		check_borders(data, x, y + 1, mapbis);
 		check_borders(data, x, y - 1, mapbis);
 	}
-	return;
+	return ;
 }
 
-
-int free_copymap(int nb_alloc, char ***copymap, int ret)
+int		free_copymap(int nb_alloc, char ***copymap, int ret)
 {
 	int i;
 
@@ -39,11 +51,11 @@ int free_copymap(int nb_alloc, char ***copymap, int ret)
 	return (ret);
 }
 
-int flood_fill(t_data *data)
+int		flood_fill(t_data *data)
 {
-	char **copymap;
-	int i;
-	
+	char	**copymap;
+	int		i;
+
 	i = 0;
 	copymap = (char **)malloc((sizeof(char *)) * (data->map_h + 1));
 	if (!copymap)

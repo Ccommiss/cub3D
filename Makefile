@@ -15,6 +15,7 @@ RAYCAST = $(SOURCEDIR)raycast/
 SRCS = $(MAIN)main.c \
 	$(MAIN)init.c \
 	$(MAIN)exit_game.c \
+	$(MAIN)errors.c \
 	$(RAYCAST)cub.c \
 	$(RAYCAST)sprite_cast.c \
 	$(PARSER)info_parser.c \
@@ -28,7 +29,7 @@ SRCS = $(MAIN)main.c \
 	$(DISPLAY)sprite_draw.c \
 	$(EVENTS)events.c \
 	$(BMP)save_bmp.c \
-	
+
 
 
 

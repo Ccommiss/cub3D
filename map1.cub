@@ -1,8 +1,8 @@
-R	1900 1809
+R	600		500
 
-NO     pics/night_city.xpm
-SO       pics/matelas.xpm 
-WE  pics/matelas.xpm 
+NO 			pics/matelas.xpm
+SO       pics/matelas.xpm
+WE  pics/matelas.xpm
 EA     pics/wood.xpm
 
 S  pics/miles-davis.xpm

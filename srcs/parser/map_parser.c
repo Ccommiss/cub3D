@@ -1,13 +1,13 @@
 #include "cub3d.h"
 
 /*
- *  ft_finddir
- *
- * 	[synopsis] : set the dirx & diry positions according to letter found in game
- * 	[return] : none
- */
+**  ft_finddir
+**
+** 	[synopsis] : set the dirx & diry positions according to letter found in game
+** 	[return] : none
+*/
 
-void ft_finddir(t_data *data, char dir) //chamboule tout,marche pas avec autre config que W qui est le truc de base
+void	ft_finddir(t_data *data, char dir)
 {
 	data->dirx = 0.0;
 	data->diry = 0.0;
@@ -22,14 +22,14 @@ void ft_finddir(t_data *data, char dir) //chamboule tout,marche pas avec autre c
 }
 
 /*
- *  load_sprite
- *
- * 	[synopsis] : set the dirx & diry positions according to letter found in game
- * 	[call] : in check_borders (part of flood fill algorithm)
- * 	[return] : none
- */
+**  load_sprite
+**
+** 	[synopsis] : set the dirx & diry positions according to letter found in game
+** 	[call] : in check_borders (part of flood fill algorithm)
+** 	[return] : none
+*/
 
-int load_sprite(t_data *data, int x, int y)
+int		load_sprite(t_data *data, int x, int y)
 {
 	static int i;
 
@@ -46,7 +46,7 @@ int load_sprite(t_data *data, int x, int y)
 		data->spr->next = (t_spr *)malloc((sizeof(t_spr)));
 		if (!data->spr->next)
 			return (-1);
-		data->spr->next->head = data->spr->head; //on sauvegarde la tete, ainsi chaque maillon contient le ptr vers le debut de la liste
+		data->spr->next->head = data->spr->head;
 		data->spr = data->spr->next;
 	}
 	data->spr->index = i++;
@@ -58,20 +58,22 @@ int load_sprite(t_data *data, int x, int y)
 }
 
 /*
- *  ft_realloc_tab
- *
- * 	[synopsis] : realloc all data->map[y] lines, in case a line is longer than the previous
- * 				ones
- * 	[return] : 1 if success, -1 if malloc fails
- */
+**  ft_realloc_tab
+**
+** 	[synopsis] : realloc all data->map[y] lines, in case a line is
+**				longer than the previous ones
+** 	[return] : 1 if success, -1 if malloc fails
+*/
 
-int ft_realloc_tab(t_data *data, int x, int y)
+int		ft_realloc_tab(t_data *data, int x, int y)
 {
 	int i;
+
 	i = 0;
 	while (i < y)
 	{
-		data->map[i] = (char *)ft_realloc(data->map[i], data->map_w, sizeof(char) * x + 1);
+		data->map[i] = (char *)ft_realloc(data->map[i],
+		data->map_w, sizeof(char) * x + 1);
 		if (!data->map[i])
 			return (close_win(data));
 		data->map[i][data->map_w] = '\0';
@@ -82,13 +84,13 @@ int ft_realloc_tab(t_data *data, int x, int y)
 }
 
 /*
- *  fill_maptab
- *
- * 	[synopsis] : fill the data->map tab (char **map) with the line
- * 	[return] : 1 if success,
- */
+**  fill_maptab
+**
+** 	[synopsis] : fill the data->map tab (char **map) with the line
+** 	[return] : 1 if success, -1 if fails
+*/
 
-int fill_maptab(t_data *data, char *line, int y)
+int		fill_maptab(t_data *data, char *line, int y)
 {
 	int x;
 	int i;
@@ -117,16 +119,16 @@ int fill_maptab(t_data *data, char *line, int y)
  * 	[synopsis] : allocate memory
  * 			> Verifies if the line is blank at the beginning – simply returns 0
  * 			> Reallocates the double tab at each call (one more Y each time a line is read)
- * 			> Allocates the map[y] with : 1/ line length if it's > the saved width, 2/ the saved width if it's <= 
- * 			> Free everything if a malloc fails 
- * 	[call] : 
+ * 			> Allocates the map[y] with : 1/ line length if it's > the saved width, 2/ the saved width if it's <=
+ * 			> Free everything if a malloc fails
+ * 	[call] :
  * 	[return] : 0 if is not complete, 1 if it is
  */
 
 int ft_parse_map(t_data *data, char *line)
 {
-	static int y;
-	int len;
+	static int	y;
+	int			len;
 
 	if ((y == 0) && ft_isempty(line))
 		return (0);
@@ -153,6 +155,6 @@ int ft_parse_map(t_data *data, char *line)
 	ft_bzero(data->map[y], len);
 	fill_maptab(data, line, y);
 	data->map[++y] = 0;
-	return 1;
+	return (1);
 }
 
