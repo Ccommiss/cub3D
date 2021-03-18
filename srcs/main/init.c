@@ -45,17 +45,28 @@ int init_struct(t_data *data)
 	if (loadimage(data) == -1)
 		return (-1);
 	data->win = mlx_new_window(data->mlx, data->width, data->height, "Cub3D");
-
 	data->img = mlx_new_image(data->mlx, data->width, data->height);
 	data->imgaddr = mlx_get_data_addr(data->img, &data->bits_per_pixel, &data->line_length, &data->endian);
 	init_plane(data);
 	data->minimap_size = data->width / 50;
+	while (ft_isempty(data->map[data->map_h - 1]))
+	{
+		free(data->map[data->map_h - 1]); //verifier ce bail en gros on eneleve les dernieres lignes malloqueessi elles sont vides pour rectifier la taille de la map
+		data->map_h--;
+	}
+	
+	while (data->minimap_size * data->map_h > 0.3 * data->height)
+		data->minimap_size--;
+	while (data->minimap_size * data->map_w > 0.7 * data->width)
+		data->minimap_size--;
+	data->v.center_w = (data->width / 2 - (data->minimap_size * data->map_w / 2));
+	data->v.center_h = data->height * 0.7;
+
+
 	data->displaymap = 1;
 	data->zbuffer = (double *)malloc(sizeof(double) * (data->width + 1));
 	if (!data->zbuffer)
-		{ //free des trucs
-			return (-1);
-		}
+		error_message(data, MALLOC_ERROR);
 	ft_bzero(data->zbuffer, data->width);
 	return (1);
 }
@@ -146,7 +157,6 @@ int loadimage(t_data *data)
 	if (alloc_image(data, t, data->info->east_text) == -1)
 		return (-1);
 	t->next = head;
-	//data->t = head;
 	// ensuite on fait les sprites
 	data->sprimg = mlx_xpm_file_to_image(data->mlx, data->info->sprite_text, &data->spw, &data->sph);
 	data->sprimgaddr = mlx_get_data_addr(data->sprimg, &data->sprbpx, &data->spline, &data->end);

@@ -77,7 +77,8 @@ int free_game(t_data *data)
 	i = 0;
 	if (data->map)
 	{
-		while (i < data->map_h)
+			//while (data->map[i] != NULL)
+		while (i < data->map_h) //verifier que ca fait pas des leaks
 		{
 			printf(":: %s \n", data->map[i]);
 			free(data->map[i++]);
@@ -95,6 +96,7 @@ int free_game(t_data *data)
 
 int close_win(t_data *data)
 {
+	checkmap(data);
 	if (data->win)
 	{
 		mlx_clear_window(data->mlx, data->win);

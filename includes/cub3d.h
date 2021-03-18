@@ -159,7 +159,16 @@ typedef struct s_bresenham
 } t_bresenham;
 
 
+typedef struct s_visu2d
+{
+	int w;
+	int h;
+	int pixw;
+	int pixh;
+	int center_w;
+	int center_h;
 
+} t_visu2d;
 
 
 typedef struct s_bmp
@@ -261,6 +270,7 @@ typedef struct s_data
 	t_display *info;
 	t_text *t;
 	t_spr *spr;
+	t_visu2d v;
 
 	void *sprimg;
 	void *sprimgaddr;
