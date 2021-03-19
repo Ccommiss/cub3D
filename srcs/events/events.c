@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 15:18:12 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/18 16:56:51 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/19 09:47:11 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,43 +25,48 @@ int key_hook(int keycode, t_data *data)
 {
 	double olddirx;
 	double oldplanex;
+	double sec_spd; //security for speed
+	double sec_oth; //sec for other case
+
+
+	sec_spd = 0.01;
+	sec_oth = 0.001;
 
 	if (keycode == KEY_SHIFT)
 		data->speed = 0.20;
 
 	if (keycode == KEY_W)
 	{
-		if (is_zero(data->map[(int)(data->pos_y)][(int)(data->pos_x + data->dirx * (data->speed + 0.02))]))
+		if (is_zero(data->map[(int)(data->pos_y)][(int)(data->pos_x + data->dirx * (data->speed + sec_spd))]))
 			data->pos_x += data->dirx * data->speed;
-		if (is_zero(data->map[(int)(data->pos_y + data->diry * (data->speed + 0.02))][(int)(data->pos_x)]))
+		if (is_zero(data->map[(int)(data->pos_y + data->diry * (data->speed + 0.1))][(int)(data->pos_x - sec_oth)])
+		&& is_zero(data->map[(int)(data->pos_y + data->diry * (data->speed + 0.1))][(int)(data->pos_x + sec_oth)]))
 			data->pos_y += data->diry * data->speed;
 	}
 	if (keycode == KEY_S)
 	{
-		printf ("::%c \n", data->map[(int)(data->pos_y)][(int)(data->pos_x - data->dirx * (data->speed + 0.02))]);
-		if (is_zero(data->map[(int)(data->pos_y)][(int)(data->pos_x - data->dirx * (data->speed + 0.02))]))
+		if (is_zero(data->map[(int)(data->pos_y)][(int)(data->pos_x - data->dirx * (data->speed + 0.1))]))
 			data->pos_x -= data->dirx * data->speed;
-		if (is_zero(data->map[(int)(data->pos_y - data->diry * (data->speed + 0.02))][(int)(data->pos_x)]))
+		if (is_zero(data->map[(int)(data->pos_y - data->diry * (data->speed + sec_spd))][(int)(data->pos_x - sec_oth)])
+		&& is_zero(data->map[(int)(data->pos_y - data->diry * (data->speed + sec_spd))][(int)(data->pos_x + sec_oth)]))
 			data->pos_y -= data->diry * data->speed;
-		printf ("apres mvt X ::%c \n", data->map[(int)(data->pos_y)][(int)(data->pos_x)]);
-		printf ("apres mvt X ::%d %d \n", (int)(data->pos_y), (int)(data->pos_x));
 	}
 	if (keycode == KEY_A)
 	{
-		if (is_zero(data->map[(int)(data->pos_y)][(int)(data->pos_x + data->diry * (data->speed + 0.02))]))
+		if (is_zero(data->map[(int)(data->pos_y)][(int)(data->pos_x + data->diry * (data->speed + sec_spd))]))
 			data->pos_x += data->diry * data->speed;
-		if (is_zero(data->map[(int)(data->pos_y - data->dirx * (data->speed + 0.02))][(int)(data->pos_x)]))
+		if (is_zero(data->map[(int)(data->pos_y - data->dirx * (data->speed + sec_spd))][(int)(data->pos_x + sec_oth)])
+		&& is_zero(data->map[(int)(data->pos_y - data->dirx * (data->speed + sec_spd))][(int)(data->pos_x - sec_oth)]))
 		 	data->pos_y -= data->dirx * data->speed;
 	}
 	if (keycode == KEY_D)
 	{
-		if (is_zero(data->map[(int)(data->pos_y)][(int)(data->pos_x - data->diry * (data->speed + 0.02))]))
+		if (is_zero(data->map[(int)(data->pos_y)][(int)(data->pos_x - data->diry * (data->speed + sec_spd))]))
 			data->pos_x -= data->diry * data->speed;
-		if (is_zero(data->map[(int)(data->pos_y + data->dirx * (data->speed + 0.02))][(int)(data->pos_x)]))
+		if (is_zero(data->map[(int)(data->pos_y + data->dirx * (data->speed + sec_spd))][(int)(data->pos_x + sec_oth)])
+		&& is_zero(data->map[(int)(data->pos_y + data->dirx * (data->speed + sec_spd))][(int)(data->pos_x - sec_oth)]))
 		 	data->pos_y += data->dirx * data->speed;
 	}
-
-
 	if (keycode == KEY_RIGHT)
 	{
 		olddirx = data->dirx;
@@ -87,6 +92,8 @@ int key_hook(int keycode, t_data *data)
 		else
 			data->displaymap = 0;
 	}
+	// if (data->pos_x / (double)((int)data->pos_x) != 1.00)
+	// 	data->pos_x += 0.1;
 	if (keycode == KEY_ESC)
 		close_win(data);
 	display(data);

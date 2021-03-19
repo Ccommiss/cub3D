@@ -2,7 +2,7 @@
 
 int is_zero(char c)
 {
-	if (c == '0') // || c == '2') et 2 sil faut traverser
+	if (c == '0')
 		return (1);
 	return (0);
 }
@@ -24,7 +24,7 @@ void hit_check(t_data *data)
 			else
 				data->side = EAST;
 		}
-		else
+		else if (data->dy < data->dx)
 		{
 			data->dy += data->delta_y;
 			data->map_y += data->stepY;
@@ -50,6 +50,8 @@ void calculate_step(t_data *data)
 		data->stepX = 1;
 		data->dx = (data->map_x + 1.0 - data->pos_x) * data->delta_x;
 	}
+	if (data->dx == INFINITY)
+			printf ("POSX = %f MAPX = %d DELTAX = %f \n", data->pos_x, data->map_x, data->delta_x);
 	if (data->raydir_y < 0)
 	{
 		data->stepY = -1;
@@ -136,28 +138,14 @@ void dda(t_data *data)
 		data->raydir_y = data->diry + (data->planeY * data->camera_x);
 		data->map_x = (int)data->pos_x;
 		data->map_y = (int)data->pos_y;
-	
-		// if (data->raydir_x == 0)
-		// 	data->delta_x = 1;
-		// else
-			data->delta_x = fabs(1 / data->raydir_x);
-		
-		// if (data->raydir_y == 0)
-		// 	data->delta_y = 1;
-		// else
-			data->delta_y = fabs(1 / data->raydir_y);
-
+		data->delta_x = fabs(1 / data->raydir_x);
+		data->delta_y = fabs(1 / data->raydir_y);
 		calculate_step(data);
 		hit_check(data);
 		if (data->side == WEST || data->side == EAST)
 			data->perpwalldist = (data->map_x - data->pos_x + (1 - data->stepX) / 2) / data->raydir_x;
 		else
 			data->perpwalldist = (data->map_y - data->pos_y + (1 - data->stepY) / 2) / data->raydir_y;
-		if (x <= data->width / 2)
-		{
-			printf("%f \n", data->perpwalldist);
-			printf ("%d %f %d %f  \n", data->map_y, data->pos_y, (1 - data->stepY) / 2, data->raydir_y);
-		}
 		draw(data, x);
 		data->zbuffer[x] = data->perpwalldist;
 		x++;
