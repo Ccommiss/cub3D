@@ -47,8 +47,10 @@
 # define KEY_TAB 48
 # define KEY_SPACE 49 //mine
 # define KEY_ESC 53 //mine
-# define KEY_PLUS 69
-# define KEY_MINUS 78
+# define KEY_SINGLEQUOT 39 //mine
+# define KEY_BACKSLASH 42 //mine
+# define KEY_PLUS 24
+# define KEY_MINUS 27
 # define KEY_LEFT 123
 # define KEY_RIGHT 124
 # define KEY_DOWN 125

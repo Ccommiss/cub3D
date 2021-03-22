@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 16:14:55 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/18 15:54:53 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/22 13:37:20 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,16 @@ int set_player(t_data *data)
 {
 	int w = 0;
 	int h = 0;
+	int s_play;
 
-	while (h++ < 3)
+	s_play = data->minimap_size / 5;
+	if (s_play < 5)
+		s_play = 5;
+	while (h++ < s_play)
 	{
-		while (w++ < 3)
-			my_mlx_pixel_put(data, (data->pos_x * data->minimap_size + w + data->v.center_w),
-							 (data->pos_y * data->minimap_size + h + data->v.center_h), BLUE);
+		while (w++ < s_play)
+			my_mlx_pixel_put(data, (data->minimap_size * (data->pos_x + data->v.init_w) + w  + data->v.center_w),
+							 ( data->minimap_size * (data->pos_y + data->v.init_h + 1) + h  + data->v.center_h), BLUE);
 		w = 0;
 	}
 	return (0);
@@ -64,7 +68,10 @@ int set_player(t_data *data)
 
 void items_color(t_data *data, t_visu2d *v)
 {
-	if (data->map[v->h][v->w] == '1' && (v->pixw) % (rand() % 3 + v->pixw) != 0)
+	if (v->pixw >= 0.9 * data->width || v->pixw <= 0.1 * data->width
+	|| v->pixh >= data->height || v->pixh <= data->height * 0.7)
+		return;
+	if (data->map[v->h][v->w] == '1' && v->pixw % (rand() % 3 + v->pixw) != 0)
 		my_mlx_pixel_put(data, v->pixw, v->pixh, GREY);
 	else if (data->map[v->h][v->w] == '1')
 		my_mlx_pixel_put(data, v->pixw, v->pixh, LIGHTGREY);
@@ -78,8 +85,8 @@ void set_map(t_data *data)
 {
  	t_visu2d v;
 
-	v.w = -1;
-	v.h = -1;
+	v.w = -1 ;
+	v.h = -1 ;
 	v.pixw = 0;
 	v.pixh = 0;
 	srand(42);
@@ -87,13 +94,12 @@ void set_map(t_data *data)
 	{
 		while (++v.w < data->map_w)
 		{
-			v.pixh = data->minimap_size * v.h + data->height * 0.7;
-			while (v.pixh++ < (data->minimap_size * (v.h + 1) + data->height * 0.7) - 1)
+
+			v.pixh = data->minimap_size * (v.h + data->v.init_h + 1) + data->v.center_h;
+			while (v.pixh++ < (data->minimap_size * (v.h + data->v.init_h + 1 + 1) + data->v.center_h))
 			{
-				v.pixw = data->minimap_size * (v.w) + 
-				(data->width / 2 - (data->minimap_size * data->map_w / 2));
-				while (v.pixw++ < (data->minimap_size * (v.w + 1) - 1) + 
-				(data->width / 2 - (data->minimap_size * data->map_w / 2))) 
+				v.pixw = data->minimap_size * (v.w + data->v.init_w ) + data->v.center_w;
+				while (v.pixw++ < data->minimap_size * (v.w + 1 + data->v.init_w) + data->v.center_w)
 					items_color(data, &v);
 			}
 		}

@@ -1,40 +1,37 @@
 #include "cub3d.h"
 
-int is_zero(char c)
+int	is_zero(char c)
 {
 	if (c == '0')
 		return (1);
 	return (0);
 }
 
-void hit_check(t_data *data)
+void	hit_check(t_data *data)
 {
-	int hit;
-
-	hit = 0;
-	while (hit == 0)
+	data->hit = 0;
+	while (data->hit == 0)
 	{
-
 		if (data->dx < data->dy)
 		{
 			data->dx += data->delta_x;
-			data->map_x += data->stepX;
-			if (data->stepX < 0)
+			data->map_x += data->stepx;
+			if (data->stepx < 0)
 				data->side = WEST;
 			else
 				data->side = EAST;
 		}
-		else if (data->dy < data->dx)
+		else
 		{
 			data->dy += data->delta_y;
-			data->map_y += data->stepY;
-			if (data->stepY < 0)
+			data->map_y += data->stepy;
+			if (data->stepy < 0)
 				data->side = NORTH;
 			else
 				data->side = SOUTH;
 		}
 		if (data->map[data->map_y][data->map_x] == '1')
-			hit = 1;
+			data->hit = 1;
 	}
 }
 
@@ -42,24 +39,22 @@ void calculate_step(t_data *data)
 {
 	if (data->raydir_x < 0)
 	{
-		data->stepX = -1;
+		data->stepx = -1;
 		data->dx = (data->pos_x - data->map_x) * data->delta_x;
 	}
 	else
 	{
-		data->stepX = 1;
+		data->stepx = 1;
 		data->dx = (data->map_x + 1.0 - data->pos_x) * data->delta_x;
 	}
-	if (data->dx == INFINITY)
-			printf ("POSX = %f MAPX = %d DELTAX = %f \n", data->pos_x, data->map_x, data->delta_x);
 	if (data->raydir_y < 0)
 	{
-		data->stepY = -1;
+		data->stepy = -1;
 		data->dy = (data->pos_y - data->map_y) * data->delta_y;
 	}
 	else
 	{
-		data->stepY = 1;
+		data->stepy = 1;
 		data->dy = (data->map_y + 1.0 - data->pos_y) * data->delta_y;
 	}
 }
@@ -143,9 +138,9 @@ void dda(t_data *data)
 		calculate_step(data);
 		hit_check(data);
 		if (data->side == WEST || data->side == EAST)
-			data->perpwalldist = (data->map_x - data->pos_x + (1 - data->stepX) / 2) / data->raydir_x;
+			data->perpwalldist = (data->map_x - data->pos_x + (1 - data->stepx) / 2) / data->raydir_x;
 		else
-			data->perpwalldist = (data->map_y - data->pos_y + (1 - data->stepY) / 2) / data->raydir_y;
+			data->perpwalldist = (data->map_y - data->pos_y + (1 - data->stepy) / 2) / data->raydir_y;
 		draw(data, x);
 		data->zbuffer[x] = data->perpwalldist;
 		x++;

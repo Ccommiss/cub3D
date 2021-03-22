@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 15:18:00 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/18 12:28:46 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/22 11:35:53 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int		check_extension(char *filename)
 	int len;
 
 	len = ft_strlen(filename);
-	if (len != 0 && filename[len - 1] == 'b' && filename[len - 2] == 'u' && 
+	if (len != 0 && filename[len - 1] == 'b' && filename[len - 2] == 'u' &&
 	filename[len - 3] == 'c' && filename[len - 4] == '.')
 		return (1);
 	return (0);
@@ -34,7 +34,7 @@ int		check_extension(char *filename)
 /*
 **	check_format
 **
-** 	[synopsis] : checks if 
+** 	[synopsis] : checks if
 **		> the filename is correct i.e. ends with .cub
 **		> we can read the file
 **  [call] : in main
@@ -42,10 +42,10 @@ int		check_extension(char *filename)
 */
 
 int		check_format(char *name, t_data *data)
-{	
+{
 	int test;
 	int fd;
-	
+
 	data->error = 0;
 	if (!name)
 		error_message(data, NO_FILE);

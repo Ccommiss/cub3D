@@ -167,7 +167,8 @@ typedef struct s_visu2d
 	int pixh;
 	int center_w;
 	int center_h;
-
+	int	init_w;
+	int init_h;
 } t_visu2d;
 
 
@@ -243,10 +244,11 @@ typedef struct s_data
 
 	double perpwalldist;
 
-	int stepX;
-	int stepY;
+	int stepx;
+	int stepy;
 
 	int side; //was a NS or a EW wall hit?
+	int hit;
 
 	// map
 	char **map;
@@ -323,6 +325,7 @@ void draw_tab(t_data *data);
 void set_map(t_data *data);
 int set_player(t_data *data);
 void set_compass(t_data *data);
+void 	init_minimap(t_data *data);
 
 /*
  *  [display.c] Displaying fucntions

@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 16:08:46 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/16 16:12:28 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/22 13:37:49 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,12 +128,11 @@ int	display(t_data *data)
 	fill_ceiling(data);
 	fill_floor(data);
 	dda(data);
-	b.pt1[X] = data->pos_x * data->minimap_size + data->width / 4;
-	b.pt1[Y] = data->pos_y * data->minimap_size + data->height * 0.7;
-	b.pt2[X] = (data->pos_x + data->dirx) * data->minimap_size
-	+ data->width / 4;
-	b.pt2[Y] = (data->pos_y + data->diry) * data->minimap_size
-	+ data->height * 0.7;
+
+	b.pt1[X] = (data->pos_x + data->v.init_w) * data->minimap_size + data->v.center_w;
+	b.pt1[Y] = (data->pos_y + data->v.init_h + 1) * data->minimap_size + data->v.center_h;
+	b.pt2[X] = (data->pos_x + data->v.init_w + data->dirx) *  data->minimap_size + data->v.center_w;
+	b.pt2[Y] = (data->pos_y + data->v.init_h + 1 + data->diry) * data->minimap_size + data->v.center_h;
 	if (data->displaymap == 1)
 	{
 		set_compass(data);

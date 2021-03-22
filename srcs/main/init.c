@@ -28,6 +28,20 @@ void init_plane(t_data *data)
 		data->planeY = 0.66;
 }
 
+void 	init_minimap(t_data *data)
+{
+	data->v.init_h = -1;
+	data->v.init_w = -1;
+	data->minimap_size = data->width / 50;
+	while (data->minimap_size * data->map_h > 0.3 * data->height)
+		data->minimap_size--;
+	while (data->minimap_size * data->map_w > 0.7 * data->width)
+		data->minimap_size--;
+	data->v.center_w = (data->width / 2 - (data->minimap_size * data->map_w / 2));
+	data->v.center_h = data->height * 0.7;
+
+}
+
 /*
  *  init_struct
  *
@@ -48,21 +62,12 @@ int init_struct(t_data *data)
 	data->img = mlx_new_image(data->mlx, data->width, data->height);
 	data->imgaddr = mlx_get_data_addr(data->img, &data->bits_per_pixel, &data->line_length, &data->endian);
 	init_plane(data);
-	data->minimap_size = data->width / 50;
 	while (ft_isempty(data->map[data->map_h - 1]))
 	{
 		free(data->map[data->map_h - 1]); //verifier ce bail en gros on eneleve les dernieres lignes malloqueessi elles sont vides pour rectifier la taille de la map
 		data->map_h--;
 	}
-	
-	while (data->minimap_size * data->map_h > 0.3 * data->height)
-		data->minimap_size--;
-	while (data->minimap_size * data->map_w > 0.7 * data->width)
-		data->minimap_size--;
-	data->v.center_w = (data->width / 2 - (data->minimap_size * data->map_w / 2));
-	data->v.center_h = data->height * 0.7;
-
-
+	init_minimap(data);
 	data->displaymap = 1;
 	data->zbuffer = (double *)malloc(sizeof(double) * (data->width + 1));
 	if (!data->zbuffer)
@@ -104,6 +109,8 @@ void init_base(t_data *data)
 	data->info->west_text = NULL;
 	data->info->sprite_text = NULL;
 	data->zbuffer = NULL;
+	data->v.init_w = -1;
+	data->v.init_h = -1;
 }
 
 /*
