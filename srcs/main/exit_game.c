@@ -120,7 +120,7 @@ int close_win(t_data *data)
 	printf("exiting\n");
 	if (data->mlx)
 	{
-		mlx_destroy_display(data->mlx);//linux
+		//mlx_destroy_display(data->mlx);//linux
 		free(data->mlx);
 	}
 	exit(1);
