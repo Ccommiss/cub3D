@@ -89,6 +89,7 @@ void init_base(t_data *data)
 {
 	data->img = NULL;
 	data->win = NULL;
+	data->mlx = NULL;
 	data->width = 0;
 	data->height = 0;
 	data->error = 0;
