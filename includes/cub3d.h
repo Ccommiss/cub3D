@@ -154,7 +154,6 @@ typedef struct s_bresenham
 {
 	int pt1[2]; // pourmettre le x et le y
 	int pt2[2]; //idem 0 = x 1 = y;
-
 	unsigned int dx;
 	unsigned int dy;
 
@@ -276,6 +275,8 @@ typedef struct s_data
 	t_text *t;
 	t_spr *spr;
 	t_visu2d v;
+	double look;
+	double jump; // accroupi/saut
 
 	void *sprimg;
 	void *sprimgaddr;

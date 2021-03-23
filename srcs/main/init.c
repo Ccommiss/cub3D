@@ -113,6 +113,7 @@ void init_base(t_data *data)
 	data->v.init_w = -1;
 	data->v.init_h = -1;
 	data->v.move = 0;
+	data->look = 0.5;
 	printf( " %d \n\n", data->info->floor_rgb);
 }
 
