@@ -147,6 +147,7 @@ void dda(t_data *data)
 	}
 	if (data->spr != NULL)
 	{
+		data->spr = data->spr->head;
 		sprite_casting(data);
 		sprite_drawing(data);
 	}
