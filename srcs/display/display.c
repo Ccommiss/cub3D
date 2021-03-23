@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 16:08:46 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/22 13:37:49 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/23 01:00:16 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,31 @@ void	fill_floor(t_data *data)
 **	[return] : none
 */
 
+
+void define_move(t_data *data)
+{
+ 	static double pos[2];
+
+	if (data->v.move == 2)
+	{
+		data->v.move = 1;
+		return;
+	}
+	if (pos[0] == 0 && pos[1] == 0)
+	{
+		pos[0] = data->pos_x;
+		pos[1] = data->pos_y;
+	}
+
+	if (pos[0] != data->pos_x || pos[1] != data->pos_y)
+		data->v.move = 1;
+	else
+		data->v.move = 0;
+
+	pos[0] = data->pos_x;
+	pos[1] = data->pos_y;
+}
+
 int	display(t_data *data)
 {
 	t_bresenham b;
@@ -135,13 +160,18 @@ int	display(t_data *data)
 	b.pt2[Y] = (data->pos_y + data->v.init_h + 1 + data->diry) * data->minimap_size + data->v.center_h;
 	if (data->displaymap == 1)
 	{
+		define_move(data);
 		set_compass(data);
+		set_player(data);
 		set_map(data);
 		set_player(data);
 		data->color = 0xffffff;
 		bresenham(&b, data);
 	}
+	else if (data->displaymap == 0)
+		set_mapicon(data);
 	mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
-	display_pos(data);
+	if (data->displaymap == 1)
+		display_pos(data);
 	return(1);
 }

@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 11:01:14 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/18 16:19:02 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/22 21:29:08 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,9 @@ void	draw_text(t_data *data, t_draw *draw, t_spr_geo *sp)
 	int d;
 
 	d = (draw->y) * 256 - data->height * 128 + sp->height * 128;
-	draw->tex_y = ((d * data->sph) / sp->height) / 256;
+	draw->tex_y = (abs)((d * data->sph) / sp->height) / 256;
+	if (data->spw * draw->tex_y + draw->tex_x < 0 )
+		return ;
 	draw->color = ((unsigned int *)data->sprimgaddr)
 	[data->spw * draw->tex_y + draw->tex_x];
 	if ((draw->color & 0x00FFFFFF) != 0)

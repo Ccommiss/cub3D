@@ -22,6 +22,8 @@
 # define GRASS 0x99e599
 # define GREY 0X696969
 # define LIGHTGREY 0X9A9A9A
+# define VINTAGE_YELLOW 0Xe7cf8a
+# define BLACK 0X303030
 
 enum e_sides
 {
@@ -167,8 +169,9 @@ typedef struct s_visu2d
 	int pixh;
 	int center_w;
 	int center_h;
-	int	init_w;
-	int init_h;
+	double	init_w;
+	double init_h;
+	int move;
 } t_visu2d;
 
 
@@ -326,6 +329,7 @@ void set_map(t_data *data);
 int set_player(t_data *data);
 void set_compass(t_data *data);
 void 	init_minimap(t_data *data);
+void set_mapicon(t_data *data);
 
 /*
  *  [display.c] Displaying fucntions

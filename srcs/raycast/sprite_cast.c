@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 11:02:02 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/22 11:41:51 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/22 21:20:25 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	swap(t_spr *tmp, t_spr *tmp_next)
 	tmp_next->x = val_tmp.x;
 	tmp_next->y = val_tmp.y;
 	tmp_next->distance = val_tmp.distance;
-	printf ("A T ON SWAP ? \n");
 }
 
 t_spr	*sort_sprites(t_data *data, t_spr *head)
@@ -59,7 +58,7 @@ void	sprite_casting(t_data *data)
 	{
 		data->spr->distance = (pow((data->pos_x - data->spr->x), 2)
 		+ pow((data->pos_y - data->spr->y), 2));
-		printf (" %d -- %f \n", data->spr->index, data->spr->distance);
+		//printf (" %d -- %f \n", data->spr->index, data->spr->distance);
 		data->spr = data->spr->next;
 	}
 	data->spr = head;
