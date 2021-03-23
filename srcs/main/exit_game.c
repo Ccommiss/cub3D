@@ -118,8 +118,10 @@ int close_win(t_data *data)
 		mlx_destroy_image(data->mlx, data->img);
 	free_game(data);
 	printf("exiting\n");
-	mlx_destroy_display(data->mlx);//linux
 	if (data->mlx)
+	{
+		mlx_destroy_display(data->mlx);//linux
 		free(data->mlx);
+	}
 	exit(1);
 }
