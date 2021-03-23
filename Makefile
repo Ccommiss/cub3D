@@ -47,7 +47,7 @@ UNAME := $(shell uname)
 APPLE = Darwin
 
 ifeq ($(UNAME),$(APPLE))
-	FLAGS = -I. -I$(INCLUDES_MAC) -Wall -Werror -Wextra
+	FLAGS = -I. -I$(INCLUDES_MAC) -Wall -Werror -Wextra -fsanitize=address
 endif
 ifeq ($(UNAME),Linux)
 	FLAGS = -I. -I$(INCLUDES_LINUX) -Wall -Werror -Wextra

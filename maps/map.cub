@@ -1,9 +1,9 @@
-R	1920	1080
-NO ./textures/mossy.xpm
-SO ./textures/redbrick.xpm
-EA ./textures/stone.xpm
-WE ./textures/wood.xpm
-S ./textures/barrel.xpm
+R	1920	920
+NO ./pics/mossy.xpm
+SO ./pics/redbrick_1.xpm
+EA ./pics/bluestone.xpm
+WE ./pics/wood.xpm
+S ./pics/barrel.xpm
 
 F 255,0,255
 C 0,128,128

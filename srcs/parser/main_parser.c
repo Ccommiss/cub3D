@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 17:53:32 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/18 11:11:20 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/23 16:15:52 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int		ft_parse(int fd, t_data *data)
 	free(line);
 	if (data->error != 0)
 		return (error_message(data, data->error));
-	if (!iscomplete(data))
+	if (!iscomplete(data) || !data->map)
 		return (error_message(data, MISSING_INFOS));
 	if (data->pos_x < 0 || data->pos_y < 0)
 		return (error_message(data, NO_PLAYER_FOUND));

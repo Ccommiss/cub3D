@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 15:18:12 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/23 14:07:59 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/23 17:03:26 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,8 @@ int key_hook(int keycode, t_data *data)
 	}
 	if (keycode == KEY_MINUS) //minus
 	{
-		if (data->minimap_size * data->map_w > 0.7 * data->width
-		|| data->minimap_size * data->map_h > 0.3 * data->height)
+		if (data->minimap_size * data->map_w > 0.9 * data->width
+		|| data->minimap_size * data->map_h > 0.2 * data->height)
 			data->minimap_size--;
 		data->v.center_w = (data->width / 2 - (data->minimap_size * data->map_w / 2));
 		data->v.center_h = data->height * 0.7;

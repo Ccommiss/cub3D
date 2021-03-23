@@ -113,6 +113,7 @@ void init_base(t_data *data)
 	data->v.init_w = -1;
 	data->v.init_h = -1;
 	data->v.move = 0;
+	printf( " %d \n\n", data->info->floor_rgb);
 }
 
 /*
@@ -127,7 +128,10 @@ int	alloc_image(t_data *data, t_text *t, void *text)
 {
 	t->img = mlx_xpm_file_to_image(data->mlx, text, &t->w, &t->h);
 	if (!t->img)
-		return (error_message(data, 6));
+	{
+		t->next = NULL;
+		return (error_message(data, TEXTURE_NOT_FOUND));
+	}
 	t->imgaddr = mlx_get_data_addr(t->img, &t->bits_per_pixel, &t->line_length, &t->endian);
 	if (text != data->info->east_text)
 	{
@@ -168,6 +172,8 @@ int loadimage(t_data *data)
 	t->next = head;
 	// ensuite on fait les sprites
 	data->sprimg = mlx_xpm_file_to_image(data->mlx, data->info->sprite_text, &data->spw, &data->sph);
+	if (!data->sprimg)
+		return (error_message(data, TEXTURE_NOT_FOUND));
 	data->sprimgaddr = mlx_get_data_addr(data->sprimg, &data->sprbpx, &data->spline, &data->end);
 	return (1);
 }

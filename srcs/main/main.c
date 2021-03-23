@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 15:18:00 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/22 11:35:53 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/23 16:00:59 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ int		main(int argc, char **argv)
 
 	data.info = &info;
 	init_base(&data);
+
 	fd = check_format(argv[1], &data);
 	check_bmp(&data, argc, argv);
 	ft_parse(fd, &data);

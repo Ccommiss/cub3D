@@ -18,8 +18,6 @@ int free_textures(t_data *data, t_text *head)
 	if (data->t != head)
 		data->t = head;
 	i = 0;
-	// FREE LES STR* STRDUPEES dans PARSE INFOS
-
 	while (i < 4 && data->t != NULL) // FREE LES TEXTURES
 	{
 		tmp = data->t;
@@ -120,7 +118,7 @@ int close_win(t_data *data)
 	printf("exiting\n");
 	if (data->mlx)
 	{
-		mlx_destroy_display(data->mlx);//linux
+	//	mlx_destroy_display(data->mlx);//linux
 		free(data->mlx);
 	}
 	exit(1);

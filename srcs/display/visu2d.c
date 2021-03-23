@@ -52,6 +52,21 @@ int set_player(t_data *data)
 	int x_play = data->minimap_size * (data->pos_x + data->v.init_w) + data->v.center_w;
 	int y_play = data->minimap_size * (data->pos_y + data->v.init_h + 1) + data->v.center_h;
 
+
+	int endian;
+	int bpp;
+	int wi;
+	int hi;
+	int sl;
+	int color;
+
+
+	void *img = mlx_xpm_file_to_image(data->mlx, "pics/yoshi.xpm", &wi, &hi);
+	if (!img)
+		return -1;
+	void *imginfo = mlx_get_data_addr(img, &bpp, &sl, &endian);
+
+
 	int move;
 	move = data->v.move;
 
@@ -59,9 +74,9 @@ int set_player(t_data *data)
 	if (s_play < 5)
 		s_play = 5;
 
-	while (h++ < s_play)
+	while (h++ < hi)
 	{
-		while (w++ < s_play)
+		while (w++ < wi)
 		{
 			x_play = data->minimap_size * (data->pos_x + data->v.init_w) + data->v.center_w + w;
 			y_play = data->minimap_size * (data->pos_y + data->v.init_h + 1) + data->v.center_h + h;
@@ -92,8 +107,12 @@ int set_player(t_data *data)
 			|| (data->minimap_size * (data->pos_x + data->v.init_w) + w  + data->v.center_w + s_play >= data->width * 0.9)) && !move)
 				return (0);
 
+			color = ((unsigned int *)imginfo)[wi * (h - 1) + (w -1)];
+			if (color == 0x000000)
+				color = 0x000001;
+			if ((color & 0x00FFFFFF) != 0)
 			my_mlx_pixel_put(data, (data->minimap_size * (data->pos_x + data->v.init_w)  + data->v.center_w + w ),
-							 ( data->minimap_size * (data->pos_y + data->v.init_h + 1) + h  + data->v.center_h), BLUE);
+							 ( data->minimap_size * (data->pos_y + data->v.init_h + 1) + h  + data->v.center_h), color);
 		}
 		w = 0;
 	}

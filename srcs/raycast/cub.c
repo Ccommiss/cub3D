@@ -64,9 +64,11 @@ void calculate_wall(t_data *data, t_draw *d, int line_h)
 	double wallx;
 
 	d->start_y = (-line_h / 2) + (data->height / 2);
+	d->start_y = (-line_h / 2) + (data->height * 0.3); //tesstt
 	if (d->start_y < 0)
 		d->start_y = 0;
 	d->end_y = (line_h / 2) + (data->height / 2);
+	d->end_y = (line_h / 2) + (data->height * 0.3); //testt
 	if (d->end_y >= data->height)
 		d->end_y = data->height - 1;
 	if (data->side == WEST || data->side == EAST)
@@ -109,6 +111,7 @@ void draw(t_data *data, int x)
 	calculate_wall(data, &d, line_h);
 	step = (1.0 * data->t->h) / line_h;
 	t_pos = (d.start_y - (data->height / 2) + (line_h / 2)) * step;
+	t_pos = (d.start_y - (data->height * 0.3) + (line_h / 2)) * step; ///test
 	set_texture(data);
 	y = d.start_y - 1;
 	while (++y <= d.end_y)
