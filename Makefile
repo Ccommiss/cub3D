@@ -3,7 +3,8 @@ NAME = test
 
 SOURCEDIR = ./srcs/
 
-INCLUDES = ./includes/
+INCLUDES_MAC = ./includes/
+INCLUDES_LINUX = ./includes_linux/
 
 PARSER = $(SOURCEDIR)parser/
 BMP = $(SOURCEDIR)bmp/
@@ -39,17 +40,26 @@ OBJS := ${SRCS:c=o}
 
 CC = clang -g $(FLAGS)
 
-FLAGS = -I. -I$(INCLUDES) -Wall -Werror -Wextra
+
+
 LIBS = ./libft
 UNAME := $(shell uname)
 APPLE = Darwin
 
+ifeq ($(UNAME),$(APPLE))
+	FLAGS = -I. -I$(INCLUDES_MAC) -Wall -Werror -Wextra
+endif
+ifeq ($(UNAME),Linux)
+	FLAGS = -I. -I$(INCLUDES_LINUX) -Wall -Werror -Wextra
+endif
+
 all: $(NAME)
+
 
 $(NAME): $(OBJS) $(INCLUDES)
 	make -C $(LIBS)
 ifeq ($(UNAME),$(APPLE))
-	$(CC) $(OBJS) -Lmlx -lmlx -framework OpenGL -framework AppKit -L$(LIBS) -lft  -o $(NAME)
+	$(CC)  $(OBJS) -Lmlx -lmlx -framework OpenGL -framework AppKit -L$(LIBS) -lft  -o $(NAME)
 endif
 ifeq ($(UNAME),Linux)
 	$(CC) $(OBJS) -L$(LIBS) -lft -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -o $(NAME)

@@ -111,6 +111,7 @@ void init_base(t_data *data)
 	data->zbuffer = NULL;
 	data->v.init_w = -1;
 	data->v.init_h = -1;
+	data->v.move = 0;
 }
 
 /*
