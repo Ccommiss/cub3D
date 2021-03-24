@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 16:08:46 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/23 20:56:09 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/24 10:17:33 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	fill_ceiling(t_data *data)
 
 	i = 0;
 	j = 0;
-	limit = data->height * (int)(1 - (int)data->look);
+	limit = data->height * (int)(1 - (int)data->look) - data->jump;
 	if (limit <= 0)
 		limit = data->height;
 	while (i < limit + 100)
@@ -103,7 +103,7 @@ void	fill_floor(t_data *data)
 	int i;
 	int j;
 
-	i = data->height * data->look;
+	i = data->height * data->look + data->jump;
 	j = 0;
 	while (i < data->height)
 	{

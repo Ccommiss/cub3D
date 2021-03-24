@@ -64,11 +64,15 @@ void calculate_wall(t_data *data, t_draw *d, int line_h)
 	double wallx;
 
 	d->start_y = (-line_h / 2) + (data->height * data->look) ; //tesstt
+
 	if (d->start_y + data->jump < 0) //test
-		d->start_y = 0;
+		d->start_y = 0 - data->jump;
+
 	d->end_y = (line_h / 2) + (data->height * data->look); //testt
 	if (d->end_y + data->jump >= data->height)
-		d->end_y = data->height - 1;
+		d->end_y = data->height - 1 - data->jump;
+
+
 	if (data->side == WEST || data->side == EAST)
 		wallx = data->pos_y + (data->perpwalldist * data->raydir_y);
 	else

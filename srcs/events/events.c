@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 15:18:12 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/23 20:45:53 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/24 10:29:10 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,12 @@ int speed_hook(int keycode, t_data *data)
 {
 	if (keycode == KEY_SHIFT)
 		data->speed = 0.11;
-	if (keycode == KEY_J)
+
+	if (keycode == KEY_J || keycode == KEY_H)
+	{
 		data->jump = 0;
+		display(data);
+	}
 
 	return 1;
 }
@@ -35,7 +39,11 @@ int key_hook(int keycode, t_data *data)
 	if (keycode == KEY_SHIFT)
 		data->speed = 0.20;
 	if (keycode == KEY_J)
-		data->jump = 100;
+		data->jump = 250;
+	if (keycode == KEY_H)
+		data->jump = -250;
+
+
 
 	if (keycode == KEY_W)
 	{
@@ -136,15 +144,11 @@ int key_hook(int keycode, t_data *data)
 	}
 	if (keycode == KEY_M)
 		init_minimap(data);
-	if (keycode == KEY_UP)
+	if (keycode == KEY_UP && data->look <= 1)
 		data->look += 0.1;
-	if (keycode == KEY_DOWN)
+	if (keycode == KEY_DOWN && data->look > 0)
 		data->look -= 0.1;
 
-
-
-	// if (data->pos_x / (double)((int)data->pos_x) != 1.00)
-	// 	data->pos_x += 0.1;
 	if (keycode == KEY_ESC)
 		close_win(data);
 	display(data);

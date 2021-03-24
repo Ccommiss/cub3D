@@ -22,11 +22,11 @@ void	compute_data(t_data *data, t_spr_geo *sp, t_draw *draw)
 	sp->width = abs((int)(data->height  / (sp->trans_y)));
 
 	draw->start_y = -sp->height * 0.5 + (data->height) * (data->look);
-	if (draw->start_y <= 0)
-		draw->start_y = -1;
+	if (draw->start_y + data->jump <= 0)
+		draw->start_y = - 1 - data->jump; // yessss
 
 	draw->end_y = sp->height * 0.5 + (data->height) * (data->look) ;
-	if (draw->end_y  >= data->height)
+	if (draw->end_y + data->jump >= data->height) // a regle un pb
 		draw->end_y = data->height;
 
 	draw->start_x = -sp->width / 2 + sp->screen_x - 1;
