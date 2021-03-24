@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 16:08:46 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/23 20:33:16 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/23 20:56:09 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	fill_ceiling(t_data *data)
 	limit = data->height * (int)(1 - (int)data->look);
 	if (limit <= 0)
 		limit = data->height;
-	while (i < limit)
+	while (i < limit + 100)
 	{
 		//printf ("SKY = %f \n", data->height * (1 - data->look));
 		while (j < data->width)

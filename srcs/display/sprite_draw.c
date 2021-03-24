@@ -12,7 +12,6 @@
 
 void	compute_data(t_data *data, t_spr_geo *sp, t_draw *draw)
 {
-	//data->look = 0.7;
 	sp->x = (data->spr->x + 0.5) - data->pos_x;
 	sp->y = (data->spr->y + 0.5) - data->pos_y ;
 	sp->inv = 1.0 / (data->planeX * data->diry - data->dirx * data->planeY);
@@ -20,16 +19,16 @@ void	compute_data(t_data *data, t_spr_geo *sp, t_draw *draw)
 	sp->trans_y = sp->inv * ((-data->planeY * sp->x) + (data->planeX * sp->y));
 	sp->screen_x = (int)((data->width / 2) * (1 + sp->trans_x / sp->trans_y));
 	sp->height = abs((int)(data->height / (sp->trans_y)));
-	sp->width = abs((int)(data->height / (sp->trans_y)));
-	//draw->start_y = -sp->height / 2 + data->height / 2;
-	draw->start_y = -sp->height * 0.5 + data->height * (data->look);
+	sp->width = abs((int)(data->height  / (sp->trans_y)));
 
+	draw->start_y = -sp->height * 0.5 + (data->height) * (data->look);
 	if (draw->start_y <= 0)
 		draw->start_y = -1;
-    //draw->end_y = sp->height / 2 + data->height / 2;
-	draw->end_y = sp->height * 0.5 + data->height * (data->look);
-	if (draw->end_y >= data->height)
+
+	draw->end_y = sp->height * 0.5 + (data->height) * (data->look) ;
+	if (draw->end_y  >= data->height)
 		draw->end_y = data->height;
+
 	draw->start_x = -sp->width / 2 + sp->screen_x - 1;
 	if (draw->start_x <= 0)
 		draw->start_x = -1;
@@ -51,15 +50,12 @@ void	draw_text(t_data *data, t_draw *draw, t_spr_geo *sp)
 {
 	int d;
 
-	//d = (draw->y) * 256 - data->height * 128 + sp->height * 128;
-	d = (draw->y) * 256 - (data->height * 256 * data->look) + (sp->height * 128);
+	d = ((draw->y - data->jump) * 256 - ((data->height) * 256 * data->look) + (sp->height * 128));
 	draw->tex_y = (abs)((d * data->sph) / sp->height) / 256;
 	if (data->spw * draw->tex_y + draw->tex_x > 63 * 63 || data->spw * draw->tex_y + draw->tex_x < 0)
 	{
 		return ;
 	}
-//	printf ("LA TEXX %d TEXY%d SPW%d\n",  draw->tex_x, draw->tex_y,data->spw );
-
 	draw->color = ((unsigned int *)data->sprimgaddr)
 	[data->spw * draw->tex_y + draw->tex_x];
 	if ((draw->color & 0x00FFFFFF) != 0)
@@ -84,8 +80,11 @@ void	sprite_drawing(t_data *data)
 	while (data->spr != NULL)
 	{
 		compute_data(data, &sp, &draw);
+		draw.start_y += data->jump;
+		draw.end_y += data->jump;
 		while (++draw.start_x < draw.end_x)
 		{
+
 			draw.tex_x = (int)(256 * (draw.start_x -
 			(-sp.width / 2 + sp.screen_x)) * data->spw / sp.width) / 256;
 			if (sp.trans_y > 0 && draw.start_x >= 0
