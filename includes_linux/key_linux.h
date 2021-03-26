@@ -38,7 +38,7 @@ enum
 	KEY_RELEASE_MASK = (1L << 1),
 	BUTTON_PRESS_MASK =	(1L << 2),
 	BUTTON_RELEASE_MASK = (1L << 3),
-	STRUCTURE_NOTIFY_MASK = (1L << 17),
 	ENTER_WINDOW_MASK = (1L << 4)
-}
+};
+
 #endif

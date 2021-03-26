@@ -53,7 +53,6 @@ void 	init_minimap(t_data *data)
 
 int	init_struct(t_data *data)
 {
-	data->mlx = mlx_init();
 	loadimage(data);
 	data->win = mlx_new_window(data->mlx, data->width, data->height, "Cub3D");
 	data->img = mlx_new_image(data->mlx, data->width, data->height);
@@ -98,6 +97,7 @@ void 	init_infos(t_data *data)
 
 void	init_base(t_data *data)
 {
+	data->mlx = mlx_init();
 	data->img = NULL;
 	data->win = NULL;
 	data->mlx = NULL;

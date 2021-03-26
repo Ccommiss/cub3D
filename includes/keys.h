@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/25 21:24:02 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/25 21:35:40 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/26 10:15:07 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,13 +101,9 @@ enum
 	BUTTON_RELEASE_MASK = (1L << 3),
 	STRUCTURE_NOTIFY_MASK = (1L << 17),
 	ENTER_WINDOW_MASK = (1L << 4)
-}
-
-
-
-
-
-
 };
+
+
+
 
 #endif
