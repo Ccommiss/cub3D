@@ -40,10 +40,6 @@ SRCS = $(MAIN)main.c \
 	$(BMP)save_bmp.c \
 
 
-
-
-
-
 OBJS := ${SRCS:c=o}
 
 CC = clang -g $(FLAGS)
@@ -67,9 +63,11 @@ all: $(NAME)
 $(NAME): $(OBJS) $(INCLUDES)
 	make -C $(LIBS)
 ifeq ($(UNAME),$(APPLE))
+	make -C mlx
 	$(CC)  $(OBJS) -Lmlx -lmlx -framework OpenGL -framework AppKit -L$(LIBS) -lft  -o $(NAME)
 endif
 ifeq ($(UNAME),Linux)
+	make -C mlx_linux
 	$(CC) $(OBJS) -L$(LIBS) -lft -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -o $(NAME)
 endif
 
