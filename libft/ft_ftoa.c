@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/26 15:46:53 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/26 15:51:53 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/26 16:07:29 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ char	*ft_ftoa(float n, int afterpoint)
 
 	ipart = (int)n;
 	fpart = n - (float)ipart;
-	*res = ft_itoa(ipart);
-	*res2 = NULL;
+	res = ft_itoa(ipart);
+	res2 = NULL;
 	if (afterpoint != 0)
 	{
 		tmp = res;
