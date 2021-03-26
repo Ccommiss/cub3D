@@ -85,10 +85,7 @@ int	free_game(t_data *data)
 	if (data->map)
 	{
 		while (i < data->map_h)
-		{
-			printf(":: %s \n", data->map[i]);
 			free(data->map[i++]);
-		}
 		free(data->map);
 	}
 	if (data->t)
@@ -111,7 +108,6 @@ int	close_win(t_data *data)
 	if (data->img)
 		mlx_destroy_image(data->mlx, data->img);
 	free_game(data);
-	printf("exiting\n");
 	if (data->mlx)
 	{
 		mlx_destroy_display(data->mlx);//linux
