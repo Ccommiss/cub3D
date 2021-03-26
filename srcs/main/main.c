@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 15:18:00 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/26 10:00:12 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/26 10:49:40 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,8 @@ int	main(int argc, char **argv)
 	if (argc == 3 && ft_strncmp(argv[2], "--save", 7) == 0)
 		save_bmp(&data);
 	display(&data);
-	mlx_hook(data.win, KEY_PRESS, 1L << 0, key_hook, &data);
-	mlx_hook(data.win, KEY_RELEASE, 1L << 0, speed_hook, &data);
+	mlx_hook(data.win, KEY_PRESS, KEY_PRESS_MASK, key_hook, &data);
+	mlx_hook(data.win, KEY_RELEASE, KEY_RELEASE_MASK, speed_hook, &data);
 	mlx_hook(data.win, 9, 1L << 21, display, &data);
 	mlx_hook(data.win, DESTROY_NOTIFY, STRUCTURE_NOTIFY_MASK, close_win, &data);
 //	("afplay  &"); //mac
