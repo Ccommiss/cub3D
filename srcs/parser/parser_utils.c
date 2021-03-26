@@ -2,7 +2,7 @@
 
 void	*ft_realloc(void *ptr, size_t cursize, size_t newsize)
 {
-	void *newptr;
+	void	*newptr;
 
 	if (!ptr)
 		return (malloc(newsize));
@@ -14,12 +14,12 @@ void	*ft_realloc(void *ptr, size_t cursize, size_t newsize)
 	return (newptr);
 }
 
-int		ft_check_chars(char sign, t_data *data, int x, int y)
+int	ft_check_chars(char sign, t_data *data, int x, int y)
 {
 	if (sign == 'N' || sign == 'S' || sign == 'E' || sign == 'W')
 	{
 		if ((data->pos_x != -1 && data->pos_y != -1)
-		&& (data->pos_x != x + 0.5 || data->pos_y != y + 0.5))
+			&& (data->pos_x != x + 0.5 || data->pos_y != y + 0.5))
 			return (error_message(data, TWO_PLAYERS));
 		data->pos_x = x + 0.5;
 		data->pos_y = y + 0.5;
@@ -31,15 +31,15 @@ int		ft_check_chars(char sign, t_data *data, int x, int y)
 	return (error_message(data, 3));
 }
 
-int		ft_mapcheck(char *str)
+int	ft_mapcheck(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] != 'N' && str[i] != 'S' && str[i] != 'E' && str[i] != 'W' &&
-			str[i] != '0' && str[i] != '1' && str[i] != '2' && str[i] != ' '
+		if (str[i] != 'N' && str[i] != 'S' && str[i] != 'E' && str[i] != 'W'
+			&& str[i] != '0' && str[i] != '1' && str[i] != '2' && str[i] != ' '
 			&& str[i] != '	')
 			return (0);
 		i++;
@@ -95,7 +95,7 @@ char	*ft_trim_inside(char *str)
 
 void	ft_replace_tabs(char **line)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (line[0][++i])

@@ -1,5 +1,5 @@
 
-NAME = test
+NAME = Cub3d
 
 SOURCEDIR = ./srcs/
 
@@ -24,11 +24,19 @@ SRCS = $(MAIN)main.c \
 	$(PARSER)parser_utils.c \
 	$(PARSER)main_parser.c \
 	$(PARSER)flood_fill.c \
-	$(DISPLAY)visu2d.c \
+	$(PARSER)load_images.c \
 	$(DISPLAY)bresenham.c\
 	$(DISPLAY)display.c \
 	$(DISPLAY)sprite_draw.c \
+	$(DISPLAY)wall_draw.c \
+	$(DISPLAY)panel.c \
+	$(DISPLAY)icons.c \
+	$(DISPLAY)minimap.c \
+	$(DISPLAY)mini_player.c \
+	$(DISPLAY)fill_background.c \
 	$(EVENTS)events.c \
+	$(EVENTS)move_events.c \
+	$(EVENTS)minimap_settings.c \
 	$(BMP)save_bmp.c \
 
 
@@ -47,7 +55,7 @@ UNAME := $(shell uname)
 APPLE = Darwin
 
 ifeq ($(UNAME),$(APPLE))
-	FLAGS = -I. -I$(INCLUDES_MAC) -Wall -Werror -Wextra -fsanitize=address
+	FLAGS = -I. -I$(INCLUDES_MAC) -Wall -Werror -Wextra
 endif
 ifeq ($(UNAME),Linux)
 	FLAGS = -I. -I$(INCLUDES_LINUX) -Wall -Werror -Wextra

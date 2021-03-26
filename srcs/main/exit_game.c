@@ -8,22 +8,19 @@
  * 		an allocation fails.
  */
 
-int free_textures(t_data *data, t_text *head)
+int	free_textures(t_data *data, t_text *head)
 {
-	int i;
-	t_text *tmp;
-
-	printf("Texture la\n");
+	int		i;
+	t_text	*tmp;
 
 	if (data->t != head)
 		data->t = head;
 	i = 0;
-	while (i < 4 && data->t != NULL) // FREE LES TEXTURES
+	while (i < 4 && data->t != NULL)
 	{
 		tmp = data->t;
 		data->t = data->t->next;
-		printf("FREEING %c \n", tmp->side);
-		if (tmp->img) //si on a pas eu d'erreurs de chargement
+		if (tmp->img)
 			mlx_destroy_image(data->mlx, tmp->img);
 		free(tmp);
 		tmp = NULL;
@@ -32,26 +29,23 @@ int free_textures(t_data *data, t_text *head)
 	return (-1);
 }
 
-int free_sprites(t_data *data)
+int	free_sprites(t_data *data)
 {
-	t_spr *tmp_s;
-
-	printf("sprites la\n");
+	t_spr	*tmp_s;
 
 	tmp_s = data->spr->head;
 	while (data->spr != NULL)
 	{
 		data->spr = tmp_s->next;
-		printf("deleting spr index %d \n", tmp_s->index);
 		free(tmp_s);
 		tmp_s = data->spr;
 	}
 	if (data->sprimg)
-		mlx_destroy_image(data->mlx, data->sprimg); //on free limage
+		mlx_destroy_image(data->mlx, data->sprimg);
 	return (-1);
 }
 
-void free_info(t_data *data)
+void	free_info(t_data *data)
 {
 	if (data->info->north_text)
 		free(data->info->north_text);
@@ -63,10 +57,14 @@ void free_info(t_data *data)
 		free(data->info->west_text);
 	if (data->info->sprite_text)
 		free(data->info->sprite_text);
+	if (data->compass.img_ptr)
+		mlx_destroy_image(data->mlx, data->compass.img_ptr);
+	if (data->map_icon.img_ptr)
+		mlx_destroy_image(data->mlx, data->map_icon.img_ptr);
 }
 
 /*
- *  red_cross
+ *  free_game
  *
  * 	[synopsis] : properly closes the window and free elements previously
  * 		allocated, e.g.
@@ -77,15 +75,14 @@ void free_info(t_data *data)
  * 	[return] : none
  */
 
-int free_game(t_data *data)
+int	free_game(t_data *data)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (data->map)
 	{
-		//while (data->map[i] != NULL)
-		while (i < data->map_h) //verifier que ca fait pas des leaks
+		while (i < data->map_h)
 		{
 			printf(":: %s \n", data->map[i]);
 			free(data->map[i++]);
@@ -102,11 +99,9 @@ int free_game(t_data *data)
 	return (0);
 }
 
-
-
-int close_win(t_data *data)
+int	close_win(t_data *data)
 {
-	checkmap(data);
+	//checkmap(data);
 	if (data->win)
 	{
 		mlx_clear_window(data->mlx, data->win);
@@ -118,8 +113,9 @@ int close_win(t_data *data)
 	printf("exiting\n");
 	if (data->mlx)
 	{
-	//	mlx_destroy_display(data->mlx);//linux
+		mlx_destroy_display(data->mlx);//linux
 		free(data->mlx);
 	}
+	system("killall afplay"); //mac
 	exit(1);
 }

@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 11:17:09 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/18 11:17:10 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/25 20:05:09 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,42 +34,6 @@ void	ft_finddir(t_data *data, char dir)
 }
 
 /*
-**  load_sprite
-**
-** 	[synopsis] : set the dirx & diry positions according to letter found in game
-** 	[call] : in check_borders (part of flood fill algorithm)
-** 	[return] : none
-*/
-
-int		load_sprite(t_data *data, int x, int y)
-{
-	static int i;
-
-	if (!data->spr)
-	{
-		i = 0;
-		data->spr = (t_spr *)malloc(sizeof(t_spr));
-		if (!data->spr)
-			return (-1);
-		data->spr->head = data->spr;
-	}
-	else
-	{
-		data->spr->next = (t_spr *)malloc((sizeof(t_spr)));
-		if (!data->spr->next)
-			return (-1);
-		data->spr->next->head = data->spr->head;
-		data->spr = data->spr->next;
-	}
-	data->spr->index = i++;
-	data->spr->x = x;
-	data->spr->y = y;
-	data->spr->distance = 0;
-	data->spr->next = NULL;
-	return (1);
-}
-
-/*
 **  ft_realloc_tab
 **
 ** 	[synopsis] : realloc all data->map[y] lines, in case a line is
@@ -77,15 +41,15 @@ int		load_sprite(t_data *data, int x, int y)
 ** 	[return] : 1 if success, -1 if malloc fails
 */
 
-int		ft_realloc_tab(t_data *data, int x, int y)
+int	ft_realloc_tab(t_data *data, int x, int y)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < y)
 	{
 		data->map[i] = (char *)ft_realloc(data->map[i],
-		data->map_w, sizeof(char) * x + 1);
+				data->map_w, sizeof(char) * x + 1);
 		if (!data->map[i])
 			return (close_win(data));
 		data->map[i][data->map_w] = '\0';
@@ -102,10 +66,10 @@ int		ft_realloc_tab(t_data *data, int x, int y)
 ** 	[return] : 1 if success, -1 if fails
 */
 
-int		fill_maptab(t_data *data, char *line, int y)
+int	fill_maptab(t_data *data, char *line, int y)
 {
-	int x;
-	int i;
+	int	x;
+	int	i;
 
 	x = 0;
 	i = 0;
@@ -140,7 +104,7 @@ int		fill_maptab(t_data *data, char *line, int y)
 **			main parser before properly exiting), or 1 if success
 */
 
-int		ft_parse_map(t_data *data, char *line)
+int	ft_parse_map(t_data *data, char *line)
 {
 	static int	y;
 	int			len;
@@ -151,7 +115,7 @@ int		ft_parse_map(t_data *data, char *line)
 		y = 0;
 	data->map_h = y + 1;
 	data->map = (char **)ft_realloc(data->map, (data->map_h) * sizeof(char *),
-		(data->map_h + 1) * sizeof(char *));
+			(data->map_h + 1) * sizeof(char *));
 	if (!data->map)
 		return (-1);
 	data->map[data->map_h] = 0;

@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 12:05:44 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/16 17:24:49 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/25 09:11:17 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	fill_header(t_data *data, int fd)
 {
-	t_bmp info;
+	t_bmp	info;
 
 	write(fd, "BM", 2);
 	info.bmfh_size = 54 + (4 * data->width * data->height);
@@ -61,12 +61,12 @@ void	fill_core(t_data *data, int fd)
 
 void	save_bmp(t_data *data)
 {
-	int fd;
+	int	fd;
 
 	fill_black(data);
 	fill_ceiling(data);
 	fill_floor(data);
-	dda(data);
+	wall_casting(data);
 	fd = open("save.bmp", O_CREAT | O_WRONLY);
 	fill_header(data, fd);
 	fill_core(data, fd);

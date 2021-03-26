@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 11:02:02 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/22 21:20:25 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/25 10:06:52 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	swap(t_spr *tmp, t_spr *tmp_next)
 {
-	t_spr val_tmp;
+	t_spr	val_tmp;
 
 	val_tmp.x = tmp->x;
 	val_tmp.y = tmp->y;
@@ -29,8 +29,8 @@ void	swap(t_spr *tmp, t_spr *tmp_next)
 
 t_spr	*sort_sprites(t_data *data, t_spr *head)
 {
-	t_spr *tmp;
-	t_spr *tmp_next;
+	t_spr	*tmp;
+	t_spr	*tmp_next;
 
 	tmp = data->spr;
 	tmp_next = data->spr->next;
@@ -50,15 +50,14 @@ t_spr	*sort_sprites(t_data *data, t_spr *head)
 
 void	sprite_casting(t_data *data)
 {
-	t_spr *head;
+	t_spr	*head;
 
 	head = data->spr->head;
 	data->spr = head;
 	while (data->spr != NULL)
 	{
 		data->spr->distance = (pow((data->pos_x - data->spr->x), 2)
-		+ pow((data->pos_y - data->spr->y), 2));
-		//printf (" %d -- %f \n", data->spr->index, data->spr->distance);
+				+ pow((data->pos_y - data->spr->y), 2));
 		data->spr = data->spr->next;
 	}
 	data->spr = head;

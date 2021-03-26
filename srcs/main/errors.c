@@ -6,10 +6,9 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 18:21:51 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/17 18:28:06 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/25 13:18:49 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "cub3d.h"
 
@@ -28,7 +27,10 @@ void 	value_errors(t_data *data)
 void 	map_errors(t_data *data)
 {
 	if (data->error == MAP_NOT_CLOSED)
-		printf("Map is not closed, blank was found in land or player is not inside the bounds. \n");
+	{
+		printf("Map is not closed, or blank was found,");
+		printf("or player is not inside the walls.\n");
+	}
 	if (data->error == NO_PLAYER_FOUND)
 		printf("No player found. \n");
 	if (data->error == UNEXPECTED_CHAR)
@@ -49,12 +51,11 @@ void 	file_errors(t_data *data)
 		printf("Too many arguments.\n");
 }
 
-int error_message(t_data *data, int index)
+int	error_message(t_data *data, int index)
 {
 	printf("Error :\n");
 	if (data->error == 0)
 		data->error = index;
-
 	if (data->error == TEXTURE_NOT_FOUND)
 		printf("Texture reference could not be found.\n");
 	if (data->error == BAD_RGB_FORMAT)

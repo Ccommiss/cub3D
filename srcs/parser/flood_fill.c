@@ -6,16 +6,52 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 18:18:45 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/18 10:31:30 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/25 21:25:15 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
+/*
+**  load_sprite
+**
+** 	[synopsis] : set the dirx & diry positions according to letter found in game
+** 	[call] : in check_borders (part of flood fill algorithm)
+** 	[return] : none
+*/
+
+int	load_sprite(t_data *data, int x, int y)
+{
+	static int	i;
+
+	if (!data->spr)
+	{
+		i = 0;
+		data->spr = (t_spr *)malloc(sizeof(t_spr));
+		if (!data->spr)
+			return (-1);
+		data->spr->head = data->spr;
+	}
+	else
+	{
+		data->spr->next = (t_spr *)malloc((sizeof(t_spr)));
+		if (!data->spr->next)
+			return (-1);
+		data->spr->next->head = data->spr->head;
+		data->spr = data->spr->next;
+	}
+	data->spr->index = i++;
+	data->spr->x = x;
+	data->spr->y = y;
+	data->spr->distance = 0;
+	data->spr->next = NULL;
+	return (1);
+}
+
 void	check_borders(t_data *data, int x, int y, char ***mapbis)
 {
 	if (y < 0 || y >= data->map_h || x < 0 || x >= data->map_w
-	|| data->map[y][x] == ' ' || data->map[y][x] == '	')
+		|| data->map[y][x] == ' ' || data->map[y][x] == '	')
 	{
 		data->error = MAP_NOT_CLOSED;
 		return ;
@@ -40,9 +76,9 @@ void	check_borders(t_data *data, int x, int y, char ***mapbis)
 	return ;
 }
 
-int		free_copymap(int nb_alloc, char ***copymap, int ret)
+int	free_copymap(int nb_alloc, char ***copymap, int ret)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < nb_alloc)
@@ -51,7 +87,7 @@ int		free_copymap(int nb_alloc, char ***copymap, int ret)
 	return (ret);
 }
 
-int		flood_fill(t_data *data)
+int	flood_fill(t_data *data)
 {
 	char	**copymap;
 	int		i;

@@ -9,6 +9,7 @@
 		"__locale": "c",
 		"sstream": "c",
 		"algorithm": "c",
-		"libft.h": "c"
+		"libft.h": "c",
+		"type_traits": "c"
 	}
 }

@@ -2,10 +2,25 @@
 
 int	is_zero(char c)
 {
+	if (c == '2')
+		system("afplay punch.mp3 &");
 	if (c == '0')
 		return (1);
 	return (0);
 }
+
+/*
+**  hit_check : the Digital differential analyzer
+**
+** 	[synopsis] :
+** 		> if dx > dy i.e difference between x1 and x2 is bigger
+**			than beetween y1 and y2, we follow dx slope, and increments
+**			it, and see which one is bigger next, until the
+**			map position reached by consecutives moves is a 1, i.e.
+**			a wall.
+**	[call] : in wall_casting
+** 	[return] : none
+*/
 
 void	hit_check(t_data *data)
 {
@@ -35,7 +50,7 @@ void	hit_check(t_data *data)
 	}
 }
 
-void calculate_step(t_data *data)
+void	calculate_step(t_data *data)
 {
 	if (data->raydir_x < 0)
 	{
@@ -59,81 +74,44 @@ void calculate_step(t_data *data)
 	}
 }
 
-void calculate_wall(t_data *data, t_draw *d, int line_h)
+/*
+**  perpendicular_ray
+**
+** 	[synopsis] : to avoid fisheye effect, a perpendicular
+**		ray from camera plane to the hit wall.
+**	[call] : in wall_casting
+** 	[return] : none
+**
+**       ^         ^		 ^ |
+**        \        |        /  |
+**         \       |       /   |
+**          \      |      /    |
+**           \     |     /     |
+**            \    |    /      |
+**             \   |   /     perpwalldist
+**              \  |  /      to avoid fisheye
+**               \ | /         |
+**                \|/          |
+**        player (._.)		   |
+**				  /|\		   |
+**				  / \<---------+
+**<------------------------------------->
+**                               camera plane
+*/
+
+void	perpendicular_ray(t_data *data)
 {
-	double wallx;
-
-	d->start_y = (-line_h / 2) + (data->height * data->look) ; //tesstt
-
-	if (d->start_y + data->jump < 0) //test
-		d->start_y = 0 - data->jump;
-
-	d->end_y = (line_h / 2) + (data->height * data->look); //testt
-	if (d->end_y + data->jump >= data->height)
-		d->end_y = data->height - 1 - data->jump;
-
-
 	if (data->side == WEST || data->side == EAST)
-		wallx = data->pos_y + (data->perpwalldist * data->raydir_y);
+		data->perpwalldist = (data->map_x - data->pos_x
+				+ (1 - data->stepx) / 2) / data->raydir_x;
 	else
-		wallx = data->pos_x + (data->perpwalldist * data->raydir_x);
-	wallx -= floor(wallx);
-	d->tex_x = (int)(wallx * (double)data->t->w);
-	if ((data->side == EAST || (data->side == WEST)) && data->raydir_x > 0)
-		d->tex_x = data->t->w - d->tex_x - 1;
-	if ((data->side == NORTH || data->side == SOUTH) && data->raydir_y < 0)
-		d->tex_x = data->t->w - d->tex_x - 1;
+		data->perpwalldist = (data->map_y - data->pos_y
+				+ (1 - data->stepy) / 2) / data->raydir_y;
 }
 
-void set_texture(t_data *data)
+void	wall_casting(t_data *data)
 {
-	if (data->side == SOUTH)
-		while (data->t->side != 's')
-			data->t = data->t->next;
-	else if (data->side == WEST)
-		while (data->t->side != 'w')
-			data->t = data->t->next;
-	else if (data->side == EAST)
-		while (data->t->side != 'e')
-			data->t = data->t->next;
-	else if (data->side == NORTH)
-		while (data->t->side != 'n')
-			data->t = data->t->next;
-}
-
-void draw(t_data *data, int x)
-{
-	t_draw d;
-	int line_h;
-	double step;
-	double t_pos;
-	int y;
-
-	line_h = (int)(data->height / data->perpwalldist);
-	calculate_wall(data, &d, line_h);
-	step = (1.0 * data->t->h) / line_h;
-	t_pos = (d.start_y - (data->height * data->look) + (line_h / 2)) * step; ///test
-	set_texture(data);
-
-	d.start_y += data->jump ; //test
-	d.end_y += data->jump;
-
-	y = d.start_y - 1;
-
-
-	while (++y <= d.end_y)
-	{
-		d.tex_y = (int)t_pos & (data->t->h - 1);
-		t_pos += step;
-		data->color = ((unsigned int *)data->t->imgaddr)
-			[data->t->h * d.tex_y + d.tex_x];
-		my_mlx_pixel_put(data, x, y, data->color);
-	}
-}
-
-void dda(t_data *data)
-{
-	int x;
+	int	x;
 
 	x = 0;
 	while (x < data->width)
@@ -147,11 +125,8 @@ void dda(t_data *data)
 		data->delta_y = fabs(1 / data->raydir_y);
 		calculate_step(data);
 		hit_check(data);
-		if (data->side == WEST || data->side == EAST)
-			data->perpwalldist = (data->map_x - data->pos_x + (1 - data->stepx) / 2) / data->raydir_x;
-		else
-			data->perpwalldist = (data->map_y - data->pos_y + (1 - data->stepy) / 2) / data->raydir_y;
-		draw(data, x);
+		perpendicular_ray(data);
+		wall_drawing(data, x);
 		data->zbuffer[x] = data->perpwalldist;
 		x++;
 	}

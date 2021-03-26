@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 17:53:32 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/23 16:15:52 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/25 08:49:57 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 ** 	[return] : 0 if is not complete, 1 if it is
 */
 
-int		iscomplete(t_data *data)
+int	iscomplete(t_data *data)
 {
 	if (!data->height || !data->width || !data->info->west_text
 		|| !data->info->east_text || !data->info->sprite_text
@@ -41,9 +41,9 @@ int		iscomplete(t_data *data)
 ** 	[return] : 1 if success, exits if error occurs while parse_info/parse_map
 */
 
-int		ft_parse(int fd, t_data *data)
+int	ft_parse(int fd, t_data *data)
 {
-	char *line;
+	char	*line;
 
 	line = NULL;
 	while (get_next_line(fd, &line) && data->error == 0)

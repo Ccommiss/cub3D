@@ -1,6 +1,14 @@
-
-
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   keys.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/25 21:24:02 by ccommiss          #+#    #+#             */
+/*   Updated: 2021/03/25 21:35:40 by ccommiss         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef KEYS_H
 # define KEYS_H
@@ -45,10 +53,10 @@
 # define KEY_N 45
 # define KEY_M 46
 # define KEY_TAB 48
-# define KEY_SPACE 49 //mine
-# define KEY_ESC 53 //mine
-# define KEY_SINGLEQUOT 39 //mine
-# define KEY_BACKSLASH 42 //mine
+# define KEY_SPACE 49
+# define KEY_ESC 53
+# define KEY_SINGLEQUOT 39
+# define KEY_BACKSLASH 42
 # define KEY_PLUS 24
 # define KEY_MINUS 27
 # define KEY_LEFT 123
@@ -72,16 +80,34 @@
 ** EVENT MASKS
 */
 
-# define KEY_PRESS_MASK			(1L << 0)
-# define KEY_RELEASE_MASK		(1L << 1)
-# define BUTTON_PRESS_MASK		(1L << 2)
-# define BUTTON_RELEASE_MASK	(1L << 3)
-# define POINTER_MOTION_MASK	(1L << 6)
-# define BUTTON1_MOTION_MASK	(1L << 8)
-# define BUTTON2_MOTION_MASK	(1L << 9)
-# define BUTTON3_MOTION_MASK	(1L << 10)
-# define BUTTON4_MOTION_MASK	(1L << 11)
-# define BUTTON5_MOTION_MASK	(1L << 12)
-# define STRUCTURE_NOTIFY_MASK	(1L << 17)
-# define ENTER_WINDOW_MASK      (1L << 4)
+//# define KEY_PRESS_MASK			(1L << 0)
+// # define KEY_RELEASE_MASK		(1L << 1)
+// # define BUTTON_PRESS_MASK		(1L << 2)
+// # define BUTTON_RELEASE_MASK	(1L << 3)
+// # define POINTER_MOTION_MASK	(1L << 6)
+// # define BUTTON1_MOTION_MASK	(1L << 8)
+// # define BUTTON2_MOTION_MASK	(1L << 9)
+// # define BUTTON3_MOTION_MASK	(1L << 10)
+// # define BUTTON4_MOTION_MASK	(1L << 11)
+// # define BUTTON5_MOTION_MASK	(1L << 12)
+// # define STRUCTURE_NOTIFY_MASK	(1L << 17)
+// # define ENTER_WINDOW_MASK      (1L << 4)
+
+enum
+{
+	KEY_PRESS_MASK	= (1 << 0),
+	KEY_RELEASE_MASK = (1L << 1),
+	BUTTON_PRESS_MASK =	(1L << 2),
+	BUTTON_RELEASE_MASK = (1L << 3),
+	STRUCTURE_NOTIFY_MASK = (1L << 17),
+	ENTER_WINDOW_MASK = (1L << 4)
+}
+
+
+
+
+
+
+};
+
 #endif
