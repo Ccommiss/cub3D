@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/25 21:18:38 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/25 21:53:17 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/26 10:21:48 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <math.h>
- #include "key_linux.h"
- #include "../mlx_linux/mlx.h"
+# include "key_linux.h"
+# include "../mlx_linux/mlx.h"
+# include "../libft/libft.h"
 
 # define RED 0xFF0000
 # define WHITE 0xFFFAFA
