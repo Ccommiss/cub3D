@@ -61,6 +61,8 @@ void	free_info(t_data *data)
 		mlx_destroy_image(data->mlx, data->compass.img_ptr);
 	if (data->map_icon.img_ptr)
 		mlx_destroy_image(data->mlx, data->map_icon.img_ptr);
+	if (data->player.img_ptr)
+		mlx_destroy_image(data->mlx, data->player.img_ptr);
 }
 
 /*
