@@ -28,7 +28,12 @@ int	ft_check_chars(char sign, t_data *data, int x, int y)
 	}
 	else if (ft_is_in_str("012 	", sign))
 		return (1);
-	return (error_message(data, 3));
+	else
+	{
+		data->error = UNEXPECTED_CHAR;
+		return (-1);
+	}
+//	return (error_message(data, 3));
 }
 
 int	ft_mapcheck(char *str)
