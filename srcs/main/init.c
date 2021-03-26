@@ -84,6 +84,7 @@ void 	init_infos(t_data *data)
 	data->info->sprite_text = NULL;
 	data->compass.img_ptr = NULL;
 	data->map_icon.img_ptr = NULL;
+	data->player.img_ptr = NULL;
 }
 
 /*

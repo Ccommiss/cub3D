@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 11:17:09 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/25 20:05:09 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/26 11:19:32 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,16 +70,18 @@ int	fill_maptab(t_data *data, char *line, int y)
 {
 	int	x;
 	int	i;
+	int j;
 
 	x = 0;
 	i = 0;
-	while (*line && data->error == 0)
+	j = 0;
+	while (line[j] && data->error == 0)
 	{
-		if (ft_check_chars(*line, data, x, y) == -1)
+		if (ft_check_chars(line[j], data, x, y) == -1)
 			return (-1);
-		else if (ft_check_chars(*line, data, x, y) == 1)
-			data->map[y][x] = *line++;
-		else if (ft_check_chars(*line++, data, x, y) == 2)
+		else if (ft_check_chars(line[j], data, x, y) == 1)
+			data->map[y][x] = line[j++];
+		else if (ft_check_chars(line[j++], data, x, y) == 2)
 			data->map[y][x] = '0';
 		x++;
 	}
