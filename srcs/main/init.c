@@ -100,7 +100,6 @@ void	init_base(t_data *data)
 	data->mlx = mlx_init();
 	data->img = NULL;
 	data->win = NULL;
-	data->mlx = NULL;
 	data->width = 0;
 	data->height = 0;
 	data->error = 0;
@@ -118,5 +117,6 @@ void	init_base(t_data *data)
 	data->v.init_h = -1;
 	data->v.move = 0;
 	data->look = 0.5;
+	data->jump = 0;
 	init_infos(data);
 }
