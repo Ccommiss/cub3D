@@ -6,13 +6,13 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 18:21:51 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/25 13:18:49 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/26 15:15:33 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void 	value_errors(t_data *data)
+void	value_errors(t_data *data)
 {
 	if (data->error == BAD_RGB_VALUES)
 		printf("RGB values can't be over 255 or below 0.\n");
@@ -24,7 +24,7 @@ void 	value_errors(t_data *data)
 		printf("Missing infos.\n");
 }
 
-void 	map_errors(t_data *data)
+void	map_errors(t_data *data)
 {
 	if (data->error == MAP_NOT_CLOSED)
 	{
@@ -39,7 +39,7 @@ void 	map_errors(t_data *data)
 		printf("Two players found in map.\n");
 }
 
-void 	file_errors(t_data *data)
+void	file_errors(t_data *data)
 {
 	if (data->error == NO_FILE)
 		printf("Map must be provided. Usage : ./cub3d [mapname].cub \n");
@@ -51,7 +51,7 @@ void 	file_errors(t_data *data)
 		printf("Too many arguments.\n");
 }
 
-int	error_message(t_data *data, int index)
+int		error_message(t_data *data, int index)
 {
 	printf("Error :\n");
 	if (data->error == 0)

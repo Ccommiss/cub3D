@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 16:08:46 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/25 09:11:21 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/26 15:03:51 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	define_move(t_data *data)
 	pos[1] = data->pos_y;
 }
 
-int	display(t_data *data)
+int		display(t_data *data)
 {
 	fill_black(data);
 	fill_ceiling(data);

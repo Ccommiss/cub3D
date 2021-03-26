@@ -1,13 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/26 15:16:44 by ccommiss          #+#    #+#             */
+/*   Updated: 2021/03/26 15:17:17 by ccommiss         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 /*
- *  init_plane
- *
- * 	[synopsis] : initialises planeX and planeY according to direction.
- * 			Camera plane must be perpendicular to direction.
- * 			FOV (field of view) is here initialized at 66 deg.
- * 	[return] : none
- */
+**  init_plane
+**
+** 	[synopsis] : initialises planeX and planeY according to direction.
+** 			Camera plane must be perpendicular to direction.
+** 			FOV (field of view) is here initialized at 66 deg.
+** 	[return] : none
+*/
 
 void	init_plane(t_data *data)
 {
@@ -25,7 +37,7 @@ void	init_plane(t_data *data)
 		data->planeY = 0.66;
 }
 
-void 	init_minimap(t_data *data)
+void	init_minimap(t_data *data)
 {
 	data->v.init_h = -1;
 	data->v.init_w = -1;
@@ -41,17 +53,17 @@ void 	init_minimap(t_data *data)
 }
 
 /*
- *  init_struct
- *
- * 	[synopsis] :
- * 		> init mlx lib, window, image
- * 		> init plane of camera after dir has been set during parsing
- * 		> set minimap size and activates its displaying by default
- * 		> malloc the z buffer later used for displaying textures
- * 	[return] : none
- */
+**  init_struct
+**
+** 	[synopsis] :
+** 		> init mlx lib, window, image
+** 		> init plane of camera after dir has been set during parsing
+** 		> set minimap size and activates its displaying by default
+** 		> malloc the z buffer later used for displaying textures
+** 	[return] : none
+*/
 
-int	init_struct(t_data *data)
+int		init_struct(t_data *data)
 {
 	loadimage(data);
 	data->win = mlx_new_window(data->mlx, data->width, data->height, "Cub3D");
@@ -73,7 +85,7 @@ int	init_struct(t_data *data)
 	return (1);
 }
 
-void 	init_infos(t_data *data)
+void	init_infos(t_data *data)
 {
 	data->info->ceiling_rgb = -1;
 	data->info->floor_rgb = -1;
@@ -88,13 +100,13 @@ void 	init_infos(t_data *data)
 }
 
 /*
- *  init_base
- *
- * 	[synopsis] :
- * 		> init some useful variables later modified by parser
- * 		> Helps to handle errors detection
- * 	[return] : none
- */
+**  init_base
+**
+** 	[synopsis] :
+** 		> init some useful variables later modified by parser
+** 		> Helps to handle errors detection
+** 	[return] : none
+*/
 
 void	init_base(t_data *data)
 {

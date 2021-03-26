@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mini_player.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/26 15:04:42 by ccommiss          #+#    #+#             */
+/*   Updated: 2021/03/26 15:05:27 by ccommiss         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
-int	move_map(t_data *data, int direction, int wid_hei)
+int		move_map(t_data *data, int direction, int wid_hei)
 {
 	double	ret;
 
@@ -41,7 +53,7 @@ void	zoom_player(t_data *data, double *pos_play, int h, int w)
 		pos_play[Y] = move_map(data, DOWN, h);
 }
 
-int	is_off_limit(t_data *data, double *pos_play)
+int		is_off_limit(t_data *data, double *pos_play)
 {
 	if ((pos_play[Y] + 100 * data->speed <= data->height * 0.7)
 		|| (pos_play[Y] + 100 * data->speed >= data->height)
@@ -64,7 +76,7 @@ void	set_color(t_data *data, int w, int h, double *pos_play)
 	if ((img.color & 0x00FFFFFF) != 0)
 	{
 		my_mlx_pixel_put(data, pos_play[X] + w - 0.5 * img.width,
-			 pos_play[Y] + h - 0.5 * img.height, img.color);
+			pos_play[Y] + h - 0.5 * img.height, img.color);
 	}
 }
 

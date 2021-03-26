@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minimap_settings.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/26 15:13:55 by ccommiss          #+#    #+#             */
+/*   Updated: 2021/03/26 15:14:05 by ccommiss         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
-void 	zoom_minimap(int keycode, t_data *data)
+void	zoom_minimap(int keycode, t_data *data)
 {
 	if (keycode == KEY_PLUS)
 	{

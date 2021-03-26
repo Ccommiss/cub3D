@@ -1,14 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit_game.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/26 14:58:36 by ccommiss          #+#    #+#             */
+/*   Updated: 2021/03/26 15:19:43 by ccommiss         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 /*
- *  free_textures & free_sprites
- *
- * 	[synopsis] : free textures and sprites
- * 	[return] : -1, because these functions are also used while parsing if
- * 		an allocation fails.
- */
+**  free_textures & free_sprites
+**
+** 	[synopsis] : free textures and sprites
+** 	[return] : -1, because these functions are also used while parsing if
+** 		an allocation fails.
+*/
 
-int	free_textures(t_data *data, t_text *head)
+int		free_textures(t_data *data, t_text *head)
 {
 	int		i;
 	t_text	*tmp;
@@ -29,7 +41,7 @@ int	free_textures(t_data *data, t_text *head)
 	return (-1);
 }
 
-int	free_sprites(t_data *data)
+int		free_sprites(t_data *data)
 {
 	t_spr	*tmp_s;
 
@@ -66,18 +78,18 @@ void	free_info(t_data *data)
 }
 
 /*
- *  free_game
- *
- * 	[synopsis] : properly closes the window and free elements previously
- * 		allocated, e.g.
- * 		> The map (t_data structure)
- * 		> Textures (pointed by data->t)
- * 		> data->spr (data->sprite)
- * 		> The zbuffer
- * 	[return] : none
- */
+**  free_game
+**
+** 	[synopsis] : properly closes the window and free elements previously
+** 		allocated, e.g.
+** 		> The map (t_data structure)
+** 		> Textures (pointed by data->t)
+** 		> data->spr (data->sprite)
+** 		> The zbuffer
+** 	[return] : none
+*/
 
-int	free_game(t_data *data)
+int		free_game(t_data *data)
 {
 	int	i;
 
@@ -98,7 +110,7 @@ int	free_game(t_data *data)
 	return (0);
 }
 
-int	close_win(t_data *data)
+int		close_win(t_data *data)
 {
 	if (data->win)
 	{
@@ -110,9 +122,8 @@ int	close_win(t_data *data)
 	free_game(data);
 	if (data->mlx)
 	{
-		mlx_destroy_display(data->mlx);//linux
+		mlx_destroy_display(data->mlx);
 		free(data->mlx);
 	}
-	system("killall afplay"); //mac
 	exit(1);
 }

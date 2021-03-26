@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   panel.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/26 15:02:28 by ccommiss          #+#    #+#             */
+/*   Updated: 2021/03/26 15:03:30 by ccommiss         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 void	strput(t_data *data, char *str, int pad)
@@ -6,7 +18,7 @@ void	strput(t_data *data, char *str, int pad)
 		data->height * 0.7 + pad, BLACK, str);
 }
 
-void 	coordinates_display(t_data *data, int *n)
+void	coordinates_display(t_data *data, int *n)
 {
 	char	*stringx;
 	char	*stringy;

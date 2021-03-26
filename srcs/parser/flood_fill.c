@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 18:18:45 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/25 21:25:15 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/26 15:08:38 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 ** 	[return] : none
 */
 
-int	load_sprite(t_data *data, int x, int y)
+int		load_sprite(t_data *data, int x, int y)
 {
 	static int	i;
 
@@ -76,7 +76,7 @@ void	check_borders(t_data *data, int x, int y, char ***mapbis)
 	return ;
 }
 
-int	free_copymap(int nb_alloc, char ***copymap, int ret)
+int		free_copymap(int nb_alloc, char ***copymap, int ret)
 {
 	int	i;
 
@@ -87,7 +87,7 @@ int	free_copymap(int nb_alloc, char ***copymap, int ret)
 	return (ret);
 }
 
-int	flood_fill(t_data *data)
+int		flood_fill(t_data *data)
 {
 	char	**copymap;
 	int		i;

@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 11:17:09 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/26 11:19:32 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/26 15:11:55 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	ft_finddir(t_data *data, char dir)
 ** 	[return] : 1 if success, -1 if malloc fails
 */
 
-int	ft_realloc_tab(t_data *data, int x, int y)
+int		ft_realloc_tab(t_data *data, int x, int y)
 {
 	int	i;
 
@@ -66,7 +66,7 @@ int	ft_realloc_tab(t_data *data, int x, int y)
 ** 	[return] : 1 if success, -1 if fails
 */
 
-int	fill_maptab(t_data *data, char *line, int y)
+int		fill_maptab(t_data *data, char *line, int y)
 {
 	int	x;
 	int	i;
@@ -106,7 +106,7 @@ int	fill_maptab(t_data *data, char *line, int y)
 **			main parser before properly exiting), or 1 if success
 */
 
-int	ft_parse_map(t_data *data, char *line)
+int		ft_parse_map(t_data *data, char *line)
 {
 	static int	y;
 	int			len;

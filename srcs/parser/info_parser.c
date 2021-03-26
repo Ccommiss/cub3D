@@ -6,13 +6,13 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 17:48:14 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/26 14:43:50 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/26 15:12:40 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	rgb_convert(char **block, int *r, int *g, int *b)
+int		rgb_convert(char **block, int *r, int *g, int *b)
 {
 	int		j;
 
@@ -29,7 +29,7 @@ int	rgb_convert(char **block, int *r, int *g, int *b)
 	return (1);
 }
 
-int	ft_getrgb(t_data *data, char *rgb)
+int		ft_getrgb(t_data *data, char *rgb)
 {
 	char	**block;
 	int		r;
@@ -63,7 +63,7 @@ int	ft_getrgb(t_data *data, char *rgb)
 ** 	[return] : 0 if isn't set, 1 and set data->error if it is.
 */
 
-int	isset(t_data *data, int param)
+int		isset(t_data *data, int param)
 {
 	if ((param == north && !data->info->north_text)
 		|| (param == south && !data->info->south_text)
@@ -88,14 +88,14 @@ void	get_resolution(char **block, t_data *data)
 	data->height = ft_atoi(block[2]);
 	if (data->height <= 0 || data->width <= 0)
 		data->error = HEIGHT_WIDTH_NEG;
-	mlx_get_screen_size(data->mlx, &width, &height); //linux
+	mlx_get_screen_size(data->mlx, &width, &height);
 	if (data->width > width)
 		data->width = width;
 	if (data->height > height)
 		data->height = height;
 }
 
-int	ft_parse_info(t_data *data, char *line)
+int		ft_parse_info(t_data *data, char *line)
 {
 	char	**block;
 	char	*newline;

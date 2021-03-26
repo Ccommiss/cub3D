@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/26 15:09:21 by ccommiss          #+#    #+#             */
+/*   Updated: 2021/03/26 15:10:20 by ccommiss         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 void	*ft_realloc(void *ptr, size_t cursize, size_t newsize)
@@ -14,7 +26,7 @@ void	*ft_realloc(void *ptr, size_t cursize, size_t newsize)
 	return (newptr);
 }
 
-int	ft_check_chars(char sign, t_data *data, int x, int y)
+int		ft_check_chars(char sign, t_data *data, int x, int y)
 {
 	if (sign == 'N' || sign == 'S' || sign == 'E' || sign == 'W')
 	{
@@ -33,10 +45,9 @@ int	ft_check_chars(char sign, t_data *data, int x, int y)
 		data->error = UNEXPECTED_CHAR;
 		return (-1);
 	}
-//	return (error_message(data, 3));
 }
 
-int	ft_mapcheck(char *str)
+int		ft_mapcheck(char *str)
 {
 	int	i;
 

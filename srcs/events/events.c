@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 15:18:12 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/25 12:42:03 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/26 15:13:25 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	dir_hook(int keycode, t_data *data)
 	}
 }
 
-int	speed_hook(int keycode, t_data *data)
+int		speed_hook(int keycode, t_data *data)
 {
 	if (keycode == KEY_SHIFT)
 		data->speed = 0.11;
@@ -87,7 +87,7 @@ int	speed_hook(int keycode, t_data *data)
 	return (1);
 }
 
-int	key_hook(int keycode, t_data *data)
+int		key_hook(int keycode, t_data *data)
 {
 	move_hook(keycode, data);
 	dir_hook(keycode, data);
