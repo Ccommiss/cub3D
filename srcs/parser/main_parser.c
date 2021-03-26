@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 17:53:32 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/25 08:49:57 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/26 11:41:16 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	ft_parse(int fd, t_data *data)
 	char	*line;
 
 	line = NULL;
-	while (get_next_line(fd, &line) && data->error == 0)
+	while (get_next_line(fd, &line))
 	{
 		if (!ft_isempty(line) && !iscomplete(data))
 			ft_parse_info(data, line);
