@@ -40,8 +40,6 @@ int	free_sprites(t_data *data)
 		free(tmp_s);
 		tmp_s = data->spr;
 	}
-	if (data->sprimg)
-		mlx_destroy_image(data->mlx, data->sprimg);
 	return (-1);
 }
 
@@ -57,6 +55,8 @@ void	free_info(t_data *data)
 		free(data->info->west_text);
 	if (data->info->sprite_text)
 		free(data->info->sprite_text);
+	if (data->sprimg)
+		mlx_destroy_image(data->mlx, data->sprimg);
 	if (data->compass.img_ptr)
 		mlx_destroy_image(data->mlx, data->compass.img_ptr);
 	if (data->map_icon.img_ptr)
@@ -103,7 +103,6 @@ int	free_game(t_data *data)
 
 int	close_win(t_data *data)
 {
-	//checkmap(data);
 	if (data->win)
 	{
 		mlx_clear_window(data->mlx, data->win);
