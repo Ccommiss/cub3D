@@ -6,14 +6,16 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/26 14:58:26 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/26 15:18:58 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/30 11:53:54 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int		is_zero(char c)
+int		is_zero(char c, t_data *data)
 {
+	if (c == '2' && data->lifebar.lives > 0)
+		data->lifebar.lives -= 1;
 	if (c == '0')
 		return (1);
 	return (0);

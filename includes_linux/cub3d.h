@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/25 21:18:38 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/26 10:21:48 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/30 16:08:28 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 # include "key_linux.h"
 # include "../mlx_linux/mlx.h"
 # include "../libft/libft.h"
-
 # define RED 0xFF0000
 # define WHITE 0xFFFAFA
 # define YELLOW 0xFFDEAD
@@ -32,6 +31,7 @@
 # define LIGHTGREY 0X9A9A9A
 # define VINTAGE_YELLOW 0Xe7cf8a
 # define BLACK 0X303030
+
 
 enum e_sides
 {
@@ -218,6 +218,11 @@ typedef struct s_img_data
 	int		color;
 }	t_img_data;
 
+typedef struct s_lifebar
+{
+	int		lives;
+}	t_lifebar;
+
 typedef struct s_data
 {
 	void		*mlx;
@@ -268,6 +273,7 @@ typedef struct s_data
 	t_img_data	compass;
 	t_img_data	map_icon;
 	t_img_data	player;
+	t_lifebar	lifebar;
 	void		*sprimg;
 	void		*sprimgaddr;
 	int			sprbpx;
@@ -291,8 +297,8 @@ void	init_plane(t_data *data);
 int		loadimage(t_data *data);
 
 /*
- *  [PARSER] Parsing functions
- */
+**  [PARSER] Parsing functions
+*/
 
 int		ft_parse(int fd, t_data *data);
 int		ft_parse_info(t_data *data, char *line);
@@ -340,6 +346,7 @@ void	set_map(t_data *data);
 void	set_compass(t_data *data);
 void	set_needle(t_data *data);
 void	set_player(t_data *data);
+void	draw_lifebar(t_data *data);
 void	set_mapicon(t_data *data);
 void	display_pos(t_data *data);
 void	init_minimap(t_data *data);
@@ -352,8 +359,8 @@ void	sprite_drawing(t_data *data);
 void	save_bmp(t_data *data);
 
 /*
- *  [EXIT]  exit function
- */
+**  [EXIT]  exit function
+*/
 
 int		close_win(t_data *data); //close
 int		free_game(t_data *data);
@@ -362,15 +369,15 @@ int		free_textures(t_data *data, t_text *head);
 int		free_sprites(t_data *data);
 
 /*
- *  [EVENTS]
- * 		> events.c
- * 		> move_events.c
- * 		> minimap_settings.c
- */
+**  [EVENTS]
+** 		> events.c
+** 		> move_events.c
+**  	> minimap_settings.c
+*/
 
 int		key_hook(int keycode, t_data *data);
 int		speed_hook(int keycode, t_data *data);
-int		is_zero(char c);
+int		is_zero(char c, t_data *data);
 void	move_leftright(int keycode, t_data *data, int sec_spd, int sec_oth);
 void	move_updown(int keycode, t_data *data, int sec_spd, int sec_oth);
 void	minimap_settings(int keycode, t_data *data);

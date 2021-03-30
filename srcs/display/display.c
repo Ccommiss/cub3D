@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 16:08:46 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/26 15:03:51 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/30 11:23:59 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ int		display(t_data *data)
 		set_player(data);
 		set_map(data);
 		set_player(data);
+		draw_lifebar(data);
 		data->color = 0xffffff;
 	}
 	else if (data->displaymap == 0)

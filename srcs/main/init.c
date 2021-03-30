@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/26 15:16:44 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/26 15:17:17 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/30 11:50:53 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ void	init_infos(t_data *data)
 	data->compass.img_ptr = NULL;
 	data->map_icon.img_ptr = NULL;
 	data->player.img_ptr = NULL;
+	data->lifebar.lives = 5;
 }
 
 /*

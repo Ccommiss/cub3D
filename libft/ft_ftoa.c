@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/26 15:46:53 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/26 16:07:29 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/30 15:22:35 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ char	*ft_ftoa(float n, int afterpoint)
 		fpart = fpart * pow(10, afterpoint);
 		res2 = ft_itoa((int)fpart);
 	}
+	tmp = ft_strjoin(res, res2);
 	free(res);
 	free(res2);
-	return (ft_strjoin(res, res2));
+	return (tmp);
 }

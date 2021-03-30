@@ -32,6 +32,7 @@ SRCS = $(MAIN)main.c \
 	$(DISPLAY)panel.c \
 	$(DISPLAY)icons.c \
 	$(DISPLAY)minimap.c \
+	$(DISPLAY)lifebar.c \
 	$(DISPLAY)mini_player.c \
 	$(DISPLAY)fill_background.c \
 	$(EVENTS)events.c \

@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/26 15:02:28 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/26 15:03:30 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/03/30 15:28:55 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,7 @@ void	display_pos(t_data *data)
 	strput(data, "[ M ] Reset map ", n += 15);
 	strput(data, "[ Space ] Hide ", n += 15);
 	strput(data, "[ Esc ] Quit ", n += 15);
+	if (data->lifebar.lives == 0)
+		mlx_string_put(data->mlx, data->win, data->width * 0.5 - 30, 20,
+		BLUE, "GAME OVER");
 }
