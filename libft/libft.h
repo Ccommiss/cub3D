@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 15:06:14 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/17 18:06:01 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/04/02 13:07:29 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 # include <stdlib.h>
 # include <math.h>
 # include "get_next_line.h"
-
 
 typedef struct	s_list
 {

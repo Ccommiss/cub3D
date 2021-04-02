@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/26 14:58:36 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/04/02 12:21:58 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/04/02 13:08:35 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ int		close_win(t_data *data)
 	free_game(data);
 	if (data->mlx)
 	{
-	//	mlx_destroy_display(data->mlx);
+		mlx_destroy_display(data->mlx);
 		free(data->mlx);
 	}
 	exit(1);
