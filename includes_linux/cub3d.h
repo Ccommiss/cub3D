@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/25 21:18:38 by ccommiss          #+#    #+#             */
-/*   Updated: 2021/03/30 16:08:28 by ccommiss         ###   ########.fr       */
+/*   Updated: 2021/04/02 13:30:31 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@
 # define LIGHTGREY 0X9A9A9A
 # define VINTAGE_YELLOW 0Xe7cf8a
 # define BLACK 0X303030
-
 
 enum e_sides
 {
